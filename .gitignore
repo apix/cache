@@ -1,0 +1,13 @@
+.DS_Store
+.build
+.tmp
+/dist/
+/review/
+/vendor/
+/review/
+*~
+*.log
+phpunit.xml
+composer.lock
+composer.phar
+TODO
