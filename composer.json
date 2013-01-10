@@ -1,0 +1,40 @@
+{
+    "name": "apix/cache",
+    "description": "Apix Cache is a generic cache wrapper with a simple interface to various different caching backends.",
+    "type": "library",
+    "keywords": ["apc", "redis", "cache", "apix"],
+    "homepage": "https://github.com/frqnck/apix-cache",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Franck Cassedanne",
+            "email": "franck@ouarz.net"
+        }
+    ],
+    "support": {
+        "irc": "irc://irc.freenode.org/ouarz"
+    },
+    "require": {
+        "php": ">=5.3"
+    },
+    "require-dev": {
+        "apix/autoloader": "1.0.0-beta"
+    },
+    "suggest": {
+        "ext-apc": "*",
+        "ext-redis": "*"
+    },
+    "autoload": {
+        "psr-0": { "Apix\\Cache": "src/php" }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "/gitroot/apix/autoloader"
+        },
+        {
+            "type": "vcs",
+            "url": "/gitroot/apix/cache"
+        }
+    ]
+}
