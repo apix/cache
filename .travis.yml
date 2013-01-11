@@ -2,9 +2,8 @@ language: php
 php:
   - 5.3
   - 5.4
-  - 5.5
 
- before_script:
+before_script:
   - pecl -q install redis && echo "extension=redis.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
   - curl -s http://getcomposer.org/installer | php
   - php composer.phar --dev install
