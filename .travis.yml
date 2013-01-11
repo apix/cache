@@ -3,6 +3,9 @@ php:
   - 5.3
   - 5.4
 
+services:
+  - redis-server
+
 before_script:
 #  - pecl -q install redis && echo "extension=redis.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
   - curl -s http://getcomposer.org/installer | php
