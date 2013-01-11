@@ -1,5 +1,5 @@
-Apix Cache - Caching for PHP5.3+
-================================
+APIx Cache - Caching for PHP 5.3+   [![Build Status](https://travis-ci.org/frqnck/apix-cache.png?branch=master)](https://travis-ci.org/frqnck/apix-cache)
+==============================
 
 Apix Cache is a generic cache wrapper with a simple interface to various different caching backends.
 
