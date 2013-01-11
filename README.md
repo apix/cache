@@ -74,14 +74,6 @@ Available options
 Installation
 ------------------------
 
-* Use PEAR for a system-wide installation:
-
-    ```
-    sudo pear channel-discover pear.ouarz.net
-    sudo pear install --alldeps ouarz/apix_cache
-    ```
-For more details see [pear.ouarz.net](http://pear.ouarz.net).
-
 * If you are creating a component that relies on Apix Cache locally:
 
   * either update your **`composer.json`** file:
@@ -108,6 +100,13 @@ For more details see [pear.ouarz.net](http://pear.ouarz.net).
       </required>
     </dependencies>
     ```
+* For a system-wide installation using PEAR:
+
+    ```
+    sudo pear channel-discover pear.ouarz.net
+    sudo pear install --alldeps ouarz/apix_cache
+    ```
+For more details see [pear.ouarz.net](http://pear.ouarz.net).
 
 License
 -------
