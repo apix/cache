@@ -1,0 +1,21 @@
+language: php
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+
+ before_script:
+  - pecl -q install redis && echo "extension=redis.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+  - curl -s http://getcomposer.org/installer | php
+  - php composer.phar --dev install
+
+script:
+  - php -d apc.enable_cli=1 `which phpunit`
+
+notifications:
+  irc: "irc.freenode.org#ouarz"    
+  email:
+    recipients:
+      - dev-team@ouarz.net
+    on_success: change
+    on_failure: change

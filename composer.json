@@ -18,7 +18,7 @@
         "php": ">=5.3"
     },
     "require-dev": {
-        "apix/autoloader": "1.0.0-beta"
+        "apix/autoloader": "1.0.0"
     },
     "suggest": {
         "ext-apc": "*",
@@ -26,15 +26,5 @@
     },
     "autoload": {
         "psr-0": { "Apix\\Cache": "src/php" }
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "/gitroot/apix/autoloader"
-        },
-        {
-            "type": "vcs",
-            "url": "/gitroot/apix/cache"
-        }
-    ]
+    }
 }
