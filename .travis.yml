@@ -9,7 +9,7 @@ before_script:
   - php composer.phar --dev install
 
 script:
-  - php -d apc.enable_cli=1 `which phpunit`
+  - php -d apc.enable_cli=1 `which phpunit` --configuration phpunit.xml.dist
 
 notifications:
   irc: "irc.freenode.org#ouarz"    
