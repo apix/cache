@@ -1,7 +1,7 @@
-APIx Cache - Caching for PHP 5.3+   [![Build Status](https://travis-ci.org/frqnck/apix-cache.png?branch=master)](https://travis-ci.org/frqnck/apix-cache)
+APIx Cache, caching for PHP 5.3+   [![Build Status](https://travis-ci.org/frqnck/apix-cache.png?branch=master)](https://travis-ci.org/frqnck/apix-cache)
 ==============================
 
-Apix Cache is a generic cache wrapper with a simple interface to various different caching backends.
+APIx Cache is a generic cache wrapper with a simple interface to various different caching backends.
 
 Some of its features:
 
@@ -110,4 +110,4 @@ For more details see [pear.ouarz.net](http://pear.ouarz.net).
 
 License
 -------
-Apix Cache is licensed under the New BSD license -- see the `LICENSE.txt` for the full license details.
+APIx Cache is licensed under the New BSD license -- see the `LICENSE.txt` for the full license details.
