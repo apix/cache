@@ -1,21 +1,30 @@
 language: php
+
 php:
   - 5.3
   - 5.4
 
-services:
-  - redis-server
+env:
+  - DB=apc
+  - DB=redis
 
 before_script:
-#  - pecl -q install redis && echo "extension=redis.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+  - sh -c "if [ '$DB' = 'apc' ]; then curl -o APC.tgz http://pecl.php.net/get/APC; tar -xzf APC.tgz; fi"
+  - sh -c "if [ '$DB' = 'apc' ]; then cd APC-* && phpize && ./configure && make && sudo make install && cd ..; rm -fr APC*; fi"
+  # - sh -c "if [ '$DB' = 'apc' ]; then echo 'extension=apc.so' >> $TINI `php --ini | grep "Loaded Configuration" | sed -e 's|.*:\s*||'; fi"`
+  - sh -c "if [ '$DB' = 'apc' ]; then TINI=~/.phpenv/versions/`php -r "echo phpversion();"`/etc/conf.d/travis.ini; echo 'extension=apc.so'>>$TINI;echo 'apc.enable_cli=1'>>$TINI; fi"
+  # - sh -c "if [ '$DB' = 'redis' ]; then pecl -q install redis && echo 'extension=redis.so' >> `php --ini | grep 'Loaded Configuration' | sed -e 's|.*:\s*||'`; /usr/bin/redis-server; fi"
+  - sh -c "if [ '$DB' = 'redis' ]; then git clone --branch=master --depth=1 git://github.com/nicolasff/phpredis.git phpredis; cd phpredis && phpize && ./configure && make && sudo make install && cd ..; rm -fr phpredis; fi"
+  - sh -c "if [ '$DB' = 'redis' ]; then TINI=~/.phpenv/versions/`php -r "echo phpversion();"`/etc/conf.d/travis.ini; echo 'extension=redis.so'>>$TINI; /usr/bin/redis-server; fi"
+  - phpenv rehash
   - curl -s http://getcomposer.org/installer | php
   - php composer.phar --dev install
 
 script:
-  - php -d apc.enable_cli=1 `which phpunit` --coverage-text=php://stdout --configuration phpunit.xml.dist
+  - phpunit --coverage-text=php://stdout --configuration phpunit.xml.dist
 
 notifications:
-  irc: "irc.freenode.org#ouarz"    
+  irc: "irc.freenode.org#ouarz"
   email:
     recipients:
       - dev-team@ouarz.net
