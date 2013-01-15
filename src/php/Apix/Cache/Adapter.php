@@ -54,7 +54,7 @@ interface Adapter
      * Flush all the cached entries.
      *
      * @param boolean $all Wether to flush the whole database, or (preferably)
-     *                      the entries prefixed with prefix_key and prefix_tag.
+     *                     the entries prefixed with prefix_key and prefix_tag.
      * @return boolean Returns True on success.
      */
      public function flush($all=false);
