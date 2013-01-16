@@ -18,10 +18,11 @@ interface Adapter
     /**
      * Retrieves the cache for the given key, or return false if not set.
      *
-     * @param  string     $key The cache id to retrieve.
+     * @param  string     $key  The cache id to retrieve.
+     * @param  string     $type The type of the key (either 'key' or 'tag').
      * @return mixed|null Returns the cached data.
      */
-    public function load($key);
+    public function load($key, $type='key');
 
     /**
      * Saves data to the cache.

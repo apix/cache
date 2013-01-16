@@ -40,8 +40,8 @@ class MongoDb extends AbstractCache
 
         parent::__construct($Mongo, $options);
 
-        $this->db = $this->adapter->{$this->options['db_name']};
-        $this->collection = $this->db->{$this->options['collection_name']};
+        $this->db = $this->adapter->selectDB($this->options['db_name']);
+        $this->collection = $this->db->createCollection($this->options['collection_name'], false);
     }
 
     /**
@@ -50,31 +50,26 @@ class MongoDb extends AbstractCache
     public function load($key, $type='key')
     {
         if ($type == 'tag') {
-            $tag = $this->mapTag($key);
             $cache = $this->collection->find(
-                array('tags' => $tag)
+                array('tags' => $this->mapTag($key)),
+                array('key')
             );
 
-            return empty($cache) ? null : $cache;
+            $keys = array_map(
+                function($v) { return $v['key']; },
+                array_values(iterator_to_array($cache))
+            );
+
+            return empty($keys) ? null : $keys;
         }
 
-        $key;
-        #$key = $this->mapKey($key);
-        $res = $this->collection->findOne(array('key' => $key));
-
-// foreach ($res as $doc) {
-//     var_dump($doc);
-// }
-
-    var_dump($res);
-
-exit;
-
-        return $this->collection->findOne(
-            array('key' => $key, #'ttl' => array('$gte' => new \MongoDate)
+        $cache = $this->collection->findOne(
+            array('key' => $this->mapKey($key)
                 ),
             array('data')
         );
+
+        return isset($cache['data']) ? $cache['data'] : null;
     }
 
     /**
@@ -82,26 +77,26 @@ exit;
      */
     public function save($data, $key, array $tags=null, $ttl=null)
     {
-        #$key = $this->mapKey($key);
-
         $cache = array(
+            'key'   => $this->mapKey($key),
             'data'  => $data
         );
 
         if (null !== $tags) {
-            $cache['tags'] = $tags;
+            $cache['tags'] = array();
+            foreach($tags as $tag){
+                $cache['tags'][] = $this->mapTag($tag);
+            }
         }
 
         if (null !== $ttl && 0 !== $ttl) {
             $cache['ttl'] = $ttl;
+            // 'expireAfterSeconds' => $ttl
+
         }
 
-        $res = $this->collection->update(
-            array('key' => $key),
-            $cache
-        );
-
-        return $res['ok'] == 1  ? true : false;
+        $status = $this->collection->save($cache);
+        return (boolean) $status['ok'];
     }
 
     /**
@@ -109,12 +104,13 @@ exit;
      */
     public function clean(array $tags)
     {
-        $items = array();
         foreach ($tags as $tag) {
-            $items[] = $this->mapTag($tag);
+            $res = $this->collection->remove(
+                array('tags' => $this->mapTag($tag))
+            );
         }
 
-        return $this->collection->remove( array('tags' => $items)) ? true : false;
+        return (boolean) $res['n'];
     }
 
     /**
@@ -122,10 +118,11 @@ exit;
      */
     public function delete($key)
     {
-        $key = $this->mapKey($key);
-        return $this->collection->remove(
-            array('key' => $key)
-        ) ? true : false;
+        $res = $this->collection->remove(
+            array('key' => $this->mapKey($key))
+        );
+
+        return (boolean) $res['n'];
     }
 
     /**
@@ -136,10 +133,11 @@ exit;
         if (true === $all) {
             $res = $this->db->drop();
         } else {
-            $res = $this->collection->remove();
+            $regex = new \MongoRegex('/^' . $this->mapKey('') . '/'); 
+            $res = $this->collection->remove( array('key' => $regex) );
         }
 
-        return $res['ok'] == 1 ? true : false;
+        return (boolean) $res['ok'];
     }
 
 }
