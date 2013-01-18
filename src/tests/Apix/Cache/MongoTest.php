@@ -14,13 +14,13 @@ namespace Apix\Cache;
 
 use Apix\TestCase;
 
-class MongoDbTest extends TestCase
+class MongoTest extends TestCase
 {
     protected $cache, $mongo;
 
     protected $options = array(
-        'prefix_key' => 'unittest-apix-key:',
-        'prefix_tag' => 'unittest-apix-tag:',
+        'prefix_key' => 'unit_test-',
+        'prefix_tag' => 'unit_utest-',
     );
 
     public function setUp()
@@ -37,21 +37,31 @@ class MongoDbTest extends TestCase
             $this->markTestSkipped( $e->getMessage() );
         }
 
-       $this->cache = new MongoDb($this->mongo, $this->options);
+       $this->cache = new Mongo($this->mongo, $this->options);
     }
 
     public function tearDown()
     {
         if (null !== $this->cache) {
             $this->cache->flush();
-            $this->mongo->close();
             unset($this->cache);
+            $this->mongo->close();
         }
     }
 
     public function testLoadReturnsNullWhenEmpty()
     {
-        $this->assertNull( $this->cache->load('id') );
+        $this->assertNull($this->cache->load('id'));
+    }
+
+    public function testSaveIsUnique()
+    {
+        $this->assertTrue($this->cache->save('bar1', 'foo'));
+        $this->assertTrue($this->cache->save('bar2', 'foo'));
+
+        $this->assertEquals('bar2', $this->cache->load('foo'));
+
+        $this->assertEquals(1, $this->cache->count('foo') );
     }
 
     public function testSaveAndLoadWithString()
@@ -68,7 +78,7 @@ class MongoDbTest extends TestCase
         $this->assertEquals($data, $this->cache->load('id'));
     }
 
-    public function OFF_testSaveAndLoadWithObject()
+    public function testSaveAndLoadWithObject()
     {
         $data = new \stdClass;
         $this->assertTrue($this->cache->save($data, 'id'));
@@ -77,7 +87,7 @@ class MongoDbTest extends TestCase
 
     public function testSaveAndLoadArray()
     {
-        $this->cache = new MongoDb($this->mongo, $this->options);
+        $this->cache = new Mongo($this->mongo, $this->options);
 
         $data = array('arrayData');
         $this->assertTrue($this->cache->save($data, 'id'));
@@ -98,6 +108,18 @@ class MongoDbTest extends TestCase
         $ids = $this->cache->load('tag2', 'tag');
 
         $this->assertEquals( array($this->cache->mapKey('id1')), $ids );
+    }
+
+    public function testSaveWithTagDisabled()
+    {
+       $options = $this->options+array('tag_enable' => false);
+       $this->cache = new Mongo($this->mongo, $options);
+
+        $this->assertTrue(
+            $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
+        );
+
+        $this->assertNull($this->cache->load('tag1', 'tag'));
     }
 
     public function testSaveWithOverlappingTags()
@@ -122,23 +144,29 @@ class MongoDbTest extends TestCase
         $this->cache->save('strData2', 'id2', array('tag2', 'tag3', 'tag4'));
         $this->cache->save('strData3', 'id3', array('tag3', 'tag4'));
 
-        $this->cache->clean(array('tag4'));
+        $this->assertTrue($this->cache->clean(array('tag4')));
+        $this->assertFalse($this->cache->clean(array('tag4')));
 
+        $this->assertNull($this->cache->load('id2'));
         $this->assertNull($this->cache->load('id3'));
         $this->assertNull($this->cache->load('tag4', 'tag'));
         $this->assertEquals('strData1', $this->cache->load('id1'));
     }
 
-    public function testFlushSelected()
+    public function testFlushCacheOnly()
     {
         $this->cache->save('strData1', 'id1', array('tag1', 'tag2'));
         $this->cache->save('strData2', 'id2', array('tag2', 'tag3'));
         $this->cache->save('strData3', 'id3', array('tag3', 'tag4'));
 
-        $this->cache->collection->insert(array('foo' => 'bar'));
-        $this->cache->flush();
-        $this->assertTrue(
-            $this->cache->collection->find(array('foo'))
+        $foo = array('foo' => 'bar');
+        $this->cache->collection->insert($foo);
+
+        $this->assertTrue($this->cache->flush());
+
+        $this->assertEquals(
+            $foo,
+            $this->cache->collection->findOne(array('foo'=>'bar'))
         );
 
         $this->assertNull($this->cache->load('id3'));
@@ -151,9 +179,10 @@ class MongoDbTest extends TestCase
         $this->cache->save('strData2', 'id2', array('tag2', 'tag3'));
         $this->cache->save('strData3', 'id3', array('tag3', 'tag4'));
 
-        $this->cache->collection->insert(array('foo' => 'bar'));
-        $this->cache->flush(true);
-        $this->assertNull($this->cache->collection->findOne(array('foo')));
+        $this->cache->collection->insert(array('key' => 'foobar'));
+
+        $this->assertTrue($this->cache->flush(true));
+        $this->assertNull($this->cache->collection->findOne(array('key')));
 
         $this->assertNull($this->cache->load('id3'));
         $this->assertNull($this->cache->load('tag1', 'tag'));
@@ -164,7 +193,7 @@ class MongoDbTest extends TestCase
         $this->cache->save('strData1', 'id1', array('tag1', 'tag2', 'tagz'));
         $this->cache->save('strData2', 'id2', array('tag2', 'tag3'));
 
-        $this->cache->delete('id1');
+        $this->assertTrue($this->cache->delete('id1'));
 
         $this->assertNull($this->cache->load('id1'), 'msg1');
         $this->assertNull($this->cache->load('tag1', 'tag'), 'msg2');
@@ -183,12 +212,16 @@ class MongoDbTest extends TestCase
 
     public function testShortTtlDoesExpunge()
     {
-        $this->cache->save('ttl-1', 'ttlId', null, -1);
+        $this->assertTrue(
+            $this->cache->save('ttl-1', 'ttlId', array('someTags!'), -1)
+        );
 
-        // $this->cache->save('ttl-1', 'ttlId', null, 1);
-        // sleep(1);
+        // How to forcibly run garbage collection?
+        // $this->cache->db->command(array(
+        //     'reIndex' => 'cache'
+        // ));
 
-        $this->assertNull( $this->cache->load('ttlId'), "Should be null");
+        $this->assertNull( $this->cache->load('ttlId') );
     }
 
 }

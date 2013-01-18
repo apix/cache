@@ -109,6 +109,18 @@ class RedisTest extends TestCase
         $this->assertEquals( array($this->cache->mapKey('id1')), $ids );
     }
 
+    public function testSaveWithTagDisabled()
+    {
+       $options = $this->options+array('tag_enable' => false);
+       $this->cache = new Redis($this->redis, $options);
+
+        $this->assertTrue(
+            $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
+        );
+
+        $this->assertNull($this->cache->load('tag1', 'tag'));
+    }
+
     public function testSaveWithOverlappingTags()
     {
         $this->assertTrue(
@@ -131,7 +143,8 @@ class RedisTest extends TestCase
         $this->cache->save('strData2', 'id2', array('tag2', 'tag3', 'tag4'));
         $this->cache->save('strData3', 'id3', array('tag3', 'tag4'));
 
-        $this->cache->clean(array('tag4'));
+        $this->assertTrue($this->cache->clean(array('tag4')));
+        $this->assertFalse($this->cache->clean(array('tag4')));
 
         $this->assertNull($this->cache->load('id3'));
         $this->assertNull($this->cache->load('tag4', 'tag'));
@@ -145,7 +158,8 @@ class RedisTest extends TestCase
         $this->cache->save('strData3', 'id3', array('tag3', 'tag4'));
 
         $this->redis->set('foo', 'bar');
-        $this->cache->flush();
+        $this->assertTrue($this->cache->flush());
+        $this->assertFalse($this->cache->flush());
         $this->assertTrue($this->redis->exists('foo'));
 
         $this->assertNull($this->cache->load('id3'));
@@ -159,7 +173,7 @@ class RedisTest extends TestCase
         $this->cache->save('strData3', 'id3', array('tag3', 'tag4'));
 
         $this->redis->set('foo', 'bar');
-        $this->cache->flush(true);
+        $this->assertTrue($this->cache->flush(true)); // always true!
         $this->assertFalse($this->redis->exists('foo'));
 
         $this->assertNull($this->cache->load('id3'));
@@ -171,7 +185,8 @@ class RedisTest extends TestCase
         $this->cache->save('strData1', 'id1', array('tag1', 'tag2', 'tagz'));
         $this->cache->save('strData2', 'id2', array('tag2', 'tag3'));
 
-        $this->cache->delete('id1');
+        $this->assertTrue($this->cache->delete('id1'));
+        $this->assertFalse($this->cache->delete('id1'));
 
         $this->assertNull($this->cache->load('id1'));
         $this->assertNull($this->cache->load('tag1', 'tag'));
@@ -204,7 +219,7 @@ class RedisTest extends TestCase
             \Redis::SERIALIZER_PHP,
             $this->cache->getSerializer('php')
         );
-        if(defined(\Redis::SERIALIZER_IGBINARY)) {
+        if (defined(\Redis::SERIALIZER_IGBINARY)) {
             $this->assertSame(
                 \Redis::SERIALIZER_IGBINARY,
                 $this->cache->getSerializer('igBinary')
