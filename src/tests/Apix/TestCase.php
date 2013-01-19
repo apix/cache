@@ -17,16 +17,16 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
     public function skipIfMissing($name)
     {
-		if (!extension_loaded($name)) {
-		    $prefix = (PHP_SHLIB_SUFFIX === 'dll') ? 'php_' : '';
-		    if (
-		    	!ini_get('enable_dl') 
-		    	|| !dl($prefix . "$name." . PHP_SHLIB_SUFFIX)) {
-	            self::markTestSkipped(
-	                sprintf('The "%s" extension is required.', $name)
-	            );
-		    }
-		}
+        if (!extension_loaded($name)) {
+            $prefix = (PHP_SHLIB_SUFFIX === 'dll') ? 'php_' : '';
+            if (
+                !ini_get('enable_dl')
+                || !dl($prefix . "$name." . PHP_SHLIB_SUFFIX)) {
+                self::markTestSkipped(
+                    sprintf('The "%s" extension is required.', $name)
+                );
+            }
+        }
     }
 
 }
