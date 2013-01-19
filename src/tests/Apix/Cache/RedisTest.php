@@ -30,11 +30,7 @@ class RedisTest extends TestCase
 
     public function setUp()
     {
-        if (!extension_loaded('redis')) {
-            $this->markTestSkipped(
-                'The Redis extension is required to run this unit test.'
-            );
-        }
+        $this->skipIfMissing('redis');
 
         try {
             $this->redis = new \Redis();

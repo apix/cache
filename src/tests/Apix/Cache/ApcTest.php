@@ -27,11 +27,7 @@ class ApcTest extends TestCase
 
     public function setUp()
     {
-        if (!extension_loaded('apc')) {
-            self::markTestSkipped(
-                'The APC extension is required in order to run this unit test'
-            );
-        }
+        $this->skipIfMissing('apc');
 
         if (!ini_get('apc.enable_cli')) {
             self::markTestSkipped(

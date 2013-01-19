@@ -25,11 +25,7 @@ class MongoTest extends TestCase
 
     public function setUp()
     {
-        if (!extension_loaded('mongo')) {
-            $this->markTestSkipped(
-                'The MongoDB PHP driver is required to run this unit test.'
-            );
-        }
+        $this->skipIfMissing('mongo');
 
         try {
             $this->mongo = new \MongoClient();

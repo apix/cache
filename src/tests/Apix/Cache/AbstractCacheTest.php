@@ -22,31 +22,149 @@ class AbstractCacheTest extends TestCase
         $this->cache = new Apc;
     }
 
-    public function testSerializeDoesString()
+    public function provider()
     {
-        $str = 'str';
-        $this->assertEquals($str, $this->cache->serialize($str, 'none'));
-        $this->assertEquals('s:3:"str";', $this->cache->serialize($str, 'php'));
-        $this->assertEquals('"str"', $this->cache->serialize($str, 'json'));
-        // $this->assertEquals('"str"', $this->cache->serialize($str, 'igBinary'));
+        return array(
+            array('str' => 'str'),
+            array('arr' => array('foo' => 'bar')),
+            array('obj' => new \stdClass)
+        );
     }
 
-    public function testSerializeDoesObject()
+    /**
+     * @dataProvider provider
+     */
+    public function testSerializeSetToNone($var)
     {
-        $obj = new \stdClass;
-        $this->assertEquals($obj, $this->cache->serialize($obj, 'none'));
-        $this->assertEquals('O:8:"stdClass":0:{}', $this->cache->serialize($obj, 'php'));
-        $this->assertEquals('{}', $this->cache->serialize($obj, 'json'));
-        // $this->assertEquals('"str"', $this->cache->serialize($obj, 'igBinary'));
+        $this->assertEquals(
+            $var, $this->cache->serialize($var, 'none')
+        );
     }
 
-    public function testSerializeDoesArray()
+    /**
+     * @dataProvider provider
+     */
+    public function testUnserializeSetToNone($var)
     {
-        $array = array('foo'=>'bar');
-        $this->assertEquals($array, $this->cache->serialize($array, 'none'));
-        $this->assertEquals('a:1:{s:3:"foo";s:3:"bar";}', $this->cache->serialize($array, 'php'));
-        $this->assertEquals('{"foo":"bar"}', $this->cache->serialize($array, 'json'));
-        // $this->assertEquals('"str"', $this->cache->serialize($array, 'igBinary'));
+        $this->assertEquals(
+            $var, $this->cache->unserialize($var, 'none')
+        );
+    }
+
+    /**
+     * @dataProvider provider
+     */
+    public function testIsSerializedSetToNone($var)
+    {
+        $this->assertFalse($this->cache->isSerialized($var, 'none'));
+    }
+
+    /**
+     * @dataProvider provider
+     */
+    public function testSerializeSetToPhp($var)
+    {
+        $this->assertEquals(
+            serialize($var), $this->cache->serialize($var, 'php')
+        );
+    }
+
+    /**
+     * @dataProvider provider
+     */
+    public function testUnserializeSetToPhp($var)
+    {
+        $this->assertEquals(
+            $var, $this->cache->unserialize(serialize($var), 'php')
+        );
+    }
+
+    /**
+     * @dataProvider provider
+     */
+    public function testIsSerializedSetToPhp($var)
+    {
+        $this->assertFalse($this->cache->isSerialized($var, 'php'));
+        $this->assertTrue(
+            $this->cache->isSerialized(
+                $this->cache->serialize($var, 'php'), 'php'
+            )
+        );
+    }
+
+    /**
+     * @dataProvider provider
+     */
+    public function testSerializeSetToJson($var)
+    {
+        $this->assertEquals(
+            json_encode($var), $this->cache->serialize($var, 'json')
+        );
+    }
+
+    /**
+     * @dataProvider provider
+     */
+    public function testUnserializeSetToJson($var)
+    {
+        if(is_array($var)) $var = (object) $var;
+        $this->assertEquals(
+            $var, $this->cache->unserialize(json_encode($var), 'json')
+        );
+    }
+
+    /**
+     * @dataProvider provider
+     */
+    public function testIsSerializedSetToJson($var)
+    {
+        $this->assertFalse($this->cache->isSerialized($var, 'json'));
+        $this->assertTrue(
+            $this->cache->isSerialized(
+                $this->cache->serialize($var, 'json'), 'json'
+            )
+        );
+    }
+
+    /**
+     * @dataProvider provider
+     */
+    public function testSerializeSetToIgBinary($var)
+    {
+        $this->skipIfMissing('igbinary');
+
+        $this->assertEquals(
+            igbinary_serialize($var), // binary output
+            $this->cache->serialize($var, 'igBinary')
+        );
+    }
+
+    /**
+     * @dataProvider provider
+     */
+    public function testUnserializeSetToIgBinary($var)
+    {
+        $this->skipIfMissing('igbinary');
+
+        $this->assertEquals(
+            $var, // binary output
+            $this->cache->unserialize(igbinary_serialize($var), 'igBinary')
+        );
+    }
+
+    /**
+     * @dataProvider provider
+     */
+    public function testIsSerializedSetToIgBinary($var)
+    {
+        $this->skipIfMissing('igbinary');
+
+        $this->assertFalse($this->cache->isSerialized($var, 'igBinary'));
+        $this->assertTrue(
+            $this->cache->isSerialized(
+                $this->cache->serialize($var, 'igBinary'), 'igBinary'
+            )
+        );
     }
 
 }

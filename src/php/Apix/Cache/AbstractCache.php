@@ -141,12 +141,12 @@ abstract class AbstractCache implements Adapter
 
         switch ($type) {
             case 'json':
-                return (boolean) json_decode($str) !== null;
+                return (boolean) (json_decode($str) !== null);
 
             case 'igBinary':
                 // @codeCoverageIgnoreStart
                 // igBinary is not always compiled on the host machine.
-                return false; // TODO;
+                return substr_count($str, "\000", 0, 3) == 3;
                 // @codeCoverageIgnoreEnd
 
             case 'php':
