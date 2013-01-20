@@ -25,7 +25,7 @@ class RedisTest extends TestCase
     protected $options = array(
         'prefix_key' => 'unittest-apix-key:',
         'prefix_tag' => 'unittest-apix-tag:',
-        'serializer' => 'php' // null, php, igBinary.
+        'serializer' => 'php' // none, php, igBinary.
     );
 
     public function setUp()
