@@ -12,6 +12,11 @@
 
 namespace Apix\Cache;
 
+/**
+ * Mongo cache wrapper.
+ *
+ * @author Franck Cassedanne <franck at ouarz.net>
+ */
 class Mongo extends AbstractCache
 {
 
@@ -63,6 +68,8 @@ class Mongo extends AbstractCache
                                 array('expire' => 1),
                                 array('expireAfterSeconds' => 1)
                             );
+
+        $this->setSerializer($this->options['object_serializer']);
     }
 
     /**
@@ -100,12 +107,11 @@ class Mongo extends AbstractCache
             return null;
         }
 
-        if($this->isSerialized(
-            $cache['data'], $this->options['object_serializer'])
+        if(
+            null !== $this->serializer
+            && $this->serializer->isSerialized($cache['data'])
         ) {
-            return $this->unserialize(
-                $cache['data'], $this->options['object_serializer']
-            );
+            return $this->serializer->unserialize($cache['data']);
         }
 
         return $cache['data'];
@@ -118,8 +124,8 @@ class Mongo extends AbstractCache
     {
         $key = $this->mapKey($key);
 
-        if (is_object($data) && $this->options['object_serializer'] !== 'none') {
-            $data = $this->serialize($data, $this->options['object_serializer']);
+        if (null !== $this->serializer && is_object($data)) {
+            $data = $this->serializer->serialize($data);
         }
 
         $cache = array(

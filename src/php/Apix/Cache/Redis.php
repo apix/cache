@@ -12,6 +12,11 @@
 
 namespace Apix\Cache;
 
+/**
+ * Redis/PhpRedis cache wrapper.
+ *
+ * @author Franck Cassedanne <franck at ouarz.net>
+ */
 class Redis extends AbstractCache
 {
 

@@ -12,10 +12,24 @@
 
 namespace Apix\Cache;
 
+/**
+ * Base class provides the cache wrappers structure.
+ *
+ * @author Franck Cassedanne <franck at ouarz.net>
+ */
 abstract class AbstractCache implements Adapter
 {
 
-    protected $adapter;
+    /**
+     * Holds an injected adapter.
+     * @var object
+     */
+    protected $adapter = null;
+
+    /**
+     * @var Serializer\Adapter
+     */
+    protected $serializer;
 
     protected $options = array(
         'prefix_key'    => 'apix-cache-key:', // prefix cache keys
@@ -74,88 +88,40 @@ abstract class AbstractCache implements Adapter
     }
 
     /**
-     * Serialises mixed data as a string.
+     * Gets the injected adapter.
      *
-     * @param  mixed        $data
-     * @return string|mixed
+     * @return object
      */
-    public function serialize($data, $type)
+    public function getAdapter()
     {
-        switch ($type) {
-            case 'json':
-                return json_encode($data);
+        return $this->adapter;
+    }
 
-            case 'igBinary':
-                // @codeCoverageIgnoreStart
-                // igBinary is not always compiled on the host machine.
-                return \igbinary_serialize($data);
-                // @codeCoverageIgnoreEnd
-
-            case 'php':
-                return serialize($data);
-
-            case 'none':
-            default:
-                return $data;
+    /**
+     * Sets the serializer.
+     *
+     * @param  string $name
+     * @return void
+     */
+    public function setSerializer($name)
+    {
+        if (null === $name) {
+            $this->serializer = null;
+        } else {
+            $classname = __NAMESPACE__ . '\Serializer\\';
+            $classname .= ucfirst(strtolower($name));
+            $this->serializer = new $classname;
         }
     }
 
     /**
-     * Unserialises a string representation as mixed data.
+     * Gets the serializer.
      *
-     * @param  string       $data
-     * @return mixed|string
+     * @return Serializer\Adapter
      */
-    public function unserialize($str, $type)
+    public function getSerializer()
     {
-        switch ($type) {
-            case 'json':
-                return json_decode($str);
-
-            case 'igBinary':
-                // @codeCoverageIgnoreStart
-                // igBinary is not always compiled on the host machine.
-                return \igbinary_unserialize($str);
-                // @codeCoverageIgnoreEnd
-
-            case 'php':
-                return unserialize($str);
-
-            case 'none':
-            default:
-                return $str;
-        }
-    }
-
-    /**
-     * Checks if the input is serialized a string representation as mixed data.
-     *
-     * @param  string  $data
-     * @return boolean
-     */
-    public function isSerialized($str, $type)
-    {
-        if (!is_string($str)) {
-            return false;
-        }
-
-        switch ($type) {
-            case 'json':
-                return (boolean) (json_decode($str) !== null);
-
-            case 'igBinary':
-                // @codeCoverageIgnoreStart
-                // igBinary is not always compiled on the host machine.
-                return substr_count($str, "\000", 0, 3) == 3;
-                // @codeCoverageIgnoreEnd
-
-            case 'php':
-                return (boolean) ($str=='b:0;' || @unserialize($str) !== false);
-
-            case 'none':
-            default:
-                return false;
-        }
+        return $this->serializer;
     }
 
 }
