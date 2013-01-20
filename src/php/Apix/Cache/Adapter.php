@@ -12,6 +12,11 @@
 
 namespace Apix\Cache;
 
+/**
+ * The interface/adapter that the cache wrappers must implement.
+ *
+ * @author Franck Cassedanne <franck at ouarz.net>
+ */
 interface Adapter
 {
 
@@ -37,19 +42,19 @@ interface Adapter
     public function save($data, $key, array $tags=null, $ttl=null);
 
     /**
-     * Removes all the cached entries associated with the given tag names.
-     *
-     * @param array $tags The array of tags to remove.
-     */
-    public function clean(array $tags);
-
-    /**
      * Deletes the specified cache record.
      *
      * @param  string  $key The cache id to remove.
      * @return boolean Returns True on success or False on failure.
      */
     public function delete($key);
+
+    /**
+     * Removes all the cached entries associated with the given tag names.
+     *
+     * @param array $tags The array of tags to remove.
+     */
+    public function clean(array $tags);
 
     /**
      * Flush all the cached entries.

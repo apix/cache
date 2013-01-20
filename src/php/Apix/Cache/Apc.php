@@ -13,7 +13,9 @@
 namespace Apix\Cache;
 
 /**
- * APC wrapper with emulated tag support.
+ * APC cache wrapper with emulated tag support.
+ *
+ * @author Franck Cassedanne <franck at ouarz.net>
  */
 class Apc extends AbstractCache
 {
