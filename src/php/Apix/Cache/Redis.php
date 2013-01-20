@@ -37,10 +37,8 @@ class Redis extends AbstractCache
 
         parent::__construct($redis, $options);
 
-        $redis->setOption(
-            \Redis::OPT_SERIALIZER,
-            $this->getSerializer($this->options['serializer'])
-        );
+        $this->setSerializer($this->options['serializer']);
+        $redis->setOption( \Redis::OPT_SERIALIZER, $this->getSerializer() );
     }
 
     /**
@@ -144,14 +142,21 @@ class Redis extends AbstractCache
     }
 
     /**
-     * Returns a Redis constant
-     *
-     * @param  string  $name Can be php, igBinary or none.
-     * @return integer Corresponding to a Redis constant.
+     * {@inheritdoc}
      */
-    public function getSerializer($name)
+    public function setSerializer($name)
     {
-        switch ($name) {
+        $this->serializer = $name;
+    }
+
+    /**
+     * {@inheritdoc}
+     * 
+     * @return integer Returns a Redis constant.
+     */
+    public function getSerializer()
+    {
+        switch ($this->serializer) {
             case 'igBinary':
                 // @codeCoverageIgnoreStart
                 // igBinary is not always compiled on the host machine.

@@ -202,28 +202,29 @@ class RedisTest extends TestCase
     public function testShortTtlDoesExpunge()
     {
         $this->cache->save('ttl-1', 'ttlId', null, -1);
-
-        // $this->cache->save('ttl-1', 'ttlId', null, 1);
-        // sleep(1);
-
-        $this->assertNull( $this->cache->load('ttlId'), "Should be null");
+        $this->assertNull( $this->cache->load('ttlId'));
     }
 
     public function testGetSerializer()
     {
+        $this->cache->setSerializer('php');
         $this->assertSame(
             \Redis::SERIALIZER_PHP,
-            $this->cache->getSerializer('php')
+            $this->cache->getSerializer()
         );
+
         if(defined('Redis::SERIALIZER_IGBINARY')) {
+            $this->cache->setSerializer('igBinary');
             $this->assertSame(
                 \Redis::SERIALIZER_IGBINARY,
-                $this->cache->getSerializer('igBinary')
+                $this->cache->getSerializer()
             );
         }
+
+        $this->cache->setSerializer(null);
         $this->assertSame(
             \Redis::SERIALIZER_NONE,
-            $this->cache->getSerializer(null)
+            $this->cache->getSerializer()
         );
     }
 
