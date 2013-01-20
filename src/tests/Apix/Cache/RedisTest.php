@@ -215,7 +215,7 @@ class RedisTest extends TestCase
             \Redis::SERIALIZER_PHP,
             $this->cache->getSerializer('php')
         );
-        if (defined(\Redis::SERIALIZER_IGBINARY)) {
+        if(defined('Redis::SERIALIZER_IGBINARY')) {
             $this->assertSame(
                 \Redis::SERIALIZER_IGBINARY,
                 $this->cache->getSerializer('igBinary')
