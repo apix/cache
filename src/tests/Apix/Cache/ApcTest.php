@@ -20,13 +20,14 @@ class ApcTest extends TestCase
 
     protected $cache = null;
 
+    protected $options = array(
+        'prefix_key' => 'unittest-apix-key:',
+        'prefix_tag' => 'unittest-apix-tag:'
+    );
+
     public function setUp()
     {
-        if (!extension_loaded('apc')) {
-            self::markTestSkipped(
-                'The APC extension is required in order to run this unit test'
-            );
-        }
+        $this->skipIfMissing('apc');
 
         if (!ini_get('apc.enable_cli')) {
             self::markTestSkipped(
@@ -34,12 +35,7 @@ class ApcTest extends TestCase
             );
         }
 
-        $this->cache = new Apc(
-            array(
-                'prefix_key' => 'unittest-apix-key:',
-                'prefix_tag' => 'unittest-apix-tag:'
-            )
-        );
+        $this->cache = new Apc($this->options);
     }
 
     public function tearDown()
@@ -90,7 +86,19 @@ class ApcTest extends TestCase
         );
 
         $ids = $this->cache->load('tag2', 'tag');
-         $this->assertEquals( array($this->cache->mapKey('id1')), $ids );
+        $this->assertEquals( array($this->cache->mapKey('id1')), $ids );
+    }
+
+    public function testSaveWithTagDisabled()
+    {
+       $options = $this->options+array('tag_enable' => false);
+       $this->cache = new Apc($options);
+
+        $this->assertTrue(
+            $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
+        );
+
+        $this->assertNull($this->cache->load('tag1', 'tag'));
     }
 
     public function testSaveWithOverlappingTags()
@@ -115,7 +123,8 @@ class ApcTest extends TestCase
         $this->cache->save('strData2', 'id2', array('tag2', 'tag3'));
         $this->cache->save('strData3', 'id3', array('tag3', 'tag4'));
 
-        $this->cache->clean(array('tag4'));
+        $this->assertTrue($this->cache->clean(array('tag4')));
+        $this->assertFalse($this->cache->clean(array('tag4')));
 
         $this->assertNull($this->cache->load('id3'));
         $this->assertNull($this->cache->load('tag4', 'tag'));
@@ -129,7 +138,8 @@ class ApcTest extends TestCase
         $this->cache->save('strData3', 'id3', array('tag3', 'tag4'));
 
         apc_add('foo', 'bar');
-        $this->cache->flush();
+        $this->assertTrue($this->cache->flush());
+        $this->assertFalse($this->cache->flush());
         $this->assertEquals('bar', apc_fetch('foo'));
 
         $this->assertNull($this->cache->load('id3'));
@@ -143,7 +153,8 @@ class ApcTest extends TestCase
         $this->cache->save('strData3', 'id3', array('tag3', 'tag4'));
 
         apc_add('foo', 'bar');
-        $this->cache->flush(true);
+        $this->assertTrue($this->cache->flush(true)); // always true!
+
         $this->assertEquals(false, apc_fetch('foo'));
 
         $this->assertNull($this->cache->load('id3'));
@@ -155,7 +166,8 @@ class ApcTest extends TestCase
         $this->cache->save('strData1', 'id1', array('tag1', 'tag2'));
         $this->cache->save('strData2', 'id2', array('tag2', 'tag3'));
 
-        $this->cache->delete('id1');
+        $this->assertTrue($this->cache->delete('id1'));
+        $this->assertFalse($this->cache->delete('id1'));
 
         $this->assertNull($this->cache->load('id1'));
         $this->assertNull($this->cache->load('tag1', 'tag'));
