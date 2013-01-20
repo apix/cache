@@ -14,50 +14,50 @@ namespace Apix\Cache;
 
 use Apix\TestCase;
 
-class RedisTest extends TestCase
+class MongoTest extends TestCase
 {
-    const HOST = '127.0.0.1';
-    const PORT = 6379;
-    const AUTH = NULL;
-
-    protected $cache, $redis;
+    protected $cache, $mongo;
 
     protected $options = array(
-        'prefix_key' => 'unittest-apix-key:',
-        'prefix_tag' => 'unittest-apix-tag:',
-        'serializer' => 'php' // null, php, igBinary.
+        'prefix_key' => 'unit_test-',
+        'prefix_tag' => 'unit_utest-',
     );
 
     public function setUp()
     {
-        $this->skipIfMissing('redis');
+        $this->skipIfMissing('mongo');
 
         try {
-            $this->redis = new \Redis();
-            $this->redis->connect(self::HOST, self::PORT);
-            if (self::AUTH) {
-                $this->redis->auth(self::AUTH);
-            }
-            $this->redis->ping();
+            $this->mongo = new \MongoClient();
         } catch (\Exception $e) {
             $this->markTestSkipped( $e->getMessage() );
         }
 
-       $this->cache = new Redis($this->redis, $this->options);
+       $this->cache = new Mongo($this->mongo, $this->options);
     }
 
     public function tearDown()
     {
         if (null !== $this->cache) {
             $this->cache->flush();
-            $this->redis->close();
             unset($this->cache);
+            $this->mongo->close();
         }
     }
 
     public function testLoadReturnsNullWhenEmpty()
     {
-        $this->assertNull( $this->cache->load('id') );
+        $this->assertNull($this->cache->load('id'));
+    }
+
+    public function testSaveIsUnique()
+    {
+        $this->assertTrue($this->cache->save('bar1', 'foo'));
+        $this->assertTrue($this->cache->save('bar2', 'foo'));
+
+        $this->assertEquals('bar2', $this->cache->load('foo'));
+
+        $this->assertEquals(1, $this->cache->count('foo') );
     }
 
     public function testSaveAndLoadWithString()
@@ -83,7 +83,7 @@ class RedisTest extends TestCase
 
     public function testSaveAndLoadArray()
     {
-        $this->cache = new Redis($this->redis, $this->options);
+        $this->cache = new Mongo($this->mongo, $this->options);
 
         $data = array('arrayData');
         $this->assertTrue($this->cache->save($data, 'id'));
@@ -102,13 +102,14 @@ class RedisTest extends TestCase
         );
 
         $ids = $this->cache->load('tag2', 'tag');
+
         $this->assertEquals( array($this->cache->mapKey('id1')), $ids );
     }
 
     public function testSaveWithTagDisabled()
     {
        $options = $this->options+array('tag_enable' => false);
-       $this->cache = new Redis($this->redis, $options);
+       $this->cache = new Mongo($this->mongo, $options);
 
         $this->assertTrue(
             $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
@@ -142,21 +143,27 @@ class RedisTest extends TestCase
         $this->assertTrue($this->cache->clean(array('tag4')));
         $this->assertFalse($this->cache->clean(array('tag4')));
 
+        $this->assertNull($this->cache->load('id2'));
         $this->assertNull($this->cache->load('id3'));
         $this->assertNull($this->cache->load('tag4', 'tag'));
         $this->assertEquals('strData1', $this->cache->load('id1'));
     }
 
-    public function testFlushSelected()
+    public function testFlushCacheOnly()
     {
         $this->cache->save('strData1', 'id1', array('tag1', 'tag2'));
         $this->cache->save('strData2', 'id2', array('tag2', 'tag3'));
         $this->cache->save('strData3', 'id3', array('tag3', 'tag4'));
 
-        $this->redis->set('foo', 'bar');
+        $foo = array('foo' => 'bar');
+        $this->cache->collection->insert($foo);
+
         $this->assertTrue($this->cache->flush());
-        $this->assertFalse($this->cache->flush());
-        $this->assertTrue($this->redis->exists('foo'));
+
+        $this->assertEquals(
+            $foo,
+            $this->cache->collection->findOne(array('foo'=>'bar'))
+        );
 
         $this->assertNull($this->cache->load('id3'));
         $this->assertNull($this->cache->load('tag1', 'tag'));
@@ -168,9 +175,10 @@ class RedisTest extends TestCase
         $this->cache->save('strData2', 'id2', array('tag2', 'tag3'));
         $this->cache->save('strData3', 'id3', array('tag3', 'tag4'));
 
-        $this->redis->set('foo', 'bar');
-        $this->assertTrue($this->cache->flush(true)); // always true!
-        $this->assertFalse($this->redis->exists('foo'));
+        $this->cache->collection->insert(array('key' => 'foobar'));
+
+        $this->assertTrue($this->cache->flush(true));
+        $this->assertNull($this->cache->collection->findOne(array('key')));
 
         $this->assertNull($this->cache->load('id3'));
         $this->assertNull($this->cache->load('tag1', 'tag'));
@@ -182,11 +190,10 @@ class RedisTest extends TestCase
         $this->cache->save('strData2', 'id2', array('tag2', 'tag3'));
 
         $this->assertTrue($this->cache->delete('id1'));
-        $this->assertFalse($this->cache->delete('id1'));
 
-        $this->assertNull($this->cache->load('id1'));
-        $this->assertNull($this->cache->load('tag1', 'tag'));
-        $this->assertNull($this->cache->load('tagz', 'tag'));
+        $this->assertNull($this->cache->load('id1'), 'msg1');
+        $this->assertNull($this->cache->load('tag1', 'tag'), 'msg2');
+        $this->assertNull($this->cache->load('tagz', 'tag'), 'msg3');
 
         $this->assertContains(
             $this->cache->mapKey('id2'),
@@ -201,30 +208,16 @@ class RedisTest extends TestCase
 
     public function testShortTtlDoesExpunge()
     {
-        $this->cache->save('ttl-1', 'ttlId', null, -1);
-
-        // $this->cache->save('ttl-1', 'ttlId', null, 1);
-        // sleep(1);
-
-        $this->assertNull( $this->cache->load('ttlId'), "Should be null");
-    }
-
-    public function testGetSerializer()
-    {
-        $this->assertSame(
-            \Redis::SERIALIZER_PHP,
-            $this->cache->getSerializer('php')
+        $this->assertTrue(
+            $this->cache->save('ttl-1', 'ttlId', array('someTags!'), -1)
         );
-        if (defined(\Redis::SERIALIZER_IGBINARY)) {
-            $this->assertSame(
-                \Redis::SERIALIZER_IGBINARY,
-                $this->cache->getSerializer('igBinary')
-            );
-        }
-        $this->assertSame(
-            \Redis::SERIALIZER_NONE,
-            $this->cache->getSerializer(null)
-        );
+
+        // How to forcibly run garbage collection?
+        // $this->cache->db->command(array(
+        //     'reIndex' => 'cache'
+        // ));
+
+        $this->assertNull( $this->cache->load('ttlId') );
     }
 
 }

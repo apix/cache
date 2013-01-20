@@ -98,7 +98,7 @@ class Redis extends AbstractCache
             $items[] = $this->mapTag($tag);
         }
 
-        return $this->adapter->del($items) ? true : false;
+        return (boolean) $this->adapter->del($items);
     }
 
     /**
@@ -108,7 +108,7 @@ class Redis extends AbstractCache
     {
         $key = $this->mapKey($key);
 
-        if($this->options['tag_enable']) {
+        if ($this->options['tag_enable']) {
             $tags = $this->adapter->keys($this->mapTag('*'));
             if (!empty($tags)) {
                 $redis = $this->adapter->multi($this->options['atomicity']);
@@ -118,7 +118,8 @@ class Redis extends AbstractCache
                 $redis->exec();
             }
         }
-        return $this->adapter->del($key) ? true : false;
+
+        return (boolean) $this->adapter->del($key);
     }
 
     /**
@@ -134,7 +135,7 @@ class Redis extends AbstractCache
             $this->adapter->keys($this->mapKey('*'))
         );
 
-        return $this->adapter->del($items) ? true : false;
+        return (boolean) $this->adapter->del($items);
     }
 
     /**
@@ -147,7 +148,10 @@ class Redis extends AbstractCache
     {
         switch ($name) {
             case 'igBinary':
+                // @codeCoverageIgnoreStart
+                // igBinary is not always compiled on the host machine.
                 return \Redis::SERIALIZER_IGBINARY;
+                // @codeCoverageIgnoreEnd
             case 'php':
                 return \Redis::SERIALIZER_PHP;
             case 'none':

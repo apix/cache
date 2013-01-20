@@ -14,6 +14,7 @@ Cache backends
 Currently, the following cache store are available:
 * APC
 * Redis (via PhpRedis)
+* Mongo (using MongoDB Native Driver)
 * more to come...
 
 Basic usage
@@ -61,15 +62,22 @@ Available options
   );
   $local_cache = new Apix\Cache\Apc($options);
 
-  // additional options, specific to Redis
+  // additional (default) options, specific to Redis
   $options['atomicity']  = false;         // false is faster, true is guaranteed
-  $options['serializer'] = igBinary;      // none, php, igBinary
+  $options['serializer'] = 'igBinary';    // none, php, igBinary
 
-  $redis_instance = new \Redis;           // instantiate phpredis*
-  $distributed_cache = new Apix\Cache\Redis($redis_instance, $options);
+  $redis_client = new \Redis;             // instantiate phpredis*
+  $distributed_cache = new Apix\Cache\Redis($redis_client, $options);
+
+  // additional (default) options, specific to Mongo
+  $options['object_serializer'] = 'php';  // none, json, php, igBinary
+
+  $mongo_client = new \MongoClient;       // MongoDB native driver** instance
+  $distributed_cache = new Apix\Cache\Mongo($mongo_client, $options);
 ```
 
 \* see [phpredis](https://github.com/nicolasff/phpredis) for more details and usage.
+\*\* see [MongoDB](http://php.net/manual/en/book.mongo.php) for more details and usage.
 
 Installation
 ------------------------

@@ -18,10 +18,11 @@ interface Adapter
     /**
      * Retrieves the cache for the given key, or return false if not set.
      *
-     * @param  string     $key The cache id to retrieve.
+     * @param  string     $key  The cache id to retrieve.
+     * @param  string     $type The type of the key (either 'key' or 'tag').
      * @return mixed|null Returns the cached data.
      */
-    public function load($key);
+    public function load($key, $type='key');
 
     /**
      * Saves data to the cache.
@@ -31,7 +32,7 @@ interface Adapter
      * @param array  $tags The cache tags for this cache entry.
      * @param int    $ttl  The time-to-live in seconds, if set to null the
      *                     cache is valid forever.
-     * @return boolean Returns True on success.
+     * @return boolean Returns True on success or False on failure.
      */
     public function save($data, $key, array $tags=null, $ttl=null);
 
@@ -46,7 +47,7 @@ interface Adapter
      * Deletes the specified cache record.
      *
      * @param  string  $key The cache id to remove.
-     * @return boolean Returns True on success.
+     * @return boolean Returns True on success or False on failure.
      */
     public function delete($key);
 
@@ -54,8 +55,8 @@ interface Adapter
      * Flush all the cached entries.
      *
      * @param boolean $all Wether to flush the whole database, or (preferably)
-     *                      the entries prefixed with prefix_key and prefix_tag.
-     * @return boolean Returns True on success.
+     *                     the entries prefixed with prefix_key and prefix_tag.
+     * @return boolean Returns True on success or False on failure.
      */
      public function flush($all=false);
 

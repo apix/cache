@@ -110,6 +110,8 @@ class Apc extends AbstractCache
                     $rmed[] = apc_delete($key);
                 }
                 $rmed[] = apc_delete($tag);
+            } else {
+                $rmed[] = false;
             }
         }
 
@@ -138,7 +140,7 @@ class Apc extends AbstractCache
             $rmed[] = apc_delete($key);
         }
 
-        return !in_array(false, $rmed);
+        return empty($rmed) || in_array(false, $rmed) ? false : true;
     }
 
     protected function iterator($search=null, $format=APC_ITER_ALL)
