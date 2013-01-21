@@ -43,7 +43,7 @@ class PdoTest extends TestCase
                     );
                 }
             ),
-            'postgresql' => array(
+            'pgsql' => array(
                 'pdo_postgress',
                 function(){
                     return new \PDO(

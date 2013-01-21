@@ -20,12 +20,11 @@ before_script:
   - sh -c "if [ '$DB' = 'apc' ]; then echo 'apc.enable_cli=1' >> `php --ini | grep 'Loaded Configuration' | sed -e 's|.*:\s*||'`; fi"
   - sh -c "if [ '$DB' = 'redis' ]; then git clone --branch=master --depth=1 git://github.com/nicolasff/phpredis.git phpredis; cd phpredis && phpize && ./configure && make && sudo make install && cd ..; rm -fr phpredis; fi"
   - sh -c "if [ '$DB' = 'redis' ]; then echo 'extension=redis.so' >> `php --ini | grep 'Loaded Configuration' | sed -e 's|.*:\s*||'`; fi"
-  - sh -c "if [ '$DB' = 'mongodb' ]; then curl -o APC.tgz http://pecl.php.net/get/mongo; tar -xzf mongo.tgz; fi"
+  - sh -c "if [ '$DB' = 'mongodb' ]; then curl -o mongo.tgz http://pecl.php.net/get/mongo; tar -xzf mongo.tgz; fi"
   - sh -c "if [ '$DB' = 'mongodb' ]; then cd mongo-* && phpize && ./configure && make && sudo make install && cd ..; rm -fr mongo*; fi"
   - sh -c "if [ '$DB' = 'mongodb' ]; then echo 'extension=mongo.so' >> `php --ini | grep 'Loaded Configuration' | sed -e 's|.*:\s*||'`; fi"
-  - sh -c "if [ '$DB' = 'pgsql' ]; then psql -c 'DROP DATABASE IF EXISTS apix_tests;' -U postgres; fi"
-  - sh -c "if [ '$DB' = 'pgsql' ]; then psql -c 'CREATE DATABASE apix_tests;' -U postgres; fi"
   - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'CREATE DATABASE IF NOT EXISTS apix_tests;'; fi"
+  - sh -c "if [ '$DB' = 'pgsql' ]; then psql -c 'DROP DATABASE IF EXISTS apix_tests;CREATE DATABASE apix_tests;' -U postgres; fi"
   - phpenv rehash
   - curl -s http://getcomposer.org/installer | php
   - php composer.phar --dev install

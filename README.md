@@ -5,17 +5,24 @@ APIx Cache is a generic cache wrapper with a simple interface to various differe
 
 Some of its features:
 
-* Provides cache tagging -- natively and through emulation.
+* Provides cache tagging -- natively and/or through emulation.
 * 100% unit tested and compliant with PSR0, PSR1 and PSR2.
 * Available as a PEAR and as a Composer package.
 
 Cache backends
 --------------
 Currently, the following cache store are available:
-* APC
-* Redis (via PhpRedis)
-* Mongo (using MongoDB Native Driver)
-* more to come...
+
+* [APC](http://php.net/book.apc.php) (with full tag support)
+* [Redis](http://redis.io) (using [PhpRedis](https://github.com/nicolasff/phpredis) extension)
+* [MongoDB](http://www.mongodb.org/) (using [mongo](http://php.net/book.mongo.php) native PHP extension)
+* [PDO](http://php.net/book.pdo.php), fully tested with: 
+  * [SQLite](http://www.sqlite.org)
+  * [MySQL](http://www.mysql.com)
+  * [PostgreSQL](http://www.postgresql.org)
+  * (other native PDO
+
+Planned support: Memcache and Memcached.
 
 Basic usage
 -----------
