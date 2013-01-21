@@ -100,8 +100,7 @@ abstract class AbstractCache implements Adapter
     /**
      * Sets the serializer.
      *
-     * @param  string $name
-     * @return void
+     * @param string $name
      */
     public function setSerializer($name)
     {

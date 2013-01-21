@@ -128,10 +128,7 @@ class Mongo extends AbstractCache
             $data = $this->serializer->serialize($data);
         }
 
-        $cache = array(
-            'key'   => $key,
-            'data'  => $data
-        );
+        $cache = array('key' => $key, 'data'  => $data);
 
         if ($this->options['tag_enable'] && null !== $tags) {
             $cache['tags'] = array();
@@ -145,9 +142,7 @@ class Mongo extends AbstractCache
         }
 
         $res = $this->collection->update(
-            array('key' => $key),
-            $cache,
-            array('upsert' => true)
+            array('key' => $key), $cache, array('upsert' => true)
         );
 
         return (boolean) $res['ok'];
