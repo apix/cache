@@ -21,24 +21,24 @@ class Pdo extends AbstractCache
 {
 
     protected $sql_definitions = array(
-        'init' => 'CREATE TABLE IF NOT EXISTS %s (key VARCHAR(255) PRIMARY KEY,
-                  data LONGTEXT, tags TEXT, expire INT, created INT)',
-        'key_idx' => 'CREATE INDEX IF NOT EXISTS %s_key_idx ON %s (key)',
-        'exp_idx' => 'CREATE INDEX IF NOT EXISTS %s_exp_idx ON %s (expire)',
-        'tag_idx' => 'CREATE INDEX IF NOT EXISTS %s_tag_idx ON %s (tags)',
+        'init' => 'CREATE TABLE IF NOT EXISTS %s (key VARCHAR PRIMARY KEY,
+                  data LONGTEXT, tags TEXT, expire INT, created INT);',
+        'key_idx' => 'CREATE INDEX IF NOT EXISTS %s_key_idx ON %s (key);',
+        'exp_idx' => 'CREATE INDEX IF NOT EXISTS %s_exp_idx ON %s (expire);',
+        'tag_idx' => 'CREATE INDEX IF NOT EXISTS %s_tag_idx ON %s (tags);',
         'loadKey' => 'SELECT data FROM %s WHERE key=:key AND
-                      (expire IS NULL OR expire > :now)',
+                      (expire IS NULL OR expire > :now);',
         'loadTag' => 'SELECT key FROM %s WHERE tags LIKE :tag AND
-                      (expire IS NULL OR expire > :now)',
+                      (expire IS NULL OR expire > :now);',
         'update' => 'UPDATE %s SET data=:data, tags=:tags, expire=:exp
-                     WHERE key=:key',
+                     WHERE key=:key;',
         'insert' => 'INSERT INTO %s (key, data, tags, expire)
-                     VALUES (:key, :data, :tags, :exp)',
-        'delete' => 'DELETE FROM %s WHERE key = ?',
-        'clean' => 'DELETE FROM %s WHERE %s',
-        'flush_all' => 'DROP TABLE IF EXISTS %s',
-        'flush' =>  'DELETE FROM %s',
-        'purge' => 'DELETE FROM %s WHERE expire IS NOT NULL AND expire < %d'
+                     VALUES (:key, :data, :tags, :exp);',
+        'delete' => 'DELETE FROM %s WHERE key = ?;',
+        'clean' => 'DELETE FROM %s WHERE %s;',
+        'flush_all' => 'DROP TABLE IF EXISTS %s;',
+        'flush' =>  'DELETE FROM %s;',
+        'purge' => 'DELETE FROM %s WHERE expire IS NOT NULL AND expire < %d;'
     );
 
     /**
