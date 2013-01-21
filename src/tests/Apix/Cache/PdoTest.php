@@ -14,23 +14,43 @@ namespace Apix\Cache;
 
 use Apix\TestCase;
 
+/**
+ * @covers Apix\Cache\Pdo
+ */
 class PdoTest extends TestCase
 {
     protected $cache, $pdo;
 
     protected $options = array(
+        'db_name'  => 'apix_tests',
+        'db_table' => 'cache'
     );
 
     public function pdoProvider()
     {
         $dbs = array(
-            'sqlite' => array('pdo_sqlite', function(){return new \PDO('sqlite::memory:');}),
-            // before_script:
-            // mysql -e 'create database apix_cache;'
-            'mysql' => array('pdo_mysql', function(){return new \PDO('mysql:dbname=apix_cache;host=127.0.0.1', 'root');}),
-            // before_script:
-            //   - psql -c 'create database apix_cache;' -U postgres
-            'postgresql' => array('pdo_postgress', function(){return new \PDO('pgsql:dbname=apix_cache;host=127.0.0.1', 'postgres');})
+            'sqlite' => array(
+                'pdo_sqlite',
+                function(){
+                    return new \PDO('sqlite::memory:');
+                }
+            ),
+            'mysql' => array(
+                'pdo_mysql',
+                function(){
+                    return new \PDO(
+                        'mysql:dbname=apix_tests;host=127.0.0.1', 'root'
+                    );
+                }
+            ),
+            'postgresql' => array(
+                'pdo_postgress',
+                function(){
+                    return new \PDO(
+                        'pgsql:dbname=apix_tests;host=127.0.0.1', 'postgres'
+                    );
+                }
+            )
         );
         $DB = getenv('DB');
 
@@ -38,12 +58,9 @@ class PdoTest extends TestCase
             return $dbs[$DB];
         }
 
-        $this->markTestSkipped('Unsupported DB environment.');
+        $this->markTestSkipped('Unsupported ~DB~ environment.');
     }
 
-    /**
-     * @dataProvider pdoProvider
-     */
     public function setUp()
     {
         list($ext_name, $pdo_dbh) = $this->pdoProvider();
@@ -109,10 +126,7 @@ class PdoTest extends TestCase
     {
         $this->assertTrue(
             $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
-        );
-
-        $this->assertTrue(
-            $this->cache->save('strData2', 'id2', array('tag3', 'tag4'))
+            && $this->cache->save('strData2', 'id2', array('tag3', 'tag4'))
         );
 
         $ids = $this->cache->load('tag2', 'tag');
@@ -122,9 +136,8 @@ class PdoTest extends TestCase
 
     public function testSaveWithTagDisabled()
     {
-        return;
-       $options = $this->options+array('tag_enable' => false);
-       $this->cache = new Sqlite($this->sqlite, $options);
+        $options = $this->options+array('tag_enable' => false);
+        $this->cache = new Pdo($this->pdo, $options);
 
         $this->assertTrue(
             $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
@@ -137,10 +150,7 @@ class PdoTest extends TestCase
     {
         $this->assertTrue(
             $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
-        );
-
-        $this->assertTrue(
-            $this->cache->save('strData2', 'id2', array('tag2', 'tag3'))
+            && $this->cache->save('strData2', 'id2', array('tag2', 'tag3'))
         );
 
         $ids = $this->cache->load('tag2', 'tag');
@@ -151,9 +161,11 @@ class PdoTest extends TestCase
 
     public function testClean()
     {
-        $this->cache->save('strData1', 'id1', array('tag1', 'tag2'));
-        $this->cache->save('strData2', 'id2', array('tag2', 'tag3', 'tag4'));
-        $this->cache->save('strData3', 'id3', array('tag3', 'tag4'));
+        $this->assertTrue(
+            $this->cache->save('strData2', 'id2', array('tag2', 'tag3', 'tag4'))
+            && $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
+            && $this->cache->save('strData3', 'id3', array('tag3', 'tag4'))
+        );
 
         $this->assertTrue($this->cache->clean(array('tag4')));
         $this->assertFalse($this->cache->clean(array('tag4')));
@@ -166,10 +178,11 @@ class PdoTest extends TestCase
 
     public function testFlushCacheOnly()
     {
-        $this->cache->save('strData1', 'id1', array('tag1', 'tag2'));
-        $this->cache->save('strData2', 'id2', array('tag2', 'tag3'));
-        $this->cache->save('strData3', 'id3', array('tag3', 'tag4'));
-
+        $this->assertTrue(
+            $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
+            && $this->cache->save('strData2', 'id2', array('tag2', 'tag3'))
+            && $this->cache->save('strData3', 'id3', array('tag3', 'tag4'))
+        );
         // $foo = array('foo' => 'bar');
         // $this->cache->getAdapter()->insert($foo);
 
@@ -189,9 +202,11 @@ class PdoTest extends TestCase
      */
     public function testFlushAll()
     {
-        $this->cache->save('strData1', 'id1', array('tag1', 'tag2'));
-        $this->cache->save('strData2', 'id2', array('tag2', 'tag3'));
-        $this->cache->save('strData3', 'id3', array('tag3', 'tag4'));
+        $this->assertTrue(
+            $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
+            && $this->cache->save('strData2', 'id2', array('tag2', 'tag3'))
+            && $this->cache->save('strData3', 'id3', array('tag3', 'tag4'))
+        );
 
         $this->assertTrue($this->cache->flush(true));
 
@@ -201,8 +216,10 @@ class PdoTest extends TestCase
 
     public function testDelete()
     {
-        $this->cache->save('strData1', 'id1', array('tag1', 'tag2', 'tagz'));
-        $this->cache->save('strData2', 'id2', array('tag2', 'tag3'));
+        $this->assertTrue(
+            $this->cache->save('strData1', 'id1', array('tag1', 'tag2', 'tagz'))
+            && $this->cache->save('strData2', 'id2', array('tag2', 'tag3'))
+        );
 
         $this->assertTrue($this->cache->delete('id1'));
 
@@ -237,10 +254,22 @@ class PdoTest extends TestCase
         );
 
         $this->assertEquals('ttl-null', $this->cache->load('ttlId') );
-        // How to forcibly run garbage collection?
-        // $this->cache->db->command(array(
-        //     'reIndex' => 'cache'
-        // ));
+    }
+
+    public function testPurge()
+    {
+        $this->assertTrue(
+            $this->cache->save('120s', 'id1', null, 120)
+            && $this->cache->save('600s', 'id2', null, 600)
+        );
+        $this->assertEquals('120s', $this->cache->load('id1'));
+        $this->assertTrue($this->cache->purge(130));
+        $this->assertFalse($this->cache->purge());
+        $this->assertNull($this->cache->load('id1'));
+
+        $this->assertEquals('600s', $this->cache->load('id2'));
+        $this->assertTrue($this->cache->purge(630));
+        $this->assertNull($this->cache->load('id2'));
     }
 
 }
