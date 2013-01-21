@@ -44,7 +44,7 @@ class PdoTest extends TestCase
                 }
             ),
             'pgsql' => array(
-                'pdo_postgress',
+                'pdo_pgsql',
                 function(){
                     return new \PDO(
                         'pgsql:dbname=apix_tests;host=127.0.0.1', 'postgres'
