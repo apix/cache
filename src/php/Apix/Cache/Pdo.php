@@ -26,7 +26,7 @@ class Pdo extends AbstractCache
      */
     public $sql_definitions = array(
         'init'      => 'CREATE TABLE "%s" ("key" VARCHAR PRIMARY KEY, "data" TEXT,
-                        "tags" TEXT, "expire" INT, "created" TIMESTAMP);',
+                        "tags" TEXT, "expire" INTEGER, "dated" TIMESTAMP);',
         'key_idx'   => 'CREATE INDEX "%s_key_idx" ON "%s" ("key");',
         'exp_idx'   => 'CREATE INDEX "%s_exp_idx" ON "%s" ("expire");',
         'tag_idx'   => 'CREATE INDEX "%s_tag_idx" ON "%s" ("tags");',
@@ -34,12 +34,13 @@ class Pdo extends AbstractCache
                         ("expire" IS NULL OR "expire" > :now);',
         'loadTag'   => 'SELECT "key" FROM "%s" WHERE "tags" LIKE :tag AND
                         ("expire" IS NULL OR "expire" > :now);',
-        'update'    => 'UPDATE "%s" SET "data"=:data, "tags"=:tags, "expire"=:exp
-                        WHERE "key"=:key;',
-        'insert'    => 'INSERT INTO "%s" ("key", "data", "tags", "expire")
-                        VALUES (:key, :data, :tags, :exp);',
+        'update'    => 'UPDATE "%s" SET "data"=:data, "tags"=:tags, "expire"=:exp,
+                        "dated"=:dated WHERE "key"=:key;',
+        'insert'    => 'INSERT INTO "%s" ("key", "data", "tags", "expire", "dated")
+                        VALUES (:key, :data, :tags, :exp, :dated);',
         'delete'    => 'DELETE FROM "%s" WHERE "key"=?;',
-        'clean'     => 'DELETE FROM "%s" WHERE %s;',
+        'clean'     => 'DELETE FROM "%s" WHERE %s;', // %s 'clean_like' iterated
+        'clean_like'=> 'tags LIKE ?',
         'flush_all' => 'DROP TABLE IF EXISTS "%s";',
         'flush'     => 'DELETE FROM "%s";',
         'purge'     => 'DELETE FROM "%s" WHERE "expire" IS NOT NULL AND "expire" < %d;'
@@ -134,11 +135,12 @@ class Pdo extends AbstractCache
     public function save($data, $key, array $tags=null, $ttl=null)
     {
         $values = array(
-            'key'  => $this->mapKey($key),
-            'data' => null !== $this->serializer
+            'key'   => $this->mapKey($key),
+            'data'  => null !== $this->serializer
                         ? $this->serializer->serialize($data)
                         : $data,
-            'exp'  => null !== $ttl && 0 !== $ttl ? time()+$ttl : null
+            'exp'   => null !== $ttl && 0 !== $ttl ? time()+$ttl : null,
+            'dated' => time()
         );
 
         $values['tags'] = $this->options['tag_enable'] && null !== $tags
@@ -179,7 +181,8 @@ class Pdo extends AbstractCache
         }
 
         $sql = $this->getSql(
-            'clean', implode(' OR ', array_fill(0, count($tags), 'tags LIKE ?'))
+            'clean', implode(' OR ', array_fill(
+                    0, count($tags), $this->getSql('clean_like')))
         );
 
         return (boolean) $this->exec($sql, $values)->rowCount();
