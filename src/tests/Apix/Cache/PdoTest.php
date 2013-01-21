@@ -33,7 +33,8 @@ class PdoTest extends TestCase
                 'pdo_sqlite',
                 function(){
                     return new \PDO('sqlite::memory:');
-                }
+                },
+                __NAMESPACE__ . '\\Pdo\\Sqlite'
             ),
             'mysql' => array(
                 'pdo_mysql',
@@ -41,7 +42,8 @@ class PdoTest extends TestCase
                     return new \PDO(
                         'mysql:dbname=apix_tests;host=127.0.0.1', 'root'
                     );
-                }
+                },
+                __NAMESPACE__ . '\\Pdo\\Mysql'
             ),
             'pgsql' => array(
                 'pdo_pgsql',
@@ -49,7 +51,8 @@ class PdoTest extends TestCase
                     return new \PDO(
                         'pgsql:dbname=apix_tests;host=127.0.0.1', 'postgres'
                     );
-                }
+                },
+                __NAMESPACE__ . '\\Pdo\\Postgres'
             )
         );
         $DB = getenv('DB');
@@ -58,23 +61,23 @@ class PdoTest extends TestCase
             return $dbs[$DB];
         }
 
-        $this->markTestSkipped('Unsupported ~DB~ environment.');
+        $this->markTestSkipped("Unsupported DB ($DB) environment.");
     }
 
     public function setUp()
     {
-        list($ext_name, $pdo_dbh) = $this->pdoProvider();
+        list($ext_name, $dbh, $class) = $this->pdoProvider();
 
         $this->skipIfMissing('pdo');
         $this->skipIfMissing($ext_name);
 
         try {
-            $this->pdo = $pdo_dbh();
+            $this->pdo = $dbh();
         } catch (\Exception $e) {
             $this->markTestSkipped( $e->getMessage() );
         }
 
-       $this->cache = new Pdo($this->pdo, $this->options);
+       $this->cache = new $class($this->pdo, $this->options);
     }
 
     public function tearDown()
@@ -136,8 +139,7 @@ class PdoTest extends TestCase
 
     public function testSaveWithTagDisabled()
     {
-        $options = $this->options+array('tag_enable' => false);
-        $this->cache = new Pdo($this->pdo, $options);
+        $this->cache->setOptions(array('tag_enable' => false));
 
         $this->assertTrue(
             $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))

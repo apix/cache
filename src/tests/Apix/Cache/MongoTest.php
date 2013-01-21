@@ -83,8 +83,6 @@ class MongoTest extends TestCase
 
     public function testSaveAndLoadArray()
     {
-        $this->cache = new Mongo($this->mongo, $this->options);
-
         $data = array('arrayData');
         $this->assertTrue($this->cache->save($data, 'id'));
 
@@ -108,8 +106,7 @@ class MongoTest extends TestCase
 
     public function testSaveWithTagDisabled()
     {
-       $options = $this->options+array('tag_enable' => false);
-       $this->cache = new Mongo($this->mongo, $options);
+        $this->cache->setOptions(array('tag_enable' => false));
 
         $this->assertTrue(
             $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))

@@ -151,7 +151,7 @@ class Redis extends AbstractCache
 
     /**
      * {@inheritdoc}
-     * 
+     *
      * @return integer Returns a Redis constant.
      */
     public function getSerializer()

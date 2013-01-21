@@ -91,8 +91,7 @@ class ApcTest extends TestCase
 
     public function testSaveWithTagDisabled()
     {
-       $options = $this->options+array('tag_enable' => false);
-       $this->cache = new Apc($options);
+        $this->cache->setOptions(array('tag_enable' => false));
 
         $this->assertTrue(
             $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))

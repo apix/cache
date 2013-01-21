@@ -83,8 +83,6 @@ class RedisTest extends TestCase
 
     public function testSaveAndLoadArray()
     {
-        $this->cache = new Redis($this->redis, $this->options);
-
         $data = array('arrayData');
         $this->assertTrue($this->cache->save($data, 'id'));
 
@@ -107,8 +105,7 @@ class RedisTest extends TestCase
 
     public function testSaveWithTagDisabled()
     {
-       $options = $this->options+array('tag_enable' => false);
-       $this->cache = new Redis($this->redis, $options);
+        $this->cache->setOptions(array('tag_enable' => false));
 
         $this->assertTrue(
             $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
@@ -213,7 +210,7 @@ class RedisTest extends TestCase
             $this->cache->getSerializer()
         );
 
-        if(defined('Redis::SERIALIZER_IGBINARY')) {
+        if (defined('Redis::SERIALIZER_IGBINARY')) {
             $this->cache->setSerializer('igBinary');
             $this->assertSame(
                 \Redis::SERIALIZER_IGBINARY,

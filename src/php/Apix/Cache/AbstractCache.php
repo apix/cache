@@ -31,6 +31,10 @@ abstract class AbstractCache implements Adapter
      */
     protected $serializer;
 
+    /**
+     * Holds some generic default options.
+     * @var array
+     */
     protected $options = array(
         'prefix_key'    => 'apix-cache-key:', // prefix cache keys
         'prefix_tag'    => 'apix-cache-tag:', // prefix cache tags
@@ -38,16 +42,24 @@ abstract class AbstractCache implements Adapter
     );
 
     /**
-     * Constructor use to set the adapter and merge the options (overriding the
-     * default ones).
+     * Constructor use to set the adapter and dedicated options.
      *
      * @param object|null $adapter The adapter to set, generally an object.
-     * @param array       $options The array of user options.
+     * @param array|null  $options The array of user options.
      */
     public function __construct($adapter=null, array $options=null)
     {
         $this->adapter = $adapter;
+        $this->setOptions($options);
+    }
 
+    /**
+     * Sets and merges the options (overriding the default options).
+     *
+     * @param array|null $options The array of user options.
+     */
+    public function setOptions(array $options=null)
+    {
         if (null !== $options) {
             $this->options = $options+$this->options;
         }
