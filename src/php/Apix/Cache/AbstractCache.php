@@ -36,9 +36,10 @@ abstract class AbstractCache implements Adapter
      * @var array
      */
     protected $options = array(
-        'prefix_key'    => 'apix-cache-key:', // prefix cache keys
-        'prefix_tag'    => 'apix-cache-tag:', // prefix cache tags
-        'tag_enable'    => true               // wether to enable tagging
+        'prefix_key'        => 'apix-cache-key:', // prefix cache keys
+        'prefix_tag'        => 'apix-cache-tag:', // prefix cache tags
+        'tag_enable'        => true,              // wether to enable tagging
+        'format_timestamp'  => 'Y-m-d H:i:s'      // the format of timestamps
     );
 
     /**
@@ -133,6 +134,19 @@ abstract class AbstractCache implements Adapter
     public function getSerializer()
     {
         return $this->serializer;
+    }
+
+    /**
+     * Returns a formated timestamp.
+     *
+     * @param integer|null $time If null, use the current time.
+     */
+    public function timestamp($time=null)
+    {
+        return date(
+            $this->options['format_timestamp'],
+            null != $time ? $time : time()
+        );
     }
 
 }

@@ -15,20 +15,26 @@ namespace Apix\Cache\Pdo;
 use Apix\Cache\AbstractPdo;
 
 /**
- * The PostgreSQL (PDO) wrapper.
+ * The SQL:1999 / SQL 3 (PDO) cache wrapper.
+ *
+ * Allows to use databases that have 'some' SQL:1999 compliance.
+ * e.g. Oracle, IBM DB2, Informix.
+ * PostgreSQL, MySQl and SQLite should also support SQL99.
+ *
+ * Conforms to at least SQL-92 are DB2, MSSQL, MySQL, Oracle, Informix.
  *
  * @author Franck Cassedanne <franck at ouarz.net>
  */
-class Postgres extends AbstractPdo
+class Sql1999 extends AbstractPdo
 {
 
     /**
-     * Holds the SQL definitions for PostgreSQL.
+     * Holds a generic SQL-99'ish schema definitions.
+     * @see http://www.contrib.andrew.cmu.edu/~shadow/sql/sql1992.txt
      */
     public $sql_definitions = array(
-        'init'      => 'CREATE TABLE IF NOT EXISTS "%s"
-                        ("key" VARCHAR PRIMARY KEY, "data" TEXT, "tags" TEXT,
-                        "expire" INTEGER, "dated" TIMESTAMP);',
+        'init'      => 'CREATE TABLE "%s" ("key" VARCHAR PRIMARY KEY, "data" TEXT,
+                        "tags" TEXT, "expire" INTEGER, "dated" TIMESTAMP);',
         'key_idx'   => 'CREATE INDEX "%s_key_idx" ON "%s" ("key");',
         'exp_idx'   => 'CREATE INDEX "%s_exp_idx" ON "%s" ("expire");',
         'tag_idx'   => 'CREATE INDEX "%s_tag_idx" ON "%s" ("tags");',
@@ -47,16 +53,5 @@ class Postgres extends AbstractPdo
         'flush'     => 'DELETE FROM "%s";',
         'purge'     => 'DELETE FROM "%s" WHERE "expire" IS NOT NULL AND "expire" < %d;'
     );
-
-    /**
-     * Constructor.
-     *
-     * @param \PDO  $pdo
-     * @param array $options Array of options.
-     */
-    public function __construct(\PDO $pdo, array $options=null)
-    {
-        parent::__construct($pdo, $options);
-    }
 
 }

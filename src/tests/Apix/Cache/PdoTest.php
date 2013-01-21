@@ -15,7 +15,11 @@ namespace Apix\Cache;
 use Apix\TestCase;
 
 /**
- * @covers Apix\Cache\Pdo
+ * @covers Apix\Cache\AbstractPdo
+ * @covers Apix\Cache\Pdo\Mysql
+ * @covers Apix\Cache\Pdo\Postgres
+ * @covers Apix\Cache\Pdo\Sql1999
+ * @covers Apix\Cache\Pdo\Sqlite
  */
 class PdoTest extends TestCase
 {
@@ -53,7 +57,15 @@ class PdoTest extends TestCase
                     );
                 },
                 __NAMESPACE__ . '\\Pdo\\Postgres'
-            )
+            ),
+            'sql1999' => array(
+                'pdo_sqlite',
+                function(){
+                    return new \PDO('sqlite::memory:');
+                },
+                __NAMESPACE__ . '\\Pdo\\Sql1999'
+            ),
+
         );
         $DB = getenv('DB');
 
@@ -77,7 +89,10 @@ class PdoTest extends TestCase
             $this->markTestSkipped( $e->getMessage() );
         }
 
-       $this->cache = new $class($this->pdo, $this->options);
+        $this->cache = new $class($this->pdo, $this->options);
+
+        // create the indexes.
+        $this->cache->createIndexes();
     }
 
     public function tearDown()

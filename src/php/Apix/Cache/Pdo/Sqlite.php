@@ -12,14 +12,14 @@
 
 namespace Apix\Cache\Pdo;
 
-use Apix\Cache\Pdo;
+use Apix\Cache\AbstractPdo;
 
 /**
  * The SQLite (PDO) wrapper.
  *
  * @author Franck Cassedanne <franck at ouarz.net>
  */
-class Sqlite extends Pdo
+class Sqlite extends AbstractPdo
 {
 
     /**

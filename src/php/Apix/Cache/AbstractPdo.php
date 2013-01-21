@@ -17,34 +17,8 @@ namespace Apix\Cache;
  *
  * @author Franck Cassedanne <franck at ouarz.net>
  */
-class Pdo extends AbstractCache
+abstract class AbstractPdo extends AbstractCache
 {
-
-    /**
-     * Holds generic SQL-99'ish definitions.
-     * @see http://www.contrib.andrew.cmu.edu/~shadow/sql/sql1992.txt
-     */
-    public $sql_definitions = array(
-        'init'      => 'CREATE TABLE "%s" ("key" VARCHAR PRIMARY KEY, "data" TEXT,
-                        "tags" TEXT, "expire" INTEGER, "dated" TIMESTAMP);',
-        'key_idx'   => 'CREATE INDEX "%s_key_idx" ON "%s" ("key");',
-        'exp_idx'   => 'CREATE INDEX "%s_exp_idx" ON "%s" ("expire");',
-        'tag_idx'   => 'CREATE INDEX "%s_tag_idx" ON "%s" ("tags");',
-        'loadKey'   => 'SELECT "data" FROM "%s" WHERE "key"=:key AND
-                        ("expire" IS NULL OR "expire" > :now);',
-        'loadTag'   => 'SELECT "key" FROM "%s" WHERE "tags" LIKE :tag AND
-                        ("expire" IS NULL OR "expire" > :now);',
-        'update'    => 'UPDATE "%s" SET "data"=:data, "tags"=:tags, "expire"=:exp,
-                        "dated"=:dated WHERE "key"=:key;',
-        'insert'    => 'INSERT INTO "%s" ("key", "data", "tags", "expire", "dated")
-                        VALUES (:key, :data, :tags, :exp, :dated);',
-        'delete'    => 'DELETE FROM "%s" WHERE "key"=?;',
-        'clean'     => 'DELETE FROM "%s" WHERE %s;', // %s 'clean_like' iterated
-        'clean_like'=> 'tags LIKE ?',
-        'flush_all' => 'DROP TABLE IF EXISTS "%s";',
-        'flush'     => 'DELETE FROM "%s";',
-        'purge'     => 'DELETE FROM "%s" WHERE "expire" IS NOT NULL AND "expire" < %d;'
-    );
 
     /**
      * Constructor.
@@ -55,7 +29,7 @@ class Pdo extends AbstractCache
     public function __construct(\PDO $pdo, array $options=null)
     {
         // default options
-        $this->options['db_table'] = 'cache';
+        $this->options['db_table']   = 'cache';
         $this->options['serializer'] = 'php'; // none, php, igBinary, json.
 
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
@@ -149,7 +123,7 @@ class Pdo extends AbstractCache
                         ? $this->serializer->serialize($data)
                         : $data,
             'exp'   => null !== $ttl && 0 !== $ttl ? time()+$ttl : null,
-            'dated' => time()
+            'dated' => $this->timestamp()
         );
 
         $values['tags'] = $this->options['tag_enable'] && null !== $tags

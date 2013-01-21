@@ -12,23 +12,24 @@
 
 namespace Apix\Cache\Pdo;
 
-use Apix\Cache\Pdo;
+use Apix\Cache\AbstractPdo;
 
 /**
  * The Mysql (PDO) wrapper.
  *
  * @author Franck Cassedanne <franck at ouarz.net>
  */
-class Mysql extends Pdo
+class Mysql extends AbstractPdo
 {
 
     /**
      * Holds the SQL definitions for MySQL 3.x, 4.x and 5.x.
      */
     public $sql_definitions = array(
-        'init'      => 'CREATE TABLE IF NOT EXISTS `%s`
-                        (`key` VARCHAR PRIMARY KEY, `data` LONGTEXT, `tags` TEXT,
-                        `expire` INT unsigned, `dated` TIMESTAMP) ENGINE=MyISAM DEFAULT CHARSET=utf8;',
+        'init'      => 'CREATE TABLE IF NOT EXISTS `%s` (`key` VARCHAR NOT NULL,
+                        `data` LONGTEXT, `tags` TEXT, `expire` INT unsigned,
+                        `dated` TIMESTAMP, PRIMARY KEY (`key`))
+                        ENGINE=MyISAM DEFAULT CHARSET=utf8;',
         'key_idx'   => 'CREATE INDEX IF NOT EXISTS `%s_key_idx` ON `%s` (`key`);',
         'exp_idx'   => 'CREATE INDEX IF NOT EXISTS `%s_exp_idx` ON `%s` (`expire`);',
         'tag_idx'   => 'CREATE INDEX IF NOT EXISTS `%s_tag_idx` ON `%s` (`tags`);',
