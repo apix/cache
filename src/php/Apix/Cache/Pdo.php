@@ -22,8 +22,7 @@ class Pdo extends AbstractCache
 
     protected $sql_definitions = array(
         'init' => 'CREATE TABLE IF NOT EXISTS %s (key VARCHAR(255) PRIMARY KEY,
-                  data LONGTEXT, tags TEXT, expire INTEGER,
-                  created INTEGER)',
+                  data LONGTEXT, tags TEXT, expire INT, created INT)',
         'key_idx' => 'CREATE INDEX IF NOT EXISTS %s_key_idx ON %s (key)',
         'exp_idx' => 'CREATE INDEX IF NOT EXISTS %s_exp_idx ON %s (expire)',
         'tag_idx' => 'CREATE INDEX IF NOT EXISTS %s_tag_idx ON %s (tags)',

@@ -20,7 +20,6 @@ Currently, the following cache store are available:
   * [SQLite](http://www.sqlite.org)
   * [MySQL](http://www.mysql.com)
   * [PostgreSQL](http://www.postgresql.org)
-  * (other native PDO
 
 Planned support: Memcache and Memcached.
 
