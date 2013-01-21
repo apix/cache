@@ -29,9 +29,9 @@ class Postgres extends Pdo
         'init'      => 'CREATE TABLE IF NOT EXISTS "%s"
                         ("key" VARCHAR PRIMARY KEY, "data" TEXT, "tags" TEXT,
                         "expire" INTEGER, "dated" TIMESTAMP);',
-        'key_idx'   => 'CREATE INDEX IF NOT EXISTS "%s_key_idx" ON "%s" ("key");',
-        'exp_idx'   => 'CREATE INDEX IF NOT EXISTS "%s_exp_idx" ON "%s" ("expire");',
-        'tag_idx'   => 'CREATE INDEX IF NOT EXISTS "%s_tag_idx" ON "%s" ("tags");',
+        'key_idx'   => 'CREATE INDEX "%s_key_idx" ON "%s" ("key");',
+        'exp_idx'   => 'CREATE INDEX "%s_exp_idx" ON "%s" ("expire");',
+        'tag_idx'   => 'CREATE INDEX "%s_tag_idx" ON "%s" ("tags");',
         'loadKey'   => 'SELECT "data" FROM "%s" WHERE "key"=:key AND
                         ("expire" IS NULL OR "expire" > :now);',
         'loadTag'   => 'SELECT "key" FROM "%s" WHERE "tags" LIKE :tag AND

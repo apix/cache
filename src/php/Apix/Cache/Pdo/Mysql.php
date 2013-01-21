@@ -28,7 +28,7 @@ class Mysql extends Pdo
     public $sql_definitions = array(
         'init'      => 'CREATE TABLE IF NOT EXISTS `%s`
                         (`key` VARCHAR PRIMARY KEY, `data` LONGTEXT, `tags` TEXT,
-                        `expire` INT UNSIGNED, `dated` TIMESTAMP);',
+                        `expire` INT unsigned, `dated` TIMESTAMP) ENGINE=MyISAM DEFAULT CHARSET=utf8;',
         'key_idx'   => 'CREATE INDEX IF NOT EXISTS `%s_key_idx` ON `%s` (`key`);',
         'exp_idx'   => 'CREATE INDEX IF NOT EXISTS `%s_exp_idx` ON `%s` (`expire`);',
         'tag_idx'   => 'CREATE INDEX IF NOT EXISTS `%s_tag_idx` ON `%s` (`tags`);',

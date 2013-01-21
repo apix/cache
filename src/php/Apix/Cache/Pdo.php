@@ -55,9 +55,7 @@ class Pdo extends AbstractCache
     public function __construct(\PDO $pdo, array $options=null)
     {
         // default options
-        $this->options['db_name'] = 'apix_cache';
         $this->options['db_table'] = 'cache';
-
         $this->options['serializer'] = 'php'; // none, php, igBinary, json.
 
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
@@ -67,6 +65,15 @@ class Pdo extends AbstractCache
 
         // Initialises the database.
         $this->adapter->exec( $this->getSql('init') );
+    }
+
+    /**
+     * Creates the database indexes
+     *
+     * @return self Provides a fluent interface
+     */
+    public function createIndexes()
+    {
         $this->adapter->exec(
             $this->getSql('key_idx', $this->options['db_table'])
         );
@@ -76,6 +83,8 @@ class Pdo extends AbstractCache
         $this->adapter->exec(
             $this->getSql('tag_idx', $this->options['db_table'])
         );
+
+        return $this;
     }
 
     /**
@@ -234,7 +243,7 @@ class Pdo extends AbstractCache
      *
      * @param  string        $sql    The SQL to prepare.
      * @param  array         $values The values to execute.
-     * @return \PDOStatement
+     * @return \PDOStatement Provides a fluent interface
      */
     protected function exec($sql, array $values)
     {

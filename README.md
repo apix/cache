@@ -1,27 +1,26 @@
 APIx Cache, caching for PHP 5.3+   [![Build Status](https://travis-ci.org/frqnck/apix-cache.png?branch=master)](https://travis-ci.org/frqnck/apix-cache)
 ==============================
 
-APIx Cache is a generic cache wrapper with a simple interface to various different caching backends.
+APIx Cache is a generic and thin cache wrapper with a simple interface to various different caching backends.
 
 Some of its features:
 
 * Provides cache tagging -- natively and/or through emulation.
-* 100% unit tested and compliant with PSR0, PSR1 and PSR2.
-* Available as a PEAR and as a Composer package.
+* **100%** unit **tested** and compliant with PSR0, PSR1 and PSR2.
+* Available as a **Composer** and as a **PEAR** package.
 
 Cache backends
 --------------
-Currently, the following cache store are available:
+Currently, the following cache store handlers are supported:
 
-* [APC](http://php.net/book.apc.php) (with full tag support)
-* [Redis](http://redis.io) (using [PhpRedis](https://github.com/nicolasff/phpredis) extension)
-* [MongoDB](http://www.mongodb.org/) (using [mongo](http://php.net/book.mongo.php) native PHP extension)
-* [PDO](http://php.net/book.pdo.php), fully tested with: 
-  * [SQLite](http://www.sqlite.org)
-  * [MySQL](http://www.mysql.com)
-  * [PostgreSQL](http://www.postgresql.org)
+* **[APC](http://php.net/book.apc.php)** with tagging support,
+* **[Redis](http://redis.io)** using [PhpRedis](https://github.com/nicolasff/phpredis) extension,
+* **[MongoDB](http://www.mongodb.org/)** using [mongo](http://php.net/book.mongo.php) native PHP extension,
+* **[PDO](http://php.net/book.pdo.php)** for relational databases:
+ * Fully tested with **[SQLite](http://www.sqlite.org)**, **[PostgreSQL](http://www.postgresql.org)** and **[MySQL](http://www.mysql.com)**.
+ * Assumed to work but not tested [4D](http://www.4d.com/), [Cubrid](http://www.cubrid.org), [MS SQL Server](http://www.microsoft.com/sqlserver/), [Sybase](http://www.sybase.com), [Firebird](http://www.firebirdsql.org), ODBC, [Interbase](http://www.embarcadero.com/products/interbase), [IBM DB2](www.ibm.com/software/data/db2/), [IDS](http://www-01.ibm.com/software/data/informix/) and [Oracle](http://www.oracle.com/database/).
 
-Planned support: Memcache and Memcached.
+Feel free to comment, send pull requests and patches...
 
 Basic usage
 -----------
@@ -63,8 +62,7 @@ Available options
   $options = array(
       'prefix_key'  => 'apix-cache-key:', // prefix cache keys
       'prefix_tag'  => 'apix-cache-tag:', // prefix cache tags
-      'tag_enable'  => true,              // wether to enable tags support
-
+      'tag_enable'  => true               // wether to enable tags support
   );
   $local_cache = new Apix\Cache\Apc($options);
 
@@ -78,8 +76,15 @@ Available options
   // additional (default) options, specific to Mongo
   $options['object_serializer'] = 'php';  // none, json, php, igBinary
 
-  $mongo_client = new \MongoClient;       // MongoDB native driver** instance
-  $distributed_cache = new Apix\Cache\Mongo($mongo_client, $options);
+  $mongo_client  = new \MongoClient;       // MongoDB native driver** instance
+  $another_cache = new Apix\Cache\Mongo($mongo_client, $options);
+
+  // additional (default) options, specific to PDO
+  $options['db_table']   = 'cache';
+  $options['serializer'] = 'php';         // none, php, igBinary, json.
+
+  $db = new new \PDO('pgsql:dbname=apix_tests;host=127.0.0.1', 'postgres';
+  $relational_cache = new Apix\Cache\Pdo\Sqlite($db, $options);
 ```
 
 \* see [phpredis](https://github.com/nicolasff/phpredis) for more details and usage.
