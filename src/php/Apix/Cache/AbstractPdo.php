@@ -48,17 +48,18 @@ abstract class AbstractPdo extends AbstractCache
      */
     public function createIndexes()
     {
-        $this->adapter->exec(
-            $this->getSql('key_idx', $this->options['db_table'])
-        );
-        $this->adapter->exec(
-            $this->getSql('exp_idx', $this->options['db_table'])
-        );
-        $this->adapter->exec(
-            $this->getSql('tag_idx', $this->options['db_table'])
-        );
+        $this->createIndexe('key_idx');
+        $this->createIndexe('exp_idx');
+        $this->createIndexe('tag_idx');
 
         return $this;
+    }
+
+    private function createIndexe($index)
+    {
+        if(isset($this->options[$index]) && $this->options[$index]) {
+            return $this->adapter->exec($this->getSql($index));
+        }
     }
 
     /**
