@@ -26,10 +26,10 @@ class Mysql extends AbstractPdo
      * Holds the SQL definitions for MySQL 3.x, 4.x and 5.x.
      */
     public $sql_definitions = array(
-        'init'      => 'CREATE TABLE IF NOT EXISTS `%s` (`key` VARCHAR NOT NULL,
-                        `data` LONGTEXT, `tags` TEXT, `expire` INT unsigned,
-                        `dated` TIMESTAMP, PRIMARY KEY (`key`))
-                        ENGINE=MyISAM DEFAULT CHARSET=utf8;',
+        'init'      => 'CREATE TABLE IF NOT EXISTS %s (`key` VARCHAR(255) NOT NULL, 
+                        `data` LONGTEXT NULL, `tags` TEXT NULL, `expire` INTEGER 
+                        UNSIGNED, `dated` TIMESTAMP, PRIMARY KEY (`key`))
+                        ENGINE=MYISAM DEFAULT charset=utf8;',
         'key_idx'   => 'CREATE INDEX IF NOT EXISTS `%s_key_idx` ON `%s` (`key`);',
         'exp_idx'   => 'CREATE INDEX IF NOT EXISTS `%s_exp_idx` ON `%s` (`expire`);',
         'tag_idx'   => 'CREATE INDEX IF NOT EXISTS `%s_tag_idx` ON `%s` (`tags`);',

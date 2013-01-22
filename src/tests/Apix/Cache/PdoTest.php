@@ -201,7 +201,7 @@ class PdoTest extends TestCase
             && $this->cache->save('strData3', 'id3', array('tag3', 'tag4'))
         );
         // $foo = array('foo' => 'bar');
-        // $this->cache->getAdapter()->insert($foo);
+        // $this->cache->getAdapter()->add($foo);
 
         $this->assertTrue($this->cache->flush());
 

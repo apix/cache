@@ -177,10 +177,10 @@ abstract class AbstractPdo extends AbstractCache
     public function flush($all=false)
     {
         if (true === $all) {
-            return (boolean) $this->adapter->exec( $this->getSql('flush_all') );
+            return false !== $this->adapter->exec($this->getSql('flush_all'));
         }
 
-        return (boolean) $this->adapter->exec( $this->getSql('flush') );
+        return (boolean) $this->adapter->exec($this->getSql('flush'));
     }
 
     /**
@@ -193,7 +193,7 @@ abstract class AbstractPdo extends AbstractCache
     {
         $time = null == $add ? time() : time()+$add;
 
-        return (boolean) $this->adapter->exec( $this->getSql('purge', $time) );
+        return (boolean) $this->adapter->exec($this->getSql('purge', $time));
     }
 
     /**
