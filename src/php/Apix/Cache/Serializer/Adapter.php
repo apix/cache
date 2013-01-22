@@ -37,7 +37,7 @@ interface Adapter
     public function unserialize($str);
 
     /**
-     * Checks if the input is serialized a string representation as mixed data.
+     * Checks if the input is a serialized string representation.
      *
      * @param  string  $data
      * @return boolean

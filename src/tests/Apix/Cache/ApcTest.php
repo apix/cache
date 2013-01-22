@@ -31,7 +31,7 @@ class ApcTest extends TestCase
 
         if (!ini_get('apc.enable_cli')) {
             self::markTestSkipped(
-                'apc.enable_cli MUST be enable in order to run this unit test'
+                'apc.enable_cli MUST be enabled in order to run this unit test'
             );
         }
 
