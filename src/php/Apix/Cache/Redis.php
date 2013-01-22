@@ -23,7 +23,7 @@ class Redis extends AbstractCache
     /**
      * Constructor.
      *
-     * @param \Redis $redis   The redis database to instantiate.
+     * @param \Redis $redis   A Redis client instance.
      * @param array  $options Array of options.
      */
     public function __construct(\Redis $redis, array $options=null)

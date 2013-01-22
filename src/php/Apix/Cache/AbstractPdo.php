@@ -23,7 +23,7 @@ abstract class AbstractPdo extends AbstractCache
     /**
      * Constructor.
      *
-     * @param \PDO  $pdo
+     * @param \PDO  $pdo An instance of a PDO class.
      * @param array $options Array of options.
      */
     public function __construct(\PDO $pdo, array $options=null)
