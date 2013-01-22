@@ -31,14 +31,15 @@ class Memcached extends AbstractCache
         // default options
         $this->options['db_name'] = 'apix';
         $this->options['collection_name'] = 'cache';
-        $this->options['object_serializer'] = 'php'; // none, php, json, igBinary.
+        $this->options['serializer'] = 'php'; // none, php, json, igBinary.
 
         $this->separator = '^|^';
 
+        // TODO: Memcached::SERIALIZER_PHP or Memcached::SERIALIZER_IGBINARY
+        $Memcached->setOption(\Memcached::OPT_COMPRESSION, false);
         parent::__construct($Memcached, $options);
 
         $this->setSerializer($this->options['serializer']);
-        $redis->setOption( \Redis::OPT_SERIALIZER, $this->getSerializer() );
     }
 
     /**
@@ -129,7 +130,7 @@ class Memcached extends AbstractCache
             $keys = $this->loadTag($tag);
             // TODO: use $keys = $this->adapter->getMulti($tags);
             if (false !== $keys) {
-                $keys = unique(explode($this->separator, $keys));
+                $keys = array_unique(explode($this->separator, $keys));
                 array_walk_recursive(
                     $keys,
                     function($key) use (&$items) { $items[] = $key; }
