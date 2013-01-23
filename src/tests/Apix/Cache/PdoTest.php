@@ -67,7 +67,7 @@ class PdoTest extends TestCase
             ),
 
         );
-        $DB = getenv('DB');
+        $DB = getenv('DB') ? getenv('DB') : 'sqlite';
 
         if (in_array($DB, array_keys($dbs))) {
             return $dbs[$DB];

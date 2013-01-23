@@ -65,23 +65,10 @@ abstract class AbstractPdo extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    public function load($key, $type='key')
-    {
-        return $type == 'key'
-                ? $this->loadKey($this->mapKey($key))
-                : $this->loadTag($key);
-    }
-
-    /**
-     * Retrieves the cache for the given key.
-     *
-     * @param  string     $key The cache key to retrieve.
-     * @return mixed|null Returns the cached data or null.
-     */
-    protected function loadKey($key)
+    public function loadKey($key)
     {
         $sql = $this->getSql('loadKey');
-        $values = array('key' => $key, 'now' => time());
+        $values = array('key' => $this->mapKey($key), 'now' => time());
 
         $cached = $this->exec($sql, $values)->fetch();
 
@@ -93,14 +80,12 @@ abstract class AbstractPdo extends AbstractCache
     }
 
     /**
-     * Retrieves the cache keys for the given tag.
-     *
-     * @param  string     $tag The cache tag to retrieve.
-     * @return array|null Returns an array of cache keys or null.
+     * {@inheritdoc}
      */
-    protected function loadTag($tag)
+    public function loadTag($tag)
     {
         $sql = $this->getSql('loadTag');
+        // $tag = $this->mapTag($tag);
         $values = array('tag' => "%$tag%", 'now' => time());
 
         $items = $this->exec($sql, $values)->fetchAll();

@@ -31,10 +31,19 @@ class Apc extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    public function load($key, $type='key')
+    public function loadKey($key)
     {
-        $key = $type == 'tag' ? $this->mapTag($key) : $this->mapKey($key);
-        $cached = apc_fetch($key, $success);
+        $cached = apc_fetch($this->mapKey($key), $success);
+
+        return false === $success ? null : $cached;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadTag($tag)
+    {
+        $cached = apc_fetch($this->mapTag($tag), $success);
 
         return false === $success ? null : $cached;
     }
