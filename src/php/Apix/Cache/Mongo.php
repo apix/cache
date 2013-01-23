@@ -75,35 +75,15 @@ class Mongo extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    public function load($key, $type='key')
+    public function loadKey($key)
     {
-        if ($type == 'tag') {
-            $cache = $this->collection->find(
-                array('tags' => $this->mapTag($key)),
-                array('key')
-            );
-
-            $keys = array_map(
-                function($v) { return $v['key']; },
-                array_values(iterator_to_array($cache))
-            );
-
-            return empty($keys) ? null : $keys;
-        }
-
         $cache = $this->collection->findOne(
             array('key' => $this->mapKey($key)),
             array('data', 'expire')
         );
 
         // check expiration
-        if( isset($cache['expire'])
-            && (string) $cache['expire'] < time()
-        ) {
-            return null;
-        }
-
-        if (!isset($cache['data'])) {
+        if(isset($cache['expire']) && (string) $cache['expire'] < time()) {
             return null;
         }
 
@@ -115,6 +95,24 @@ class Mongo extends AbstractCache
         }
 
         return $cache['data'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadTag($tag)
+    {
+        $cache = $this->collection->find(
+            array('tags' => $this->mapTag($tag)),
+            array('key')
+        );
+
+        $keys = array_map(
+            function($v) { return $v['key']; },
+            array_values(iterator_to_array($cache))
+        );
+
+        return empty($keys) ? null : $keys;
     }
 
     /**

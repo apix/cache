@@ -44,20 +44,21 @@ class Redis extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    public function load($key, $type='key')
+    public function loadKey($key)
     {
-        if ($type == 'tag') {
-            $cache = $this->adapter->sMembers(
-                $this->mapTag($key)
-            );
-
-            return empty($cache) ? null : $cache;
-        }
-        $cache = $this->adapter->get(
-            $this->mapKey($key)
-        );
+        $cache = $this->adapter->get($this->mapKey($key));
 
         return false === $cache ? null : $cache;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadTag($tag)
+    {
+        $cache = $this->adapter->sMembers($this->mapTag($tag));
+
+        return empty($cache) ? null : $cache;
     }
 
     /**

@@ -149,4 +149,16 @@ abstract class AbstractCache implements Adapter
         );
     }
 
+    /**
+     * Retrieves the cache content for the given key or the keys for a given tag.
+     *
+     * @param  string     $key  The cache id to retrieve.
+     * @param  string     $type The type of the key (either 'key' or 'tag').
+     * @return mixed|null Returns the cached data or null if not set.
+     */
+    public function load($key, $type='key')
+    {
+        return $type == 'key' ? $this->loadKey($key) : $this->loadTag($key);
+    }
+
 }
