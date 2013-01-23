@@ -19,9 +19,8 @@ class MemcachedTest extends TestCase
     protected $cache, $memcached;
 
     protected $options = array(
-        'prefix_key' => 'key_',
-        'prefix_tag' => 'tag_',
-        'prefix_idx' => 'idx_'
+        'prefix_key' => 'unit_test-',
+        'prefix_tag' => 'unit_test-',
     );
 
     public function setUp()
@@ -57,11 +56,10 @@ class MemcachedTest extends TestCase
 
     public function testSaveIsUnique()
     {
-        $this->assertTrue(
-            $this->cache->save('bar1', 'foo')
-            && $this->cache->save('bar2', 'foo')
-        );
-        $this->assertEquals('bar2', $this->cache->loadKey('foo'));
+        $this->assertTrue($this->cache->save('bar1', 'foo'));
+        $this->assertTrue($this->cache->save('bar2', 'foo'));
+
+        $this->assertEquals('bar2', $this->cache->load('foo'));
 
         // $this->assertEquals(1, $this->cache->count('foo') );
     }
@@ -69,36 +67,40 @@ class MemcachedTest extends TestCase
     public function testSaveAndLoadWithString()
     {
         $this->assertTrue($this->cache->save('strData', 'id'));
-        $this->assertEquals('strData', $this->cache->loadKey('id'));
+
+        $this->assertEquals('strData', $this->cache->load('id'));
     }
 
     public function testSaveAndLoadWithArray()
     {
         $data = array('foo' => 'bar');
         $this->assertTrue($this->cache->save($data, 'id'));
-        $this->assertEquals($data, $this->cache->loadKey('id'));
+        $this->assertEquals($data, $this->cache->load('id'));
     }
 
     public function testSaveAndLoadWithObject()
     {
         $data = new \stdClass;
         $this->assertTrue($this->cache->save($data, 'id'));
-        $this->assertEquals($data, $this->cache->loadKey('id'));
+        $this->assertEquals($data, $this->cache->load('id'));
     }
 
     public function testSaveAndLoadArray()
     {
         $data = array('arrayData');
         $this->assertTrue($this->cache->save($data, 'id'));
-        $this->assertEquals($data, $this->cache->loadKey('id'));
+
+        $this->assertEquals($data, $this->cache->load('id'));
     }
 
     public function testSaveJustOneTag()
     {
-        $this->assertTrue( $this->cache->save('data', 'id', array('tag')) );
+        $this->assertTrue(
+            $this->cache->save('data', 'id', array('tag'))
+        );
+
         $this->assertEquals(
-            array($this->cache->mapKey('id')),
-            $this->cache->loadTag('tag')
+            array($this->cache->mapKey('id')), $this->cache->loadTag('tag')
         );
     }
 
@@ -129,10 +131,13 @@ class MemcachedTest extends TestCase
     {
         $this->assertTrue(
             $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
-            && $this->cache->save('strData2', 'id2', array('tag2', 'tag3'))
         );
 
-        $ids = $this->cache->loadTag('tag2');
+        $this->assertTrue(
+            $this->cache->save('strData2', 'id2', array('tag2', 'tag3'))
+        );
+
+        $ids = $this->cache->load('tag2', 'tag');
         $this->assertTrue(count($ids) == 2);
         $this->assertContains($this->cache->mapKey('id1'), $ids);
         $this->assertContains($this->cache->mapKey('id2'), $ids);
@@ -140,11 +145,9 @@ class MemcachedTest extends TestCase
 
     public function testClean()
     {
-        $this->assertTrue(
-            $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
-            && $this->cache->save('strData2', 'id2', array('tag2', 'tag3', 'tag4'))
-            && $this->cache->save('strData3', 'id3', array('tag3', 'tag4'))
-        );
+        $this->cache->save('strData1', 'id1', array('tag1', 'tag2'));
+        $this->cache->save('strData2', 'id2', array('tag2', 'tag3', 'tag4'));
+        $this->cache->save('strData3', 'id3', array('tag3', 'tag4'));
 
         $this->assertTrue($this->cache->clean(array('tag4')));
         $this->assertFalse($this->cache->clean(array('tag4')));
@@ -157,11 +160,9 @@ class MemcachedTest extends TestCase
 
     public function testFlushCacheOnly()
     {
-        $this->assertTrue(
-            $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
-            && $this->cache->save('strData2', 'id2', array('tag2', 'tag3'))
-            && $this->cache->save('strData3', 'id3', array('tag3', 'tag4'))
-        );
+        $this->cache->save('strData1', 'id1', array('tag1', 'tag2'));
+        $this->cache->save('strData2', 'id2', array('tag2', 'tag3'));
+        $this->cache->save('strData3', 'id3', array('tag3', 'tag4'));
 
         $this->cache->getAdapter()->add('foo', 'bar');
 
@@ -175,26 +176,23 @@ class MemcachedTest extends TestCase
 
     public function testFlushAll()
     {
-        $this->assertTrue(
-            $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
-            && $this->cache->save('strData2', 'id2', array('tag2', 'tag3'))
-            && $this->cache->save('strData3', 'id3', array('tag3', 'tag4'))
-        );
+        $this->cache->save('strData1', 'id1', array('tag1', 'tag2'));
+        $this->cache->save('strData2', 'id2', array('tag2', 'tag3'));
+        $this->cache->save('strData3', 'id3', array('tag3', 'tag4'));
 
         $this->cache->getAdapter()->add('foo', 'bar');
 
         $this->assertTrue($this->cache->flush(true));
-        $this->assertNull($this->cache->get('foo'));
+        $this->assertNull($this->cache->getAdapter()->get('foo'));
+
         $this->assertNull($this->cache->load('id3'));
         $this->assertNull($this->cache->load('tag1', 'tag'));
     }
 
     public function testDelete()
     {
-        $this->assertTrue(
-            $this->cache->save('strData1', 'id1', array('tag1', 'tag2', 'tagz'))
-            && $this->cache->save('strData2', 'id2', array('tag2', 'tag3'))
-        );
+        $this->cache->save('strData1', 'id1', array('tag1', 'tag2', 'tagz'));
+        $this->cache->save('strData2', 'id2', array('tag2', 'tag3'));
 
         $this->assertTrue($this->cache->delete('id1'));
 
@@ -205,7 +203,8 @@ class MemcachedTest extends TestCase
         $this->assertNull($this->cache->loadTag('tagz'));
 
         $this->assertContains(
-            $this->cache->mapKey('id2'), $this->cache->loadTag('tag2')
+            $this->cache->mapKey('id2'),
+            $this->cache->load('tag2', 'tag')
         );
     }
 
@@ -214,7 +213,7 @@ class MemcachedTest extends TestCase
         $this->assertFalse($this->cache->delete('Inexistant'));
     }
 
-    public function OFF_testShortTtlDoesExpunge()
+    public function testShortTtlDoesExpunge()
     {
         $this->assertTrue(
             $this->cache->save('ttl-1', 'ttlId', array('someTags!'), -1)
