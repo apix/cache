@@ -30,10 +30,12 @@ class MemcachedTest extends TestCase
 
         try {
             $this->memcached = new \Memcached;
-            $this->memcached->addServer('127.0.0.1', 11211);
+            $server = $this->memcached->addServer('127.0.0.1', 11211);
 
-            // TODO
-            $this->memcached->getStats() or die ("Could not connect");
+            // $stats = $this->memcached->getStats();
+            // if($stats['pid'] == 0)
+            //     throw new Exception('No memcache server running?');
+
         } catch (\Exception $e) {
             $this->markTestSkipped( $e->getMessage() );
         }

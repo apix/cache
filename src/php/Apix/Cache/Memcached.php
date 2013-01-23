@@ -16,7 +16,7 @@ namespace Apix\Cache;
  * Memcached cache wrapper.
  *
  * @author Franck Cassedanne <franck at ouarz.net>
- * 
+ *
  * @TODO: namespacing?!
  * @see http://code.google.com/p/memcached/wiki/NewProgrammingTricks
  * @TODO: tag set?!
@@ -52,27 +52,13 @@ class Memcached extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    public function load($key, $type='key')
-    {
-        return $type == 'key' ? $this->loadKey($key) : $this->loadTag($key);
-    }
-
-    /**
-     * Retrieves the cache for the given key.
-     *
-     * @param  string     $key The cache key to retrieve.
-     * @return mixed|null Returns the cached data or null.
-     */
     public function loadKey($key)
     {
         return $this->get($this->mapKey($key));
     }
 
     /**
-     * Retrieves the cache keys for the given tag.
-     *
-     * @param  string     $tag The cache tag to retrieve.
-     * @return array|null Returns an array of cache keys or null.
+     * {@inheritdoc}
      */
     public function loadTag($tag)
     {
@@ -84,7 +70,7 @@ class Memcached extends AbstractCache
             return $tagged['keys'];
         }
 
-        return null;        
+        return null;
     }
 
     /**
@@ -125,7 +111,7 @@ class Memcached extends AbstractCache
      * Upserts a string to an id.
      *
      * @param string $id The id od the upsert.
-     * @param array $str 
+     * @param array $str
      * @return Returns True on success or False on failure.
      */
     public function append($id, $str, $op='+')
@@ -202,7 +188,7 @@ class Memcached extends AbstractCache
     }
 
     /**
-     * Upserts some tags to an index key. 
+     * Upserts some tags to an index key.
      *
      * @param string $idx The name of the index.
      * @param array $tags
