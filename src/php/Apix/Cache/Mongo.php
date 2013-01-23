@@ -83,7 +83,7 @@ class Mongo extends AbstractCache
         );
 
         // check expiration
-        if(isset($cache['expire']) && (string) $cache['expire'] < time()) {
+        if (isset($cache['expire']) && (string) $cache['expire'] < time()) {
             return null;
         }
 

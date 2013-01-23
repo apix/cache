@@ -26,12 +26,12 @@ class StringerSet //implements Adapter
     public function serialize($keys, $op='+')
     {
         $str = '';
-        foreach((array)$keys as $key) {
-            $str .= $op . $key . ' ';            
+        foreach ((array) $keys as $key) {
+            $str .= $op . $key . ' ';
         }
+
         return $str;
     }
-
 
     /**
      * {@inheritdoc}
@@ -45,7 +45,7 @@ class StringerSet //implements Adapter
     {
         $add    = array();
         $remove = array();
-        foreach(explode(' ', trim($str)) as $k) {
+        foreach (explode(' ', trim($str)) as $k) {
             $key = substr($k, 1);
             $op = $k[0];
             if($op == '+')
@@ -53,14 +53,12 @@ class StringerSet //implements Adapter
             elseif($op == '-')
                 $remove[] = $key;
         }
+
         return array(
             'dirty' => count($remove),
             'keys'  => array_values(array_diff($add, $remove)),
-        );  
+        );
     }
-
-
-
 
     /**
      * {@inheritdoc}

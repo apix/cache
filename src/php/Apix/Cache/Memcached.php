@@ -29,24 +29,29 @@ class Memcached extends AbstractCache
     /**
      * Constructor.
      *
-     * @param \Memcached $Memcached   A Memcached instance.
-     * @param array  $options Array of options.
+     * @param \Memcached $Memcached A Memcached instance.
+     * @param array      $options   Array of options.
      */
     public function __construct(\Memcached $Memcached, array $options=null)
     {
         // default options
-        $this->options['db_name'] = 'apix';
-        $this->options['collection_name'] = 'cache';
         $this->options['serializer'] = 'php'; // none, php, json, igBinary.
+
         $this->options['prefix_idx'] = 'idx_'; // prefix cache index
         $this->options['prefix_key'] = 'key_'; // prefix cache index
         $this->options['prefix_tag'] = 'tag_'; // prefix cache index
 
-        // TODO: Memcached::SERIALIZER_PHP or Memcached::SERIALIZER_IGBINARY
-        $Memcached->setOption(\Memcached::OPT_COMPRESSION, false);
+        $this->options['namespace_key'] = 'apix_'; // namespace_key
+
         parent::__construct($Memcached, $options);
 
+        // TODO: Memcached::SERIALIZER_PHP or Memcached::SERIALIZER_IGBINARY
+        $this->adapter->setOption(\Memcached::OPT_COMPRESSION, false);
+
+
         $this->setSerializer($this->options['serializer']);
+
+        $this->setNamespace($this->options['namespace_key']);
     }
 
     /**
@@ -62,15 +67,7 @@ class Memcached extends AbstractCache
      */
     public function loadTag($tag)
     {
-        $str = $this->get($this->mapTag($tag));
-
-        if(null !== $str) {
-            $s = new Serializer\StringerSet;
-            $tagged = $s->unserialize($str);
-            return $tagged['keys'];
-        }
-
-        return null;
+        return $this->loadIndex($tag, 'tag');
     }
 
     /**
@@ -93,6 +90,8 @@ class Memcached extends AbstractCache
      */
     public function save($data, $key, array $tags=null, $ttl=null)
     {
+        $ttl = $this->sanitiseTtl($ttl);
+
         $mKey = $this->mapKey($key);
         $success = $this->adapter->set($mKey, $data, $ttl);
 
@@ -108,22 +107,16 @@ class Memcached extends AbstractCache
     }
 
     /**
-     * Upserts a string to an id.
+     * Returns the ttl sanitased for this cache adapter.
      *
-     * @param string $id The id od the upsert.
-     * @param array $str
-     * @return Returns True on success or False on failure.
+     * @http://php.net/manual/en/memcached.expiration.php
+     *
+     * @param  integer|null $ttl The time-to-live in seconds.
+     * @return int
      */
-    public function append($id, $str, $op='+')
+    protected function sanitiseTtl($ttl)
     {
-        // upsert
-        if(! $success = $this->adapter->append($id, $str) ) {
-            if($op == '+') {
-                $success = $this->adapter->add($id, $str);
-            }
-        }
-
-        return (boolean) $success;
+        return $ttl > 2592000 ? time()+$ttl : $ttl;
     }
 
     /**
@@ -154,17 +147,24 @@ class Memcached extends AbstractCache
      */
     public function delete($key)
     {
-        $key = $this->mapKey($key);
+        $_key = $this->mapKey($key);
+        $items = array( $_key );
 
         if ($this->options['tag_enable']) {
-            $tags = $this->get($this->mapIdx($key));
 
-            // mark for deletion
-            $this->upsertIndex($key, $tags, '-');
+            $idx = $this->mapIdx($key);
+
+            // mark key for deletion in tags
+            $tags = $this->loadIndex($idx);
+            if(is_array($tags)) {
+                foreach ($tags as $tag) {
+                    $this->upsertIndex($this->mapTag($tag), $_key, '-');
+                }
+                $items[] = $idx;
+            }
         }
-        $this->adapter->delete($this->mapIdx($key));
 
-        $this->adapter->delete($key);
+        $this->adapter->deleteMulti($items);
 
         return (boolean) $this->adapter->getResultCode() != \Memcached::RES_NOTFOUND;
     }
@@ -178,27 +178,76 @@ class Memcached extends AbstractCache
             return $this->adapter->flush();
         }
 
-        // namespace?
-        // $items = array_merge(
-        //     $this->adapter->keys($this->mapTag('*')),
-        //     $this->adapter->keys($this->mapKey('*'))
-        // );
+        $nsKey = $this->options['namespace_key'];
+        $this->adapter->setOption(\Memcached::OPT_PREFIX_KEY, $nsKey . '_');
 
-        // return $this->adapter->deleteMulti($items);
+        // mark for the old namespace for later deletion
+        $this->upsertIndex($this->mapIdx($nsKey), $this->getNamespace(), '-');
+
+        // increment the namespace!
+        $success = $this->adapter->increment($nsKey);
+
+        $this->setNamespace($nsKey);
+
+        return (boolean) $success;
+    }
+
+    public function setNamespace($nsKey)
+    {
+        $this->adapter->setOption(\Memcached::OPT_PREFIX_KEY, $nsKey . '_');
+
+        $nsVal = $this->adapter->get($nsKey);
+        if(false === $nsVal) {
+            $nsVal = 1;
+            $this->adapter->set($nsKey, $nsVal);
+        }
+
+        $this->adapter->setOption(\Memcached::OPT_PREFIX_KEY, $nsKey . $nsVal . '_');
+    }
+
+    public function getNamespace()
+    {
+        return $this->adapter->getOption(\Memcached::OPT_PREFIX_KEY);
     }
 
     /**
      * Upserts some tags to an index key.
      *
-     * @param string $idx The name of the index.
-     * @param array $tags
+     * @param  string  $idx  The name of the index.
+     * @param  array   $tags
      * @return Returns True on success or False on failure.
      */
     public function upsertIndex($idx, $context, $op='+')
     {
         $s = new Serializer\StringerSet;
+        $str = $s->serialize($context, $op);
 
-        return $this->append($idx, $s->serialize($context), $op);
+        // upsert
+        if (! $success = $this->adapter->append($idx, $str) ) {
+            if ($op == '+') {
+                $success = $this->adapter->add($idx, $str);
+            }
+        }
+
+        return (boolean) $success;
+    }
+
+    public function loadIndex($key, $type=null)
+    {
+        if(null !== $type) {
+            $key = $this->mapType($key, $type);
+        }
+
+        $str = $this->get($key);
+
+        if (null === $str) {
+            return null;
+        }
+
+        $s = new Serializer\StringerSet;
+        $tagged = $s->unserialize($str);
+
+        return empty($tagged['keys']) ? null : $tagged['keys'];
     }
 
     /**
@@ -210,6 +259,43 @@ class Memcached extends AbstractCache
     public function mapIdx($key)
     {
         return $this->sanitise($this->options['prefix_idx'] . $key);
+    }
+
+    public function mapType($key, $type)
+    {
+        switch($type)
+        {
+            case 'tag':
+                return $this->mapTag($key);
+
+            case 'idx':
+                return $this->mapIdx($key);
+        }
+
+        return $this->mapTag($key);
+    }
+
+    /**
+     * Purges expired items.
+     *
+     * @param  integer|null $add Extra time in second to add.
+     * @return boolean      Returns True on success or False on failure.
+     */
+    public function purge($add=null)
+    {
+        // def items(mc, indexName, forceCompaction=False):
+        // """Retrieve the current values from the set.
+
+        // This may trigger a compaction if you ask it to or the encoding is
+        // too dirty."""
+
+        // flags, casid, data = mc.get(indexName)
+        // dirtiness, keys = decodeSet(data)
+
+        // if forceCompaction or dirtiness > DIRTINESS_THRESHOLD:
+        //     compacted = encodeSet(keys)
+        //     mc.cas(indexName, casid, compacted)
+        // return keys
     }
 
 }
