@@ -99,7 +99,7 @@ class MemcachedTest extends GenericTestCase
     public function testFlushIncrementsTheNamspaceIndex()
     {
         $this->_commonMemcachedData();
-        $ns = $this->cache->getOption('namespace_key');
+        $ns = $this->cache->getOption('prefix_nsp');
 
         $this->assertEquals($ns.'1_', $this->cache->getNamespace());
         $this->assertTrue($this->cache->flush(), "Flush the namespace");
@@ -112,11 +112,37 @@ class MemcachedTest extends GenericTestCase
     public function testFlushPreserveTheNamspaceIndex()
     {
         $this->_commonMemcachedData();
-        $this->assertTrue($this->cache->flush(), "Flush the namespace");
+        $this->assertTrue($this->cache->flush());
 
-        $stuff = $this->cache->loadIndex($this->cache->getNamespace());
+        $key = $this->cache->getNamespace();
+        var_dump($key);
+
+        $idx = $this->cache->mapIdx($key);
+        var_dump($idx);
+
+        $stuff = $this->cache->getIndex($idx)->load();
+        // $stuff = $this->cache->loadIndex($idx);
 
         var_dump($stuff);
+
+        /*
+            $_key = $this->mapKey($key);
+            $items = array( $_key );
+
+            if ($this->options['tag_enable']) {
+
+                $idx = $this->mapIdx($key);
+
+                // mark key for deletion in tags
+                $tags = $this->loadIndex($idx);
+                if (is_array($tags)) {
+                    foreach ($tags as $tag) {
+                        $this->saveIndex($this->mapTag($tag), $_key, '-');
+                    }
+                    $items[] = $idx;
+                }
+            }
+        */
     }
 
     public function testFlushAll()
@@ -153,7 +179,8 @@ class MemcachedTest extends GenericTestCase
             '+tag1 +tag2 +tag3 ', $this->cache->get($idx)
         );
         $this->assertTrue(
-            $this->cache->saveIndex($idx, array('tag3'), '-')
+            $this->cache->getIndex($idx)->remove(array('tag3'))
+            // $this->cache->saveIndex($idx, array('tag3'), '-')
         );
         $this->assertEquals(
             '+tag1 +tag2 +tag3 -tag3 ', $this->cache->get($idx)
@@ -172,6 +199,44 @@ class MemcachedTest extends GenericTestCase
         // ));
 
         $this->assertNull( $this->cache->load('ttlId') );
+    }
+
+    public function testSetSerializerToNull()
+    {
+        $this->cache->setSerializer(null);
+        $this->assertSame(
+            \Memcached::SERIALIZER_PHP, $this->cache->getSerializer()
+        );
+    }
+
+    public function testSetSerializerToPhp()
+    {
+        $this->cache->setSerializer('php');
+        $this->assertSame(
+            \Memcached::SERIALIZER_PHP, $this->cache->getSerializer()
+        );
+    }
+
+    public function testSetSerializerToJson()
+    {
+        $this->markTestSkipped('json issue?!');
+        if (defined('\Memcached::SERIALIZER_JSON')) {
+            $this->cache->setSerializer('json');
+            $this->assertSame(
+                \Memcached::SERIALIZER_JSON, $this->cache->getSerializer()
+            );
+        }
+    }
+
+    public function testSetSerializerToIgbinary()
+    {
+        if (defined('\Memcached::SERIALIZER_IGBINARY')
+            && function_exists('igbinary_serialize')) {
+            $this->cache->setSerializer('igBinary');
+            $this->assertSame(
+                \Memcached::SERIALIZER_IGBINARY, $this->cache->getSerializer()
+            );
+        }
     }
 
 }

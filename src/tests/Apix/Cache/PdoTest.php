@@ -108,7 +108,7 @@ class PdoTest extends GenericTestCase
 
         $this->assertTrue($this->cache->save('bar_2', 'foo'));
         $this->assertEquals('bar_2', $this->cache->load('foo'));
-        
+
         // $this->assertEquals(1, $this->cache->getAdapter()->rowCount() );
     }
 

@@ -32,26 +32,29 @@ class Memcached extends AbstractCache
      * @param \Memcached $Memcached A Memcached instance.
      * @param array      $options   Array of options.
      */
-    public function __construct(\Memcached $Memcached, array $options=null)
+    public function __construct(\Memcached $memcached, array $options=null)
     {
         // default options
+        $this->options['prefix_key'] = 'key_'; // prefix cache keys
+        $this->options['prefix_tag'] = 'tag_'; // prefix cache tags
+        $this->options['prefix_idx'] = 'idx_'; // prefix cache indexes
+        $this->options['prefix_nsp'] = 'nsp_'; // prefix cache namespaces
+
         $this->options['serializer'] = 'php'; // none, php, json, igBinary.
 
-        $this->options['prefix_idx'] = 'idx_'; // prefix cache index
-        $this->options['prefix_key'] = 'key_'; // prefix cache index
-        $this->options['prefix_tag'] = 'tag_'; // prefix cache index
+        parent::__construct($memcached, $options);
 
-        $this->options['namespace_key'] = 'nsp_'; // namespace_key
-
-        parent::__construct($Memcached, $options);
+        if ($this->options['tag_enable']) {
+            $memcached->setOption(\Memcached::OPT_COMPRESSION, false);
+        } else {
+            $memcached->setOption(\Memcached::OPT_BINARY_PROTOCOL, true);
+        }
 
         // TODO: Memcached::SERIALIZER_PHP or Memcached::SERIALIZER_IGBINARY
-        $this->adapter->setOption(\Memcached::OPT_COMPRESSION, false);
-
 
         $this->setSerializer($this->options['serializer']);
 
-        $this->setNamespace($this->options['namespace_key']);
+        $this->setNamespace($this->options['prefix_nsp']);
     }
 
     /**
@@ -67,22 +70,7 @@ class Memcached extends AbstractCache
      */
     public function loadTag($tag)
     {
-        return $this->loadIndex($tag, 'tag');
-    }
-
-    /**
-     * Retrieves the cache item for the given id.
-     *
-     * @param  string     $id The cache id to retrieve.
-     * @return mixed|null Returns the cached data or null.
-     */
-    public function get($id)
-    {
-        $data = $this->adapter->get($id);
-
-        return $this->adapter->getResultCode() == \Memcached::RES_NOTFOUND
-                ? null
-                : $data;
+        return $this->getIndex($this->mapTag($tag))->load();
     }
 
     /**
@@ -93,30 +81,23 @@ class Memcached extends AbstractCache
         $ttl = $this->sanitiseTtl($ttl);
 
         $mKey = $this->mapKey($key);
+
+        // add the item
         $success = $this->adapter->set($mKey, $data, $ttl);
 
         if ($success && $this->options['tag_enable'] && !empty($tags)) {
 
+            // add all the tags to the index key.
+            $this->getIndex($this->mapIdx($key))->add($tags);
+
+            // append the key to each tag.
             foreach ($tags as $tag) {
-                $this->saveIndex($this->mapTag($tag), $mKey);
+                $this->getIndex($this->mapTag($tag))->add($mKey);
             }
-            $this->saveIndex($this->mapIdx($key), $tags);
+
         }
 
         return $success;
-    }
-
-    /**
-     * Returns the ttl sanitased for this cache adapter.
-     *
-     * @http://php.net/manual/en/memcached.expiration.php
-     *
-     * @param  integer|null $ttl The time-to-live in seconds.
-     * @return int
-     */
-    protected function sanitiseTtl($ttl)
-    {
-        return $ttl > 2592000 ? time()+$ttl : $ttl;
     }
 
     /**
@@ -127,19 +108,22 @@ class Memcached extends AbstractCache
         $items = array();
         foreach ($tags as $tag) {
             $keys = $this->loadTag($tag);
-            // TODO: use $keys = $this->adapter->getMulti($tags);
             if (null !== $keys) {
-                array_walk_recursive(
-                    $keys,
-                    function($key) use (&$items) { $items[] = $key; }
-                );
+                foreach ($keys as $key) {
+                        $items[] = $key;
+                        // $items[] = $this->mapIdx($key);
+                }
             }
+            // add the tag to deletion
             $items[] = $this->mapTag($tag);
+
+            // add the index key for deletion
+            // $items[] = $this->mapTag($tag);
         }
 
         $this->adapter->deleteMulti($items);
 
-        return (boolean) $this->adapter->getResultCode() != \Memcached::RES_NOTFOUND;
+        return (boolean) $this->adapter->getResultCode() != \Memcached::RES_FAILURE;
     }
 
     /**
@@ -151,22 +135,23 @@ class Memcached extends AbstractCache
         $items = array( $_key );
 
         if ($this->options['tag_enable']) {
-
             $idx = $this->mapIdx($key);
 
-            // mark key for deletion in tags
-            $tags = $this->loadIndex($idx);
-            if(is_array($tags)) {
+            // load the index of the key
+            $tags = $this->getIndex($idx)->load();
+
+            if (is_array($tags)) {
+                // mark the key as deleted in the tags.
                 foreach ($tags as $tag) {
-                    $this->saveIndex($this->mapTag($tag), $_key, '-');
+                    $this->getIndex($this->mapTag($tag))->remove($_key);
                 }
+                // delete that index
                 $items[] = $idx;
             }
         }
-
         $this->adapter->deleteMulti($items);
 
-        return (boolean) $this->adapter->getResultCode() != \Memcached::RES_NOTFOUND;
+        return (boolean) $this->adapter->getResultCode() != \Memcached::RES_FAILURE;
     }
 
     /**
@@ -177,80 +162,144 @@ class Memcached extends AbstractCache
         if (true === $all) {
             return $this->adapter->flush();
         }
+        $nsKey = $this->options['prefix_nsp'];
 
-        $nsKey = $this->options['namespace_key'];
-        $this->setPrefixNamespace($nsKey);
-
-        // mark for the old namespace for later deletion
-        $this->saveIndex($this->mapIdx($nsKey), $this->getNamespace(), '-');
-
-        // increment the namespace 
-        $success = $this->adapter->increment($nsKey);
-
-        $this->setNamespace($nsKey);
+        // set a new namespace
+        $success = $this->setNamespace($nsKey, true);
 
         return (boolean) $success;
-    }
-
-    public function setNamespace($nsKey)
-    {
-        $this->setPrefixNamespace($nsKey);
-
-        $nsVal = $this->adapter->get($nsKey);
-        if(false === $nsVal) {
-            $nsVal = 1;
-            $this->adapter->set($nsKey, $nsVal);
-        }
-
-        $this->setPrefixNamespace($nsKey . $nsVal);
-    }
-
-    public function setPrefixNamespace($prefix)
-    {
-        $this->adapter->setOption(\Memcached::OPT_PREFIX_KEY, $prefix . '_');
-    }
-
-    public function getNamespace()
-    {
-        return $this->adapter->getOption(\Memcached::OPT_PREFIX_KEY);
     }
 
     /**
-     * Upserts some tags to an index key.
+     * Purges expired items.
      *
-     * @param  string  $idx  The name of the index.
-     * @param  array   $tags
-     * @return Returns True on success or False on failure.
+     * @return boolean Returns True on success or False on failure.
      */
-    public function saveIndex($idx, $context, $op='+')
+    public function purge()
     {
-        $s = new Serializer\StringerSet;
-        $str = $s->serialize($context, $op);
+        // purge expired indexes
+        // $this->adapter->cas(indexName, $cas_token, $tring);
+    }
 
-        // upsert
-        if (! $success = $this->adapter->append($idx, $str) ) {
-            if ($op == '+') {
-                $success = $this->adapter->add($idx, $str);
+    /**
+     * {@inheritdoc}
+     */
+    public function setSerializer($serializer)
+    {
+        switch ($serializer) {
+            case 'igBinary':
+                // @codeCoverageIgnoreStart
+                if (function_exists('igbinary_serialize')) {
+                    $opt = \Memcached::SERIALIZER_IGBINARY;
+                }
+                // @codeCoverageIgnoreEnd
+                break;
+
+            case 'json':
+                $opt = \Memcached::SERIALIZER_JSON;
+                break;
+
+            case 'php':
+                $opt = \Memcached::SERIALIZER_PHP;
+                break;
+
+            default:
+                $opt = null;
+        }
+
+        if (null !== $opt) {
+            $this->getAdapter()->setOption(\Memcached::OPT_SERIALIZER, $opt);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSerializer()
+    {
+        return $this->getAdapter()->getOption(\Memcached::OPT_SERIALIZER);
+    }
+
+    /**
+     * Retrieves the cache item for the given id.
+     *
+     * @param  string     $id        The cache id to retrieve.
+     * @param  float      $cas_token The variable to store the CAS token in.
+     * @return mixed|null Returns the cached data or null.
+     */
+    public function get($id, &$cas_token=null)
+    {
+        $data = $this->adapter->get($id, null, $cas_token);
+
+        return $this->adapter->getResultCode() == \Memcached::RES_SUCCESS
+                ? $data
+                : null;
+    }
+
+    /**
+     * Returns the ttl sanitased for this cache adapter.
+     *
+     * @http://php.net/manual/en/memcached.expiration.php
+     *
+     * @param  integer|null $ttl The time-to-live in seconds.
+     * @return int
+     */
+    public function sanitiseTtl($ttl)
+    {
+        return $ttl > 2592000 ? time()+$ttl : $ttl;
+    }
+
+    /**
+     * Retrieves the cache item for the given id.
+     *
+     * @param  string     $id The cache id to retrieve.
+     * @return mixed|null Returns the cached data or null.
+     */
+    public function getIndex($idx)
+    {
+        return new MemcachedIndex($this, $idx);
+    }
+
+    /**
+     * Sets the namespace prefix.
+      *
+     * For memcache purpose, this is set as 'ns'+integer.
+     *
+     * @param string $prefix
+     */
+    public function setNamespace($ns, $renew=false, $suffix='_')
+    {
+        // temporally set the namespace to null
+        $this->adapter->setOption(\Memcached::OPT_PREFIX_KEY, null);
+
+        // mark the current namespace for future deletion
+        $this->getIndex($this->mapIdx($ns))->remove($this->getNamespace());
+
+        if ($renew) {
+            // increment the namespace counter
+            $counter = $this->increment($ns);
+        } else {
+            $counter = $this->adapter->get($ns);
+            if (false === $counter) {
+                $counter = 1;
+                $this->adapter->set($ns, $counter);
             }
         }
 
-        return (boolean) $success;
+        $ns .= $counter . $suffix;
+        $this->adapter->setOption(\Memcached::OPT_PREFIX_KEY, $ns);
+
+        return $counter;
     }
 
-    public function loadIndex($idx, $type=null)
+    /**
+     * Sets the namespace.
+     *
+     * @param string $prefix
+     */
+    public function getNamespace()
     {
-        if(null !== $type) {
-            $idx = $this->mapType($idx, $type);
-        }
-
-        $str = $this->get($idx);
-
-        if (null !== $str) {
-            $s = new Serializer\StringerSet;
-            $tagged = $s->unserialize($str);
-
-            return empty($tagged['keys']) ? null : $tagged['keys'];
-        }
+        return $this->adapter->getOption(\Memcached::OPT_PREFIX_KEY);
     }
 
     /**
@@ -264,41 +313,29 @@ class Memcached extends AbstractCache
         return $this->sanitise($this->options['prefix_idx'] . $key);
     }
 
-    public function mapType($key, $type)
+    /**
+     * Increments the value of the given key.
+     *
+     * @param  string  $key The key to increment.
+     * @return Returns the new item's value on success or FALSE on failure.
+     */
+    public function increment($key)
     {
-        switch($type)
-        {
-            case 'tag':
-                return $this->mapTag($key);
-
-            case 'idx':
-                return $this->mapIdx($key);
+        // Increment/decrement will initialize the value (if not available)
+        // only when OPT_BINARY_PROTOCOL is set to true!
+        if (true === \Memcached::OPT_BINARY_PROTOCOL) {
+            $counter = $this->adapter->increment($key, 1);
+        } else {
+            $counter = $this->adapter->get($key);
+            if (false === $counter) {
+                $counter = 1;
+                $this->adapter->set($key, $counter);
+            } else {
+                $counter = $this->adapter->increment($key);
+            }
         }
 
-        return $this->mapTag($key);
-    }
-
-    /**
-     * Purges expired items.
-     *
-     * @param  integer|null $add Extra time in second to add.
-     * @return boolean      Returns True on success or False on failure.
-     */
-    public function purge($add=null)
-    {
-        // def items(mc, indexName, forceCompaction=False):
-        // """Retrieve the current values from the set.
-
-        // This may trigger a compaction if you ask it to or the encoding is
-        // too dirty."""
-
-        // flags, casid, data = mc.get(indexName)
-        // dirtiness, keys = decodeSet(data)
-
-        // if forceCompaction or dirtiness > DIRTINESS_THRESHOLD:
-        //     compacted = encodeSet(keys)
-        //     mc.cas(indexName, casid, compacted)
-        // return keys
+        return $counter;
     }
 
 }

@@ -12,8 +12,6 @@
 
 namespace Apix\Cache;
 
-use Apix\TestCase;
-
 /* php -d apc.enable_cli=1 `which phpunit` -v */
 
 class ApcTest extends GenericTestCase
