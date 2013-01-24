@@ -15,7 +15,8 @@ namespace Apix\Cache;
 use Apix\TestCase;
 
 /* php -d apc.enable_cli=1 `which phpunit` -v */
-class ApcTest extends TestCase
+
+class ApcTest extends GenericTestCase
 {
 
     protected $cache = null;
@@ -46,96 +47,20 @@ class ApcTest extends TestCase
         }
     }
 
-    public function testLoadReturnsNullWhenEmpty()
+    public function testComplyWithApc()
     {
-        $this->assertNull( $this->cache->load('id') );
-    }
-
-    public function testSaveAndLoadWithString()
-    {
-        $this->assertTrue( $this->cache->save('strData', 'id') );
-
-        $this->assertEquals( 'strData', $this->cache->load('id') );
-
+        $this->assertTrue($this->cache->save('data', 'id'));
         $id = $this->cache->mapKey('id');
-        $this->assertEquals( 'strData', apc_fetch($id) );
-    }
-
-    public function testSaveAndLoadWithArray()
-    {
-        $data = array('foo' => 'bar');
-        $this->assertTrue($this->cache->save($data, 'id'));
-        $this->assertEquals($data, $this->cache->load('id'));
-    }
-
-    public function testSaveAndLoadWithObject()
-    {
-        $data = new \stdClass;
-        $this->assertTrue($this->cache->save($data, 'id'));
-        $this->assertEquals($data, $this->cache->load('id'));
-    }
-
-    public function testSaveWithTags()
-    {
-        $this->assertTrue(
-            $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
-        );
-
-        $this->assertTrue(
-            $this->cache->save('strData2', 'id2', array('tag3', 'tag4'))
-        );
-
-        $ids = $this->cache->load('tag2', 'tag');
-        $this->assertEquals( array($this->cache->mapKey('id1')), $ids );
-    }
-
-    public function testSaveWithTagDisabled()
-    {
-        $this->cache->setOptions(array('tag_enable' => false));
-
-        $this->assertTrue(
-            $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
-        );
-
-        $this->assertNull($this->cache->load('tag1', 'tag'));
-    }
-
-    public function testSaveWithOverlappingTags()
-    {
-        $this->assertTrue(
-            $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
-        );
-
-        $this->assertTrue(
-            $this->cache->save('strData2', 'id2', array('tag2', 'tag3'))
-        );
-
-        $ids = $this->cache->load('tag2', 'tag');
-        $this->assertTrue(count($ids) == 2);
-        $this->assertContains($this->cache->mapKey('id1'), $ids);
-        $this->assertContains($this->cache->mapKey('id2'), $ids);
-    }
-
-    public function testClean()
-    {
-        $this->cache->save('strData1', 'id1', array('tag1', 'tag2'));
-        $this->cache->save('strData2', 'id2', array('tag2', 'tag3'));
-        $this->cache->save('strData3', 'id3', array('tag3', 'tag4'));
-
-        $this->assertTrue($this->cache->clean(array('tag4')));
-        $this->assertFalse($this->cache->clean(array('tag4')));
-
-        $this->assertNull($this->cache->load('id3'));
-        $this->assertNull($this->cache->load('tag4', 'tag'));
-        $this->assertEquals('strData2', $this->cache->load('id2'));
+        $this->assertEquals('data', apc_fetch($id));
     }
 
     public function testFlushSelected()
     {
-        $this->cache->save('strData1', 'id1', array('tag1', 'tag2'));
-        $this->cache->save('strData2', 'id2', array('tag2', 'tag3'));
-        $this->cache->save('strData3', 'id3', array('tag3', 'tag4'));
-
+        $this->assertTrue(
+            $this->cache->save('data1', 'id1', array('tag1', 'tag2'))
+            && $this->cache->save('data2', 'id2', array('tag2', 'tag3'))
+            && $this->cache->save('data3', 'id3', array('tag3', 'tag4'))
+        );
         apc_add('foo', 'bar');
         $this->assertTrue($this->cache->flush());
         $this->assertFalse($this->cache->flush());
@@ -147,9 +72,11 @@ class ApcTest extends TestCase
 
     public function testFlushAll()
     {
-        $this->cache->save('strData1', 'id1', array('tag1', 'tag2'));
-        $this->cache->save('strData2', 'id2', array('tag2', 'tag3'));
-        $this->cache->save('strData3', 'id3', array('tag3', 'tag4'));
+        $this->assertTrue(
+            $this->cache->save('data1', 'id1', array('tag1', 'tag2'))
+            && $this->cache->save('data2', 'id2', array('tag2', 'tag3'))
+            && $this->cache->save('data3', 'id3', array('tag3', 'tag4'))
+        );
 
         apc_add('foo', 'bar');
         $this->assertTrue($this->cache->flush(true)); // always true!
@@ -158,23 +85,6 @@ class ApcTest extends TestCase
 
         $this->assertNull($this->cache->load('id3'));
         $this->assertNull($this->cache->load('tag1', 'tag'));
-    }
-
-    public function testDelete()
-    {
-        $this->cache->save('strData1', 'id1', array('tag1', 'tag2'));
-        $this->cache->save('strData2', 'id2', array('tag2', 'tag3'));
-
-        $this->assertTrue($this->cache->delete('id1'));
-        $this->assertFalse($this->cache->delete('id1'));
-
-        $this->assertNull($this->cache->load('id1'));
-        $this->assertNull($this->cache->load('tag1', 'tag'));
-    }
-
-    public function testDeleteInexistant()
-    {
-        $this->assertFalse($this->cache->delete('Inexistant'));
     }
 
     /**

@@ -41,7 +41,7 @@ class Memcached extends AbstractCache
         $this->options['prefix_key'] = 'key_'; // prefix cache index
         $this->options['prefix_tag'] = 'tag_'; // prefix cache index
 
-        $this->options['namespace_key'] = 'apix_'; // namespace_key
+        $this->options['namespace_key'] = 'nsp_'; // namespace_key
 
         parent::__construct($Memcached, $options);
 
@@ -98,9 +98,9 @@ class Memcached extends AbstractCache
         if ($success && $this->options['tag_enable'] && !empty($tags)) {
 
             foreach ($tags as $tag) {
-                $this->upsertIndex($this->mapTag($tag), $mKey);
+                $this->saveIndex($this->mapTag($tag), $mKey);
             }
-            $this->upsertIndex($this->mapIdx($key), $tags);
+            $this->saveIndex($this->mapIdx($key), $tags);
         }
 
         return $success;
@@ -158,7 +158,7 @@ class Memcached extends AbstractCache
             $tags = $this->loadIndex($idx);
             if(is_array($tags)) {
                 foreach ($tags as $tag) {
-                    $this->upsertIndex($this->mapTag($tag), $_key, '-');
+                    $this->saveIndex($this->mapTag($tag), $_key, '-');
                 }
                 $items[] = $idx;
             }
@@ -179,12 +179,12 @@ class Memcached extends AbstractCache
         }
 
         $nsKey = $this->options['namespace_key'];
-        $this->adapter->setOption(\Memcached::OPT_PREFIX_KEY, $nsKey . '_');
+        $this->setPrefixNamespace($nsKey);
 
         // mark for the old namespace for later deletion
-        $this->upsertIndex($this->mapIdx($nsKey), $this->getNamespace(), '-');
+        $this->saveIndex($this->mapIdx($nsKey), $this->getNamespace(), '-');
 
-        // increment the namespace!
+        // increment the namespace 
         $success = $this->adapter->increment($nsKey);
 
         $this->setNamespace($nsKey);
@@ -194,7 +194,7 @@ class Memcached extends AbstractCache
 
     public function setNamespace($nsKey)
     {
-        $this->adapter->setOption(\Memcached::OPT_PREFIX_KEY, $nsKey . '_');
+        $this->setPrefixNamespace($nsKey);
 
         $nsVal = $this->adapter->get($nsKey);
         if(false === $nsVal) {
@@ -202,7 +202,12 @@ class Memcached extends AbstractCache
             $this->adapter->set($nsKey, $nsVal);
         }
 
-        $this->adapter->setOption(\Memcached::OPT_PREFIX_KEY, $nsKey . $nsVal . '_');
+        $this->setPrefixNamespace($nsKey . $nsVal);
+    }
+
+    public function setPrefixNamespace($prefix)
+    {
+        $this->adapter->setOption(\Memcached::OPT_PREFIX_KEY, $prefix . '_');
     }
 
     public function getNamespace()
@@ -217,7 +222,7 @@ class Memcached extends AbstractCache
      * @param  array   $tags
      * @return Returns True on success or False on failure.
      */
-    public function upsertIndex($idx, $context, $op='+')
+    public function saveIndex($idx, $context, $op='+')
     {
         $s = new Serializer\StringerSet;
         $str = $s->serialize($context, $op);
@@ -232,22 +237,20 @@ class Memcached extends AbstractCache
         return (boolean) $success;
     }
 
-    public function loadIndex($key, $type=null)
+    public function loadIndex($idx, $type=null)
     {
         if(null !== $type) {
-            $key = $this->mapType($key, $type);
+            $idx = $this->mapType($idx, $type);
         }
 
-        $str = $this->get($key);
+        $str = $this->get($idx);
 
-        if (null === $str) {
-            return null;
+        if (null !== $str) {
+            $s = new Serializer\StringerSet;
+            $tagged = $s->unserialize($str);
+
+            return empty($tagged['keys']) ? null : $tagged['keys'];
         }
-
-        $s = new Serializer\StringerSet;
-        $tagged = $s->unserialize($str);
-
-        return empty($tagged['keys']) ? null : $tagged['keys'];
     }
 
     /**

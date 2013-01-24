@@ -12,8 +12,6 @@
 
 namespace Apix\Cache;
 
-use Apix\TestCase;
-
 /**
  * @covers Apix\Cache\AbstractPdo
  * @covers Apix\Cache\Pdo\Mysql
@@ -21,7 +19,7 @@ use Apix\TestCase;
  * @covers Apix\Cache\Pdo\Sql1999
  * @covers Apix\Cache\Pdo\Sqlite
  */
-class PdoTest extends TestCase
+class PdoTest extends GenericTestCase
 {
     protected $cache, $pdo;
 
@@ -103,102 +101,23 @@ class PdoTest extends TestCase
         }
     }
 
-    public function testLoadReturnsNullWhenEmpty()
-    {
-        $this->assertNull($this->cache->load('id'));
-    }
-
     public function testSaveIsUnique()
     {
         $this->assertTrue($this->cache->save('bar_1', 'foo'));
         $this->assertEquals('bar_1', $this->cache->load('foo'));
 
         $this->assertTrue($this->cache->save('bar_2', 'foo'));
-
         $this->assertEquals('bar_2', $this->cache->load('foo'));
+        
         // $this->assertEquals(1, $this->cache->getAdapter()->rowCount() );
-    }
-
-    public function testSaveAndLoadWithString()
-    {
-        $this->assertTrue($this->cache->save('strData', 'id'));
-
-        $this->assertEquals('strData', $this->cache->load('id'));
-    }
-
-    public function testSaveAndLoadWithArray()
-    {
-        $data = array('foo' => 'bar');
-        $this->assertTrue($this->cache->save($data, 'id'));
-        $this->assertEquals($data, $this->cache->load('id'));
-    }
-
-    public function testSaveAndLoadWithObject()
-    {
-        $data = new \stdClass;
-        $this->assertTrue($this->cache->save($data, 'id'));
-        $this->assertEquals($data, $this->cache->load('id'));
-    }
-
-    public function testSaveWithTags()
-    {
-        $this->assertTrue(
-            $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
-            && $this->cache->save('strData2', 'id2', array('tag3', 'tag4'))
-        );
-
-        $ids = $this->cache->load('tag2', 'tag');
-
-        $this->assertEquals( array($this->cache->mapKey('id1')), $ids );
-    }
-
-    public function testSaveWithTagDisabled()
-    {
-        $this->cache->setOptions(array('tag_enable' => false));
-
-        $this->assertTrue(
-            $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
-        );
-
-        $this->assertNull($this->cache->load('tag1', 'tag'));
-    }
-
-    public function testSaveWithOverlappingTags()
-    {
-        $this->assertTrue(
-            $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
-            && $this->cache->save('strData2', 'id2', array('tag2', 'tag3'))
-        );
-
-        $ids = $this->cache->load('tag2', 'tag');
-        $this->assertTrue(count($ids) == 2);
-        $this->assertContains($this->cache->mapKey('id1'), $ids);
-        $this->assertContains($this->cache->mapKey('id2'), $ids);
-    }
-
-    public function testClean()
-    {
-        $this->assertTrue(
-            $this->cache->save('strData2', 'id2', array('tag2', 'tag3', 'tag4'))
-            && $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
-            && $this->cache->save('strData3', 'id3', array('tag3', 'tag4'))
-        );
-
-        $this->assertTrue($this->cache->clean(array('tag4')));
-        $this->assertFalse($this->cache->clean(array('tag4')));
-
-        $this->assertNull($this->cache->load('id2'));
-        $this->assertNull($this->cache->load('id3'));
-        $this->assertNull($this->cache->load('tag4', 'tag'));
-        $this->assertEquals('strData1', $this->cache->load('id1'));
     }
 
     public function testFlushCacheOnly()
     {
         $this->assertTrue(
-            $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
-            && $this->cache->save('strData2', 'id2', array('tag2', 'tag3'))
-            && $this->cache->save('strData3', 'id3', array('tag3', 'tag4'))
+            $this->cache->save('data1', 'id1', array('tag1', 'tag2'))
+            && $this->cache->save('data2', 'id2', array('tag2', 'tag3'))
+            && $this->cache->save('data3', 'id3', array('tag3', 'tag4'))
         );
         // $foo = array('foo' => 'bar');
         // $this->cache->getAdapter()->add($foo);
@@ -220,39 +139,15 @@ class PdoTest extends TestCase
     public function testFlushAll()
     {
         $this->assertTrue(
-            $this->cache->save('strData1', 'id1', array('tag1', 'tag2'))
-            && $this->cache->save('strData2', 'id2', array('tag2', 'tag3'))
-            && $this->cache->save('strData3', 'id3', array('tag3', 'tag4'))
+            $this->cache->save('data1', 'id1', array('tag1', 'tag2'))
+            && $this->cache->save('data2', 'id2', array('tag2', 'tag3'))
+            && $this->cache->save('data3', 'id3', array('tag3', 'tag4'))
         );
 
         $this->assertTrue($this->cache->flush(true));
 
         $this->assertNull($this->cache->load('id3'));
         $this->assertNull($this->cache->load('tag1', 'tag'));
-    }
-
-    public function testDelete()
-    {
-        $this->assertTrue(
-            $this->cache->save('strData1', 'id1', array('tag1', 'tag2', 'tagz'))
-            && $this->cache->save('strData2', 'id2', array('tag2', 'tag3'))
-        );
-
-        $this->assertTrue($this->cache->delete('id1'));
-
-        $this->assertNull($this->cache->load('id1'), 'msg1');
-        $this->assertNull($this->cache->load('tag1', 'tag'), 'msg2');
-        $this->assertNull($this->cache->load('tagz', 'tag'), 'msg3');
-
-        $this->assertContains(
-            $this->cache->mapKey('id2'),
-            $this->cache->load('tag2', 'tag')
-        );
-    }
-
-    public function testDeleteInexistant()
-    {
-        $this->assertFalse($this->cache->delete('Inexistant'));
     }
 
     public function testShortTtlDoesExpunge()
