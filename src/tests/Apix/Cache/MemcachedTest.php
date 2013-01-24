@@ -23,7 +23,8 @@ class MemcachedTest extends GenericTestCase
     protected $options = array(
         'prefix_key' => 'key_',
         'prefix_tag' => 'tag_',
-        'prefix_idx' => 'idx_'
+        'prefix_idx' => 'idx_',
+        'serializer' => 'json'
     );
 
     public function getMemcached()
@@ -219,8 +220,9 @@ class MemcachedTest extends GenericTestCase
 
     public function testSetSerializerToJson()
     {
-        $this->markTestSkipped('json issue?!');
-        if (defined('\Memcached::SERIALIZER_JSON')) {
+        if (defined('\Memcached::SERIALIZER_JSON')
+            && \Memcached::HAVE_JSON
+        ) {
             $this->cache->setSerializer('json');
             $this->assertSame(
                 \Memcached::SERIALIZER_JSON, $this->cache->getSerializer()
@@ -231,7 +233,8 @@ class MemcachedTest extends GenericTestCase
     public function testSetSerializerToIgbinary()
     {
         if (defined('\Memcached::SERIALIZER_IGBINARY')
-            && function_exists('igbinary_serialize')) {
+            && \Memcached::HAVE_IGBINARY
+        ) {
             $this->cache->setSerializer('igBinary');
             $this->assertSame(
                 \Memcached::SERIALIZER_IGBINARY, $this->cache->getSerializer()

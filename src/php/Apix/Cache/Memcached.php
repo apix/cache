@@ -177,7 +177,7 @@ class Memcached extends AbstractCache
      */
     public function purge()
     {
-        // purge expired indexes
+        // expired indexes: tags,
         // $this->adapter->cas(indexName, $cas_token, $tring);
     }
 
@@ -191,7 +191,7 @@ class Memcached extends AbstractCache
                 // @codeCoverageIgnoreStart
                 if (function_exists('igbinary_serialize')) {
                     $opt = \Memcached::SERIALIZER_IGBINARY;
-                }
+                } 
                 // @codeCoverageIgnoreEnd
                 break;
 
