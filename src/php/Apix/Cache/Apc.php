@@ -80,6 +80,10 @@ class Apc extends AbstractCache
         
         $store = array();
         if ($this->options['tag_enable'] && !empty($tags)) {
+
+            // add all the tags to the index key.
+            $this->getIndex($this->mapIdx($key))->add($tags);
+
             foreach ($tags as $tag) {
                 $tag = $this->mapTag($tag);
                 $keys = apc_fetch($tag, $success);
