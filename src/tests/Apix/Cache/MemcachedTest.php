@@ -24,7 +24,7 @@ class MemcachedTest extends GenericTestCase
         'prefix_key' => 'key_',
         'prefix_tag' => 'tag_',
         'prefix_idx' => 'idx_',
-        'serializer' => 'json'
+        'serializer' => 'php'
     );
 
     public function getMemcached()
@@ -107,45 +107,6 @@ class MemcachedTest extends GenericTestCase
         $this->assertEquals($ns.'2_', $this->cache->getNamespace());
     }
 
-    /**
-     * @group encours
-     */
-    public function testFlushPreserveTheNamspaceIndex()
-    {
-        $this->_commonMemcachedData();
-        $this->assertTrue($this->cache->flush());
-
-        $key = $this->cache->getNamespace();
-        var_dump($key);
-
-        $idx = $this->cache->mapIdx($key);
-        var_dump($idx);
-
-        $stuff = $this->cache->getIndex($idx)->load();
-        // $stuff = $this->cache->loadIndex($idx);
-
-        var_dump($stuff);
-
-        /*
-            $_key = $this->mapKey($key);
-            $items = array( $_key );
-
-            if ($this->options['tag_enable']) {
-
-                $idx = $this->mapIdx($key);
-
-                // mark key for deletion in tags
-                $tags = $this->loadIndex($idx);
-                if (is_array($tags)) {
-                    foreach ($tags as $tag) {
-                        $this->saveIndex($this->mapTag($tag), $_key, '-');
-                    }
-                    $items[] = $idx;
-                }
-            }
-        */
-    }
-
     public function testFlushAll()
     {
         $this->_commonMemcachedData();
@@ -168,6 +129,33 @@ class MemcachedTest extends GenericTestCase
 
         $this->assertTrue($this->cache->delete('id'));
         $this->assertNull($this->cache->loadTag('tag1'));
+
+        $idxKey = $this->cache->mapIdx('id');
+        $this->assertNull($this->cache->getIndex($idxKey)->load());
+    }
+
+    /**
+     * @group encours
+     */
+    public function testDelete()
+    {
+        $tags = array('tag1', 'tag2');
+        $this->assertTrue($this->cache->save('data', 'id', $tags));
+
+        $this->assertSame(
+            array($this->cache->mapKey('id')), $this->cache->loadTag('tag1'),
+            'tag1 isset'
+        );
+
+        // check the idx isset
+        $indexer = $this->cache->getIndex($this->cache->mapIdx('id'));
+        $this->assertSame( $tags, $indexer->load(), 'idx_id isset');
+
+        $this->assertTrue($this->cache->delete('id'));
+        $this->assertFalse($this->cache->delete('id'));
+
+        $this->assertNull($this->cache->loadTag('tag1'), 'tag1 !isset');
+        $this->assertNull($indexer->load(), 'idx_id !isset');
     }
 
     public function testIndexing()

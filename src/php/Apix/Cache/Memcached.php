@@ -135,18 +135,18 @@ class Memcached extends AbstractCache
         $items = array( $_key );
 
         if ($this->options['tag_enable']) {
-            $idx = $this->mapIdx($key);
+            $idx_key = $this->mapIdx($key);
 
-            // load the index of the key
-            $tags = $this->getIndex($idx)->load();
+            // load the tags from the index key
+            $tags = $this->getIndex($idx_key)->load();
 
             if (is_array($tags)) {
                 // mark the key as deleted in the tags.
                 foreach ($tags as $tag) {
                     $this->getIndex($this->mapTag($tag))->remove($_key);
                 }
-                // delete that index
-                $items[] = $idx;
+                // delete that index key
+                $items[] = $idx_key;
             }
         }
         $this->adapter->deleteMulti($items);
@@ -189,27 +189,31 @@ class Memcached extends AbstractCache
         switch ($serializer) {
             case 'igBinary':
                 // @codeCoverageIgnoreStart
-                if (function_exists('igbinary_serialize')) {
-                    $opt = \Memcached::SERIALIZER_IGBINARY;
+                if(!\Memcached::HAVE_IGBINARY) {
+                    continue;
                 } 
+                $opt = \Memcached::SERIALIZER_IGBINARY;
                 // @codeCoverageIgnoreEnd
-                break;
+            break;
 
             case 'json':
+                // @codeCoverageIgnoreStart
+                if(!\Memcached::HAVE_JSON) {
+                    continue;
+                }
                 $opt = \Memcached::SERIALIZER_JSON;
-                break;
+                // @codeCoverageIgnoreEnd
+            break;
 
             case 'php':
-                $opt = \Memcached::SERIALIZER_PHP;
-                break;
-
             default:
-                $opt = null;
+                $opt = \Memcached::SERIALIZER_PHP;
         }
 
-        if (null !== $opt) {
-            $this->getAdapter()->setOption(\Memcached::OPT_SERIALIZER, $opt);
+        if(!isset($opt)) {
+            throw new \Exception('Serializer not enabled.'); // @todo
         }
+        $this->getAdapter()->setOption(\Memcached::OPT_SERIALIZER, $opt);
     }
 
     /**
