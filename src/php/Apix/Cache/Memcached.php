@@ -50,8 +50,6 @@ class Memcached extends AbstractCache
             $memcached->setOption(\Memcached::OPT_BINARY_PROTOCOL, true);
         }
 
-        // TODO: Memcached::SERIALIZER_PHP or Memcached::SERIALIZER_IGBINARY
-
         $this->setSerializer($this->options['serializer']);
 
         $this->setNamespace($this->options['prefix_nsp']);
@@ -189,16 +187,16 @@ class Memcached extends AbstractCache
         switch ($serializer) {
             case 'igBinary':
                 // @codeCoverageIgnoreStart
-                if(!\Memcached::HAVE_IGBINARY) {
+                if (!\Memcached::HAVE_IGBINARY) {
                     continue;
-                } 
+                }
                 $opt = \Memcached::SERIALIZER_IGBINARY;
                 // @codeCoverageIgnoreEnd
             break;
 
             case 'json':
                 // @codeCoverageIgnoreStart
-                if(!\Memcached::HAVE_JSON) {
+                if (!\Memcached::HAVE_JSON) {
                     continue;
                 }
                 $opt = \Memcached::SERIALIZER_JSON;
@@ -210,7 +208,7 @@ class Memcached extends AbstractCache
                 $opt = \Memcached::SERIALIZER_PHP;
         }
 
-        if(!isset($opt)) {
+        if (!isset($opt)) {
             throw new \Exception('Serializer not enabled.'); // @todo
         }
         $this->getAdapter()->setOption(\Memcached::OPT_SERIALIZER, $opt);
@@ -254,14 +252,14 @@ class Memcached extends AbstractCache
     }
 
     /**
-     * Retrieves the cache item for the given id.
+     * Returns the named indexer.
      *
-     * @param  string     $id The cache id to retrieve.
-     * @return mixed|null Returns the cached data or null.
+     * @param  string          $name The name of the index.
+     * @return Indexer\Adapter
      */
-    public function getIndex($idx)
+    public function getIndex($name)
     {
-        return new MemcachedIndex($this, $idx);
+        $idx = new Indexer\MemcachedIndex($this, $name);
     }
 
     /**

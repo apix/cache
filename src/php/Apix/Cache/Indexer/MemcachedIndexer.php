@@ -10,7 +10,7 @@
  *
  */
 
-namespace Apix\Cache;
+namespace Apix\Cache\Indexer;
 
 use Apix\Cache\Memcached;
 
@@ -25,7 +25,7 @@ use Apix\Cache\Memcached;
  * @see http://dustin.github.com/2011/02/17/memcached-set.html
  *
  */
-class MemcachedIndex
+class MemcachedIndexer extends AbstractIndexer
 {
 
     const DIRTINESS_THRESHOLD = 100;
@@ -57,15 +57,13 @@ class MemcachedIndex
     /**
      * Constructor.
      *
-     * @param Apix\Cache\Memcached $Memcached A Memcached instance.
      * @param array                $options   Array of options.
+     * @param Apix\Cache\Memcached $Memcached A Memcached instance.
      */
     public function __construct(Memcached $engine, $index)
     {
         $this->engine = $engine;
         $this->index = $index;
-
-        $this->options['prefix_idx'] = 'idx_'; // prefix cache index
     }
 
     /**
@@ -79,14 +77,11 @@ class MemcachedIndex
     }
 
     /**
-     * Adds one or many element(s) to the index.
-     *
-     * @param  array   $context The elements to remove from the index.
-     * @return Returns True on success or False on failure.
+     * {@inheritdoc}
      */
     public function add($elements)
     {
-        $str = $this->serialize($elements, '+');
+        $str = $this->serialize((array) $elements, '+');
 
         $success = $this->getAdapter()->append($this->index, $str);
 
@@ -98,14 +93,11 @@ class MemcachedIndex
     }
 
     /**
-     * Removes one or many element(s) from the index.
-     *
-     * @param  array|string $items The items to remove from the index.
-     * @return Returns      True on success or False on failure.
+     * {@inheritdoc}
      */
     public function remove($elements)
     {
-        $str = $this->serialize($elements, '-');
+        $str = $this->serialize((array) $elements, '-');
 
         return (boolean) $this->getAdapter()->append($this->index, $str);
     }
@@ -144,12 +136,18 @@ class MemcachedIndex
     }
 
     /**
-     * {@inheritdoc}
+     * Serialises the given string.
+     *
+     * e.g. '+a +b +c -b -x' => ['a','c'];
+     * Sets the dirtiness level (count negative).
+     *
+     * @param  array  $keys
+     * @return string $operator
      */
-    public function serialize($keys, $op='+')
+    public function serialize(array $keys, $op='+')
     {
         $str = '';
-        foreach ((array) $keys as $key) {
+        foreach ($keys as $key) {
             $str .= $op . $key . ' ';
         }
 
@@ -158,8 +156,9 @@ class MemcachedIndex
 
     /**
      * Unserialises the given string.
+     *
      * e.g. '+a +b +c -b -x' => ['a','c'];
-     * Sets the dirtiness level (2 in thaht case).
+     * Sets the dirtiness level (count negative).
      *
      * @param  string $string
      * @return array
