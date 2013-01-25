@@ -85,7 +85,7 @@ class MemcachedIndexer extends AbstractIndexer
 
         $success = $this->getAdapter()->append($this->index, $str);
 
-        if (!$success) {
+        if (false === $success) {
             $success = $this->getAdapter()->add($this->index, $str);
         }
 

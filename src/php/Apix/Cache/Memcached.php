@@ -259,7 +259,7 @@ class Memcached extends AbstractCache
      */
     public function getIndex($name)
     {
-        $idx = new Indexer\MemcachedIndex($this, $name);
+        return new Indexer\MemcachedIndexer($this, $name);
     }
 
     /**
