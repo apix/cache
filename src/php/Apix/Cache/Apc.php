@@ -33,9 +33,7 @@ class Apc extends AbstractCache
      */
     public function loadKey($key)
     {
-        $cached = apc_fetch($this->mapKey($key), $success);
-
-        return false === $success ? null : $cached;
+        return $this->get($this->mapKey($key));
     }
 
     /**
@@ -43,9 +41,32 @@ class Apc extends AbstractCache
      */
     public function loadTag($tag)
     {
-        $cached = apc_fetch($this->mapTag($tag), $success);
+        return $this->getIndex($this->mapTag($tag))->load();
+    }
+
+    /**
+     * Retrieves the cache item for the given id.
+     *
+     * @param  string       $id        The cache id to retrieve.
+     * @param  boolean      $success The variable to store the success value.
+     * @return mixed|null Returns the cached data or null.
+     */
+    public function get($id, $success=null)
+    {
+        $cached = apc_fetch($id, $success);
 
         return false === $success ? null : $cached;
+    }
+
+    /**
+     * Returns the named indexer.
+     *
+     * @param  string          $name The name of the index.
+     * @return Indexer\Adapter
+     */
+    public function getIndex($name)
+    {
+        return new Indexer\ApcIndexer($this, $name);
     }
 
     /**
@@ -56,6 +77,7 @@ class Apc extends AbstractCache
     public function save($data, $key, array $tags=null, $ttl=null)
     {
         $key = $this->mapKey($key);
+        
         $store = array();
         if ($this->options['tag_enable'] && !empty($tags)) {
             foreach ($tags as $tag) {
