@@ -32,11 +32,11 @@ class Mysql extends AbstractPdo
                         ENGINE=MYISAM DEFAULT charset=utf8;',
         'key_idx'   => 'CREATE INDEX `%s_key_idx` ON `%s` (`key`);',
         'exp_idx'   => 'CREATE INDEX `%s_exp_idx` ON `%s` (`expire`);',
-        
+
         // 'tag_idx' will throw MYSQL ERROR 1170 -- if the index is needed then
         // we should split keys and tags into diff tables and use varchar(255).
         // 'tag_idx'   => 'CREATE INDEX `%s_tag_idx` ON `%s` (`tags`);',
-        
+
         'loadKey'   => 'SELECT `data` FROM `%s` WHERE `key`=:key AND
                         (`expire` IS NULL OR `expire` > :now);',
         'loadTag'   => 'SELECT `key` FROM `%s` WHERE `tags` LIKE :tag AND
