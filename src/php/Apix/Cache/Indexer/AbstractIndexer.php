@@ -20,4 +20,13 @@ namespace Apix\Cache\Indexer;
 abstract class AbstractIndexer implements Adapter
 {
 
+    /**
+     * Returns the items index.
+     *
+     * @return Returns True on success or False on failure.
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
 }

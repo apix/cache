@@ -43,15 +43,9 @@ class ApcIndexer extends AbstractIndexer
     protected $items = null;
 
     /**
-     * Holds this index dirtiness.
-     * @var integer
-     */
-    protected $dirtiness;
-
-    /**
      * Constructor.
      *
-     * @param array                $options   Array of options.
+     * @param array          $options   Array of options.
      * @param Apix\Cache\Apc $Memcached An instance of .
      */
     public function __construct(Apc $engine, $index)
@@ -76,19 +70,17 @@ class ApcIndexer extends AbstractIndexer
     public function add($elements)
     {
         foreach ((array) $elements as $element) {
-            $tag = $this->mapTag($element);
+            $tag = $this->engine->mapTag($element);
             $keys = apc_fetch($tag, $success);
-           // here!!! 
             if (false === $success) {
-
-                $store[$tag] = array($key);
+                $this->items[$tag] = array($this->index);
             } else {
-                $keys[] = $key;
-                $store[$tag] = array_unique($keys);
+                $keys[] = $this->index;
+                $this->items[$tag] = array_unique($keys);
             }
         }
-        // $this->items[] = $key;
-        return (boolean) $success;
+
+        return !in_array(false, apc_store($this->items, null, $ttl));
     }
 
     /**
@@ -102,75 +94,14 @@ class ApcIndexer extends AbstractIndexer
     }
 
     /**
-     * Returns the indexed items.
+     * Loads the indexed items from the backend.
      *
      * @param  array   $context The elements to remove from the index.
-     * @return Returns True on success or False on failure.
+     * @return boolean Returns True on success or False on failure.
      */
     public function load()
     {
         return $this->engine->get($this->index);
-    }
-
-    /**
-     * Purge the index.
-     *
-     * @return [type] [description]
-     */
-    public function purge()
-    {
-        $str = $this->serialize($this->items, '+');
-
-        return $this->getAdapter()->cas($this->token, $this->index, $str);
-    }
-
-    /**
-     * Serialises the given string.
-     *
-     * e.g. '+a +b +c -b -x' => ['a','c'];
-     * Sets the dirtiness level (count negative).
-     *
-     * @param  array  $keys
-     * @return string $operator
-     */
-    public function serialize(array $keys, $op='+')
-    {
-        $str = '';
-        foreach ($keys as $key) {
-            $str .= $op . $key . ' ';
-        }
-
-        return $str;
-    }
-
-    /**
-     * Unserialises the given string.
-     *
-     * e.g. '+a +b +c -b -x' => ['a','c'];
-     * Sets the dirtiness level (count negative).
-     *
-     * @param  string $string
-     * @return array
-     */
-    public function unserialize($str)
-    {
-        $add    = array();
-        $remove = array();
-        foreach (explode(' ', trim($str)) as $k) {
-            $key = substr($k, 1);
-            $op = $k[0];
-            if ($op == '+') {
-                $add[] = $key;
-            } else {
-                $remove[] = $key;
-            }
-        }
-
-        $this->dirtiness = count($remove);
-
-        $items = array_values(array_diff($add, $remove));
-
-        return empty($items) ? null : $items;
     }
 
 }

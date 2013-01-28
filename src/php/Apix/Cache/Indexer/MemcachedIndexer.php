@@ -19,12 +19,6 @@ use Apix\Cache\Memcached,
  * Memcached index.
  *
  * @author Franck Cassedanne <franck at ouarz.net>
- *
- * @TODO: namespacing?!
- * @see http://code.google.com/p/memcached/wiki/NewProgrammingTricks
- * @TODO: tag set?!
- * @see http://dustin.github.com/2011/02/17/memcached-set.html
- *
  */
 class MemcachedIndexer extends AbstractIndexer
 {
@@ -103,7 +97,7 @@ class MemcachedIndexer extends AbstractIndexer
      * Returns the indexed items.
      *
      * @param  array   $context The elements to remove from the index.
-     * @return Returns True on success or Null on failure.
+     * @return boolean Returns True on success or Null on failure.
      */
     public function load()
     {
@@ -122,9 +116,9 @@ class MemcachedIndexer extends AbstractIndexer
     }
 
     /**
-     * Purge the index.
+     * Purge atomically the index.
      *
-     * @return [type] [description]
+     * @return float $cas_token The Memcache CAS token.
      */
     protected function purge($cas_token)
     {

@@ -47,8 +47,8 @@ class Apc extends AbstractCache
     /**
      * Retrieves the cache item for the given id.
      *
-     * @param  string       $id        The cache id to retrieve.
-     * @param  boolean      $success The variable to store the success value.
+     * @param  string     $id      The cache id to retrieve.
+     * @param  boolean    $success The variable to store the success value.
      * @return mixed|null Returns the cached data or null.
      */
     public function get($id, $success=null)
@@ -77,12 +77,12 @@ class Apc extends AbstractCache
     public function save($data, $key, array $tags=null, $ttl=null)
     {
         $key = $this->mapKey($key);
-        
-        $store = array();
+        $store = array($key => $data);
+
         if ($this->options['tag_enable'] && !empty($tags)) {
 
             // add all the tags to the index key.
-            $this->getIndex($this->mapIdx($key))->add($tags);
+            // $this->getIndex($key)->add($tags);
 
             foreach ($tags as $tag) {
                 $tag = $this->mapTag($tag);
@@ -95,7 +95,6 @@ class Apc extends AbstractCache
                 }
             }
         }
-        $store[$key] = $data;
 
         return !in_array(false, apc_store($store, null, $ttl));
     }

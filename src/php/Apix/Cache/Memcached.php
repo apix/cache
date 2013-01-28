@@ -50,7 +50,7 @@ class Memcached extends AbstractCache
             $memcached->setOption(\Memcached::OPT_BINARY_PROTOCOL, false);
             $this->setSerializer($this->options['serializer']);
             $this->setNamespace($this->options['prefix_nsp']);
-        }        
+        }
     }
 
     /**
