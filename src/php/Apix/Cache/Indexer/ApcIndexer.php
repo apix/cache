@@ -34,7 +34,7 @@ class ApcIndexer extends AbstractIndexer
      * Holds the name of the index.
      * @var array
      */
-    protected $index;
+    protected $name;
 
     /**
      * Holds the index items.
@@ -48,10 +48,10 @@ class ApcIndexer extends AbstractIndexer
      * @param array          $options   Array of options.
      * @param Apix\Cache\Apc $Memcached An instance of .
      */
-    public function __construct(Apc $engine, $index)
+    public function __construct($name, Apc $engine)
     {
+        $this->name   = $name;
         $this->engine = $engine;
-        $this->index = $index;
     }
 
     /**
@@ -73,9 +73,9 @@ class ApcIndexer extends AbstractIndexer
             $tag = $this->engine->mapTag($element);
             $keys = apc_fetch($tag, $success);
             if (false === $success) {
-                $this->items[$tag] = array($this->index);
+                $this->items[$tag] = array($this->name);
             } else {
-                $keys[] = $this->index;
+                $keys[] = $this->name;
                 $this->items[$tag] = array_unique($keys);
             }
         }
@@ -90,18 +90,17 @@ class ApcIndexer extends AbstractIndexer
     {
         $str = $this->serialize((array) $elements, '-');
 
-        return (boolean) $this->getAdapter()->append($this->index, $str);
+        return (boolean) $this->getAdapter()->append($this->name, $str);
     }
 
     /**
      * Loads the indexed items from the backend.
      *
-     * @param  array   $context The elements to remove from the index.
      * @return boolean Returns True on success or False on failure.
      */
     public function load()
     {
-        return $this->engine->get($this->index);
+        return $this->engine->get($this->name);
     }
 
 }

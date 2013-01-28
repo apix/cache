@@ -19,7 +19,7 @@ class MemcachedIndexerTest extends TestCase
 {
     protected $cache, $memcached, $indexer;
 
-    public $indexKey = 'qwertyuiop';
+    public $indexKey = 'indexKey';
 
     protected $options = array(
         'prefix_key' => 'unit_test-',
@@ -42,7 +42,7 @@ class MemcachedIndexerTest extends TestCase
 
         $this->cache = new Memcached($this->memcached, $this->options);
 
-        $this->indexer = new MemcachedIndexer($this->cache, $this->indexKey);
+        $this->indexer = new MemcachedIndexer($this->indexKey, $this->cache);
     }
 
     public function tearDown()

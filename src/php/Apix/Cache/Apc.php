@@ -66,7 +66,7 @@ class Apc extends AbstractCache
      */
     public function getIndex($name)
     {
-        return new Indexer\ApcIndexer($this, $name);
+        return new Indexer\ApcIndexer($name, $this);
     }
 
     /**

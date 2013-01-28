@@ -78,8 +78,7 @@ class Stringset implements Adapter
             return false;
         }
 
-        return false; // todo
-        // return preg_match('/^[\w]* $/', $str);
+        return (boolean) preg_match('/^.*\s$/', $str);
     }
 
     /**

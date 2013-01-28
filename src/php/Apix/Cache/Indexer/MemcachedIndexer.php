@@ -29,7 +29,7 @@ class MemcachedIndexer extends AbstractIndexer
      * Holds the name of the index.
      * @var array
      */
-    protected $index;
+    protected $name;
 
     /**
      * Holds the index items.
@@ -49,10 +49,10 @@ class MemcachedIndexer extends AbstractIndexer
      * @param array                $options   Array of options.
      * @param Apix\Cache\Memcached $Memcached A Memcached instance.
      */
-    public function __construct(Memcached $engine, $index)
+    public function __construct($name, Memcached $engine)
     {
+        $this->name = $name;
         $this->engine = $engine;
-        $this->index = $index;
 
         $this->serializer = new Serializer\Stringset;
     }
@@ -74,10 +74,10 @@ class MemcachedIndexer extends AbstractIndexer
     {
         $str = $this->serializer->serialize((array) $elements);
 
-        $success = $this->getAdapter()->append($this->index, $str);
+        $success = $this->getAdapter()->append($this->name, $str);
 
         if (false === $success) {
-            $success = $this->getAdapter()->add($this->index, $str);
+            $success = $this->getAdapter()->add($this->name, $str);
         }
 
         return (boolean) $success;
@@ -90,7 +90,7 @@ class MemcachedIndexer extends AbstractIndexer
     {
         $str = $this->serializer->serialize((array) $elements, '-');
 
-        return (boolean) $this->getAdapter()->append($this->index, $str);
+        return (boolean) $this->getAdapter()->append($this->name, $str);
     }
 
     /**
@@ -101,7 +101,7 @@ class MemcachedIndexer extends AbstractIndexer
      */
     public function load()
     {
-        $str = $this->engine->get($this->index, $cas_token);
+        $str = $this->engine->get($this->name, $cas_token);
 
         if (null === $str) {
             return null;
@@ -124,7 +124,7 @@ class MemcachedIndexer extends AbstractIndexer
     {
         $str = $this->serializer->serialize($this->items);
 
-        return $this->getAdapter()->cas($cas_token, $this->index, $str);
+        return $this->getAdapter()->cas($cas_token, $this->name, $str);
     }
 
 }

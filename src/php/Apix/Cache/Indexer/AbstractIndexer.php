@@ -21,6 +21,16 @@ abstract class AbstractIndexer implements Adapter
 {
 
     /**
+     * Returns the index name.
+     *
+     * @return Returns True on success or False on failure.
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
      * Returns the items index.
      *
      * @return Returns True on success or False on failure.

@@ -58,13 +58,21 @@ class StringsetTest extends TestCase
         $this->assertEquals($dirt, $this->formatter->getDirtiness());
     }
 
+    public function isSerializerProvider()
+    {
+        return array(
+            array(array('a', 'b', 'c'), 'a b c '),
+            array(array('juju', 'molly', 'loulou'), 'juju molly loulou '),
+            array(array('a-b', 'c', 'd'), 'a-b c d ')
+        );
+    }
+
     /**
-     * @dataProvider serializerProvider
-     * @todo
+     * @dataProvider isSerializerProvider
      */
-    // public function testIsSerialized($arr, $str)
-    // {
-    //     $this->assertFalse($this->formatter->isSerialized($arr));
-    //     $this->assertTrue($this->formatter->isSerialized($str));
-    // }
+    public function testIsSerialized($arr, $str)
+    {
+        $this->assertFalse($this->formatter->isSerialized($arr));
+        $this->assertTrue($this->formatter->isSerialized($str));
+    }
 }
