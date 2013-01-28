@@ -13,7 +13,8 @@
 namespace Apix\Cache\Serializer;
 
 /**
- * Serializes cache data using as Stringset.
+ * Serializes cache data using a stringset (appendset) such as:
+ * 'tag1 tag2 -tag2 -tag3'
  *
  * @author Franck Cassedanne <franck at ouarz.net>
  */
@@ -29,7 +30,7 @@ class Stringset implements Adapter
     /**
      * {@inheritdoc}
      *
-     * e.g. ['a','c'] => '+a +b'
+     * e.g. ['a','c'] => 'a b'
      */
     public function serialize($keys, $op='')
     {
@@ -44,7 +45,7 @@ class Stringset implements Adapter
     /**
      * {@inheritdoc}
      *
-     * e.g. '+a +b +c -b -x' => ['a','c'];
+     * e.g. 'a b c -b -x' => ['a','c'];
      * Sets the dirtiness level (counts the negative entries).
      */
     public function unserialize($str)
@@ -57,7 +58,7 @@ class Stringset implements Adapter
                     $remove[] = substr($key, 1);
                 } else {
                     $add[] = $key;
-                }                
+                }
             }
         }
 
