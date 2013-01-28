@@ -67,6 +67,18 @@ abstract class AbstractCache implements Adapter
     }
 
     /**
+     * Sets and merges the options (overriding the default options).
+     *
+     * @param array|null $options The array of user options.
+     */
+    public function getOption($key)
+    {
+        if (isset($this->options[$key])) {
+            return $this->options[$key];
+        }
+    }
+
+    /**
      * Returns a prefixed and sanitased cache id.
      *
      * @param  string $key The base key to prefix.

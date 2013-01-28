@@ -23,7 +23,7 @@ abstract class AbstractPdo extends AbstractCache
     /**
      * Constructor.
      *
-     * @param \PDO  $pdo An instance of a PDO class.
+     * @param \PDO  $pdo     An instance of a PDO class.
      * @param array $options Array of options.
      */
     public function __construct(\PDO $pdo, array $options=null)
@@ -57,7 +57,7 @@ abstract class AbstractPdo extends AbstractCache
 
     private function createIndexe($index)
     {
-        if(isset($this->options[$index]) && $this->options[$index]) {
+        if (isset($this->options[$index]) && $this->options[$index]) {
             return $this->adapter->exec($this->getSql($index));
         }
     }

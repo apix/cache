@@ -17,7 +17,7 @@ use Apix\TestCase as ApixTestCase;
 class TestCase extends ApixTestCase
 {
 
-   public function serializerProvider()
+    public function serializerProvider()
     {
         return array(
             array('string'),

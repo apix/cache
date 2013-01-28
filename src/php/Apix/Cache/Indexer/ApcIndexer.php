@@ -76,25 +76,19 @@ class ApcIndexer extends AbstractIndexer
     public function add($elements)
     {
         foreach ((array) $elements as $element) {
-            $tag = $this->mapTag($tag);
+            $tag = $this->mapTag($element);
             $keys = apc_fetch($tag, $success);
-            
+           // here!!! 
             if (false === $success) {
+
                 $store[$tag] = array($key);
             } else {
                 $keys[] = $key;
                 $store[$tag] = array_unique($keys);
             }
         }
-
+        // $this->items[] = $key;
         return (boolean) $success;
-
-
-        $success = $this->getAdapter()->append($this->index, $str);
-        if (!$success) {
-            $success = $this->getAdapter()->add($this->index, $str);
-        }
-
     }
 
     /**
