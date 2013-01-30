@@ -106,8 +106,8 @@ class Memcached extends AbstractCache
             $keys = $this->loadTag($tag);
             if (null !== $keys) {
                 foreach ($keys as $key) {
-                        $items[] = $key;
-                        // $items[] = $this->mapIdx($key);
+                    $items[] = $key;
+                    // $items[] = $this->mapIdx($key);
                 }
             }
             // add the tag to deletion
@@ -172,8 +172,9 @@ class Memcached extends AbstractCache
     public function setSerializer($serializer)
     {
         switch ($serializer) {
-            case 'igBinary':
+
             // @codeCoverageIgnoreStart
+            case 'igBinary':
                 if (!\Memcached::HAVE_IGBINARY) {
                     continue;
                 }
@@ -181,8 +182,8 @@ class Memcached extends AbstractCache
             break;
             // @codeCoverageIgnoreEnd
 
-            case 'json':
             // @codeCoverageIgnoreStart
+            case 'json':
                 if (!\Memcached::HAVE_JSON) {
                     continue;
                 }
@@ -312,16 +313,16 @@ class Memcached extends AbstractCache
         // if (true === \Memcached::OPT_BINARY_PROTOCOL) {
         //     // Increment will initialize the value (if not available)
         //     // only when OPT_BINARY_PROTOCOL is set to true!
-        //     $counter = $this->adapter->increment($key, 1);
-        // } else {
-            $counter = $this->adapter->get($key);
-            if (false === $counter) {
-                $counter = 1;
-                $this->adapter->set($key, $counter);
-            } else {
-                $counter = $this->adapter->increment($key);
-            }
+        //     return $this->adapter->increment($key, 1);
         // }
+        $counter = $this->adapter->get($key);
+        if (false === $counter) {
+            $counter = 1;
+            $this->adapter->set($key, $counter);
+        } else {
+            $counter = $this->adapter->increment($key);
+        }
+
         return $counter;
     }
 
