@@ -17,15 +17,21 @@ use Apix\TestCase;
 class GenericTestCase extends TestCase
 {
 
-    public function testLoadReturnsNullWhenEmpty()
+    public function testLoadKeyReturnsNullWhenInexistant()
     {
         $this->assertNull($this->cache->loadKey('id'));
+    }
+
+    public function testLoadTagReturnsNullWhenInexistant()
+    {
+        $this->assertNull($this->cache->loadTag('id'));
     }
 
     public function testSaveAndLoadWithString()
     {
         $this->assertTrue($this->cache->save('data', 'id'));
         $this->assertEquals('data', $this->cache->loadKey('id'));
+        $this->assertEquals('data', $this->cache->load('id'));
     }
 
     public function testSaveAndLoadWithArray()
@@ -33,6 +39,7 @@ class GenericTestCase extends TestCase
         $data = array('foo' => 'bar');
         $this->assertTrue($this->cache->save($data, 'id'));
         $this->assertEquals($data, $this->cache->loadKey('id'));
+        $this->assertEquals($data, $this->cache->load('id'));
     }
 
     public function testSaveAndLoadWithObject()
@@ -40,14 +47,15 @@ class GenericTestCase extends TestCase
         $data = new \stdClass;
         $this->assertTrue($this->cache->save($data, 'id'));
         $this->assertEquals($data, $this->cache->loadKey('id'));
+        $this->assertEquals($data, $this->cache->load('id'));
     }
 
     public function testSaveWithJustOneSingularTag()
     {
         $this->assertTrue($this->cache->save('data', 'id', array('tag')));
-        $this->assertEquals(
-            array($this->cache->mapKey('id')), $this->cache->loadTag('tag')
-        );
+        $ids = array($this->cache->mapKey('id'));
+        $this->assertEquals($ids, $this->cache->loadTag('tag'));
+        $this->assertEquals($ids, $this->cache->load('tag', 'tag'));
     }
 
     public function testSaveManyTags()
@@ -55,10 +63,10 @@ class GenericTestCase extends TestCase
         $this->assertTrue(
             $this->cache->save('data', 'id', array('tag1', 'tag2'))
         );
+        $ids = array($this->cache->mapKey('id'));
 
-        $this->assertEquals(
-            array($this->cache->mapKey('id')), $this->cache->loadTag('tag2')
-        );
+        $this->assertEquals($ids, $this->cache->loadTag('tag2'));
+        $this->assertEquals($ids, $this->cache->load('tag2', 'tag'));
     }
 
     public function testSaveWithOverlappingTags()
