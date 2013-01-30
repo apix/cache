@@ -23,7 +23,7 @@ class RedisTest extends GenericTestCase
     protected $options = array(
         'prefix_key' => 'unittest-apix-key:',
         'prefix_tag' => 'unittest-apix-tag:',
-        'serializer' => 'php' // null, php, igBinary.
+        'serializer' => 'php' // null, json, php, igBinary.
     );
 
     public function setUp()
