@@ -1,8 +1,8 @@
 {
     "name": "apix/cache",
-    "description": "Apix Cache is a generic cache wrapper with a simple interface to various different caching backends.",
+    "description": "A thin cache wrapper with a generic interface to various caching backends emphasising cache taggging and indexing.",
     "type": "library",
-    "keywords": ["apc", "redis", "mongodb", "mongo", "igbinary", "cache", "apix", "serializer", "json", "pdo", "sqlite", "mysql", "postgres", "pgsql"],
+    "keywords": ["apc", "redis", "mongodb", "mongo", "igbinary", "cache", "apix", "serializer", "json", "pdo", "sqlite", "mysql", "postgres", "pgsql", "memcached", "memcache"],
     "homepage": "https://github.com/frqnck/apix-cache",
     "license": "BSD-3-Clause",
     "authors": [
@@ -24,6 +24,7 @@
         "ext-apc": "*",
         "ext-redis": "*",
         "ext-mongo": "*",
+        "ext-memcached": "*",
         "ext-pdo": "*",
         "ext-pdo_sqlite": "*",
         "ext-pdo_mysql": "*",
