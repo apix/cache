@@ -35,12 +35,12 @@ class Memcached extends AbstractCache
     public function __construct(\Memcached $memcached, array $options=null)
     {
         // default options
-        $this->options['prefix_key'] = 'key_'; // prefix cache keys
-        $this->options['prefix_tag'] = 'tag_'; // prefix cache tags
-        $this->options['prefix_idx'] = 'idx_'; // prefix cache indexes
-        $this->options['prefix_nsp'] = 'nsp_'; // prefix cache namespaces
+        $this->options['prefix_key'] = 'key_';  // prefix cache keys
+        $this->options['prefix_tag'] = 'tag_';  // prefix cache tags
+        $this->options['prefix_idx'] = 'idx_';  // prefix cache indexes
+        $this->options['prefix_nsp'] = 'nsp_';  // prefix cache namespaces
 
-        $this->options['serializer'] = 'php'; // none, php, json, igBinary.
+        $this->options['serializer'] = 'php';   // none, php, json, igBinary.
 
         parent::__construct($memcached, $options);
 
@@ -322,7 +322,6 @@ class Memcached extends AbstractCache
                 $counter = $this->adapter->increment($key);
             }
         // }
-
         return $counter;
     }
 

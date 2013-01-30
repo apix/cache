@@ -30,7 +30,7 @@ class Stringset implements Adapter
     /**
      * {@inheritdoc}
      *
-     * e.g. ['a','c'] => 'a b'
+     * e.g. ['a','c'] => 'a b '
      */
     public function serialize($keys, $op='')
     {
@@ -45,7 +45,7 @@ class Stringset implements Adapter
     /**
      * {@inheritdoc}
      *
-     * e.g. 'a b c -b -x' => ['a','c'];
+     * e.g. 'a b c -b -x ' => ['a','c'];
      * Sets the dirtiness level (counts the negative entries).
      */
     public function unserialize($str)
