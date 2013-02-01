@@ -17,6 +17,10 @@ use Apix\TestCase,
 
 class MemcachedIndexerTest extends TestCase
 {
+    const HOST = '127.0.0.1';
+    const PORT = 11211;
+    const AUTH = NULL;
+
     protected $cache, $memcached, $indexer;
 
     public $indexKey = 'indexKey';
@@ -26,20 +30,30 @@ class MemcachedIndexerTest extends TestCase
         'prefix_tag' => 'unit_test-',
     );
 
-    public function setUp()
+    public function getMemcached()
     {
-        $this->skipIfMissing('memcached');
-
         try {
-            $this->memcached = new \Memcached;
-            $this->memcached->addServer('127.0.0.1', 11211);
+            $m = new \Memcached;
+            $m->addServer(self::HOST, self::PORT);
 
-            // TODO
-            $this->memcached->getStats() or die ("Could not connect");
+            $stats = $m->getStats();
+            $host = self::HOST.':'.self::PORT;
+            if($stats[$host]['pid'] == -1)
+                throw new \Exception(
+                    sprintf('Unable to reach a memcached server on %s', $host)
+                );
+
         } catch (\Exception $e) {
             $this->markTestSkipped( $e->getMessage() );
         }
 
+        return $m;
+    }
+
+    public function setUp()
+    {
+        $this->skipIfMissing('memcached');
+        $this->memcached = $this->getMemcached();
         $this->cache = new Memcached($this->memcached, $this->options);
 
         $this->indexer = new MemcachedIndexer($this->indexKey, $this->cache);
