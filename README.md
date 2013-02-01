@@ -1,7 +1,7 @@
 APIx Cache, caching for PHP 5.3+   [![Build Status](https://travis-ci.org/frqnck/apix-cache.png?branch=master)](https://travis-ci.org/frqnck/apix-cache)
 ==============================
 
-APIx Cache is a generic and thin cache wrapper with a simple interface to various different caching backends.
+APIx Cache is a generic and thin cache wrapper with a simple interface to various different caching backends and emphasising cache tagging and indexing.
 
 Some of its features:
 
@@ -88,7 +88,7 @@ Available options
   $options['db_table']   = 'cache';
   $options['serializer'] = 'php';         // null, php, igBinary, json.
 
-  $db = new new \PDO('pgsql:dbname=apix_tests;host=127.0.0.1', 'postgres';
+  $db = new new \PDO('pgsql:dbname=apix_tests;host=127.0.0.1', 'postgres');
   $relational_cache = new Apix\Cache\Pdo\Sqlite($db, $options);
 ```
 
