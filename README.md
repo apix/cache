@@ -66,8 +66,8 @@ Available options
   // default options, common to all backends
   $options = array(
       'prefix_key'  => 'apix-cache-key:', // prefix cache keys
-      'prefix_tag'   => 'apix-cache-tag:', // prefix cache tags
-      'tag_enable' => true                      // wether to enable tags support
+      'prefix_tag'  => 'apix-cache-tag:', // prefix cache tags
+      'tag_enable'  => true               // wether to enable tags support
   );
   $local_cache = new Apix\Cache\Apc($options);
 
@@ -79,9 +79,9 @@ Available options
   $distributed_cache = new Apix\Cache\Redis($redis_client, $options);
 
   // additional (default) options, specific to Mongo
-  $options['object_serializer'] = 'php';   // null, json, php, igBinary
+  $options['object_serializer'] = 'php';  // null, json, php, igBinary
 
-  $mongo_client  = new \MongoClient;  // MongoDB native driver** instance
+  $mongo_client  = new \MongoClient;      // MongoDB native driver** instance
   $another_cache = new Apix\Cache\Mongo($mongo_client, $options);
 
   // additional (default) options, specific to PDO
