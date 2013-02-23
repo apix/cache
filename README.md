@@ -7,6 +7,7 @@ Some of its features:
 
 * Provides cache **tagging** and **indexing** -- *natively* and/or through *emulation*.
 * **100%** unit **tested** and compliant with PSR0, PSR1 and PSR2.
+* Continuously integrated using **PHP 5.3**, **5.4**, **5.5**, apc, redis, mongodb, sqlite, mysql, pgsql and memcache.
 * Available as a **Composer** and as a **PEAR** package.
 
 Cache backends
