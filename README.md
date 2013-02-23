@@ -42,7 +42,7 @@ Basic usage
       $cache->save($data, 'wobble_id', array('baz', 'flob'), 300);
 
       // retrieve 'wibble_id' from the cache
-      $data = $cache->loadKey('wibble_id');
+      $data = $cache->load('wibble_id');
 
       // retrieve the cache ids under the tag 'baz'
       $ids = $cache->loadTag('baz');
