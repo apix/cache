@@ -33,7 +33,7 @@ Basic usage
       // some arbitrary mixed data
       $data = array('foo'=>'bar');
 
-      // save data to the cache as 'wibble_id' (and use the default ttl).
+      // save data to the cache as 'wibble_id'.
       $cache->save($data, 'wibble_id');
 
       // Save data to the cache as 'wobble_id',
@@ -47,14 +47,13 @@ Basic usage
       // retrieve the cache ids under the tag 'baz'
       $ids = $cache->loadTag('baz');
 
-
       // clear out all items with a 'baz' tag
       $cache->clean('baz');
 
       // remove the named item
       $cache->delete('wibble_id');
 
-      // flush out the cache (of all -YOUR- stored items)
+      // flush out the cache (of all -your- stored items)
       $cache->flush();
 ```
 
@@ -66,8 +65,8 @@ Available options
   // default options, common to all backends
   $options = array(
       'prefix_key'  => 'apix-cache-key:', // prefix cache keys
-      'prefix_tag'  => 'apix-cache-tag:', // prefix cache tags
-      'tag_enable'  => true               // wether to enable tags support
+      'prefix_tag'   => 'apix-cache-tag:', // prefix cache tags
+      'tag_enable' => true                      // wether to enable tags support
   );
   $local_cache = new Apix\Cache\Apc($options);
 
@@ -79,9 +78,9 @@ Available options
   $distributed_cache = new Apix\Cache\Redis($redis_client, $options);
 
   // additional (default) options, specific to Mongo
-  $options['object_serializer'] = 'php';  // null, json, php, igBinary
+  $options['object_serializer'] = 'php';   // null, json, php, igBinary
 
-  $mongo_client  = new \MongoClient;       // MongoDB native driver** instance
+  $mongo_client  = new \MongoClient;  // MongoDB native driver** instance
   $another_cache = new Apix\Cache\Mongo($mongo_client, $options);
 
   // additional (default) options, specific to PDO
