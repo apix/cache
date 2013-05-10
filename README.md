@@ -66,8 +66,7 @@ Advanced usage
   $options = array(
       'prefix_key'  => 'apix-cache-key:', // prefix cache keys
       'prefix_tag'  => 'apix-cache-tag:', // prefix cache tags
-      'tag_enable'  => true,              // wether to enable tags support
-      'format_timestamp' => 'Y-m-d H:i:s' // the format of timestamps
+      'tag_enable'  => true               // wether to enable tags support
   );
 
   // start APC as a local cache
@@ -109,6 +108,7 @@ Advanced usage
   // additional (default) options, specific to PDO
   $options['db_table']   = 'cache';  // table to hold the cache
   $options['serializer'] = 'php';    // null, php, igBinary, json
+  $options['format_timestamp'] = 'Y-m-d H:i:s'
 
   // Note that the db table(s) will be created automatically.
 
