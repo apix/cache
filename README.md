@@ -1,7 +1,7 @@
-APIx Cache, caching for PHP 5.3+   [![Build Status](https://travis-ci.org/frqnck/apix-cache.png?branch=master)](https://travis-ci.org/frqnck/apix-cache)
+Cachette, caching for PHP 5.3+   [![Build Status](https://travis-ci.org/frqnck/apix-cache.png?branch=master)](https://travis-ci.org/frqnck/apix-cache)
 ================================
 
-APIx Cache is a generic and thin cache wrapper with a simple interface to various different caching backends and emphasising cache tagging and indexing.
+Cachette is a generic and thin cache wrapper with a simple interface to various different caching backends and emphasising cache tagging and indexing.
 
 Some of its features:
 
@@ -92,9 +92,9 @@ Advanced usage
   $mongo  = new \MongoClient;             // MongoDB native driver** instance
   $another_cache = new Apix\Cache\Mongo($mongo, $options);
 ```
-### Options specific to Memcached
+### Memcached specific
 ```php
-  // additional (default) options
+  // additional (default) options, specific to Memcached
   $options['prefix_key'] = 'key_';  // prefix cache keys
   $options['prefix_tag'] = 'tag_';  // prefix cache tags
   $options['prefix_idx'] = 'idx_';  // prefix cache indexes
