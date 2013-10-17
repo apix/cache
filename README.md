@@ -31,21 +31,27 @@ Basic usage
   <?php
       $cache = new Apix\Cache\Apc;
 
-      // some arbitrary mixed data
-      $data = array('foo' => 'bar');
+      // try to retrieve 'wibble_id' from the cache
+      if (!$data = $cache->load('wibble_id')) {
+        
+        // otherwise, get some data from the origin
+        // example of arbitrary mixed data
+        $data = array('foo' => 'bar');
 
-      // save data to the cache as 'wibble_id'.
-      $cache->save($data, 'wibble_id');
-
-      // Save data to the cache as 'wobble_id',
+        // and save it to the cache
+        $cache->save($data, 'wibble_id');
+      }
+      
+      return $data;
+```
+You can also use the folowing in your use cases: 
+```php
+      // save $data to the cache as 'wobble_id',
       // tagging it along the way as 'baz' and 'flob',
       // and set the ttl to 300 seconds (5 minutes)
       $cache->save($data, 'wobble_id', array('baz', 'flob'), 300);
 
-      // retrieve 'wibble_id' from the cache
-      $data = $cache->load('wibble_id');
-
-      // retrieve the cache ids under the tag 'baz'
+      // retrieve all the cache ids under the tag 'baz'
       $ids = $cache->loadTag('baz');
 
       // clear out all items with a 'baz' tag
@@ -76,11 +82,13 @@ Advanced usage
 ```php
   // additional (default) options
   $options['atomicity']  = false;    // false is faster, true is guaranteed
-  $options['serializer'] = 'php';    // null, php, igBinary and json
+  $options['serializer'] = 'php';    // null, php, igbinary and json
 
   $redis_client = new \Redis;        // instantiate phpredis*
   $distributed_cache = new Apix\Cache\Redis($redis_client, $options);
 ```
+\* see [phpredis](https://github.com/nicolasff/phpredis) for instantiation usage.
+
 ### MongoDB specific 
 ```php
   // additional (default) options
@@ -89,8 +97,10 @@ Advanced usage
   $options['collection_name'] = 'cache';  // name of the mongo collection
 
   $mongo  = new \MongoClient;             // MongoDB native driver** instance
-  $another_cache = new Apix\Cache\Mongo($mongo, $options);
+  $cache = new Apix\Cache\Mongo($mongo, $options);
 ```
+\*\* see [MongoDB](http://php.net/manual/en/book.mongo.php) for more instantiation details.
+
 ### Memcached specific
 ```php
   // additional (default) options, specific to Memcached
@@ -98,19 +108,19 @@ Advanced usage
   $options['prefix_tag'] = 'tag_';  // prefix cache tags
   $options['prefix_idx'] = 'idx_';  // prefix cache indexes
   $options['prefix_nsp'] = 'nsp_';  // prefix cache namespaces
-  $options['serializer'] = 'php';   // null, php, json, igBinary.
+  $options['serializer'] = 'php';   // null, php, json, igbinary.
 
   $memcached  = new \Memcached;     // a Memcached instance
   $shared_cache = new Apix\Cache\Memcached($memcached, $options);
 ```
-### Options specific to the PDO backends (MySQL, PostgreSQL, SQLite, ...)
+### Options for to the PDO backends
+Note that if missing the required DB table(s) will be created on-the-fly.
+
 ```php
   // additional (default) options, specific to PDO
   $options['db_table']   = 'cache';  // table to hold the cache
-  $options['serializer'] = 'php';    // null, php, igBinary, json
+  $options['serializer'] = 'php';    // null, php, igbinary, json
   $options['format_timestamp'] = 'Y-m-d H:i:s'
-
-  // Note that the db table(s) will be created automatically.
 
   // start SQLITE
   $db = new \PDO('sqlite:/tmp/apix_tests.sqlite3');
@@ -120,8 +130,6 @@ Advanced usage
   $pgsql = new \PDO('pgsql:dbname=apix_tests;host=127.0.0.1', 'postgres');
   $postgres_cache = new Apix\Cache\Pdo\Postgres($pgsql, $options);
 ```
-\* see [MongoDB](http://php.net/manual/en/book.mongo.php) for more details and usage.
-\*\* see [phpredis](https://github.com/nicolasff/phpredis) for more details and usage.
 
 Installation
 ------------------------
