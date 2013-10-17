@@ -18,7 +18,7 @@ namespace Apix\Cache\Serializer;
  *
  * @author Franck Cassedanne <franck at ouarz.net>
  */
-class IgBinary implements Adapter
+class Igbinary implements Adapter
 {
 
     /**
