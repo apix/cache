@@ -12,7 +12,7 @@
 
 namespace Apix\Cache\Serializer;
 
-class IgBinaryTest extends TestCase
+class IgbinaryTest extends TestCase
 {
 
     public function setUp()
@@ -25,7 +25,7 @@ class IgBinaryTest extends TestCase
      */
     public function testSerialize($var)
     {
-        $formatter = new IgBinary;
+        $formatter = new Igbinary;
         $this->assertEquals(
             igbinary_serialize($var), $formatter->serialize($var)
         );
@@ -47,7 +47,7 @@ class IgBinaryTest extends TestCase
      */
     public function testIsSerialized($var)
     {
-        $formatter = new IgBinary;
+        $formatter = new Igbinary;
         $this->assertFalse($formatter->isSerialized($var));
 
         $this->assertTrue(
