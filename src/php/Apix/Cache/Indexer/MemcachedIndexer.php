@@ -38,7 +38,7 @@ class MemcachedIndexer extends AbstractIndexer
     protected $items = null;
 
     /**
-     * Holds the .
+     * Holds an instane of a serializer.
      * @var Serializer
      */
     protected $serializer;
@@ -101,6 +101,8 @@ class MemcachedIndexer extends AbstractIndexer
      */
     public function load()
     {
+        // &$cas_token holds the unique 64-bit float token generated
+        // by memcache for the named item @see \Memcached::get
         $str = $this->engine->get($this->name, $cas_token);
 
         if (null === $str) {
