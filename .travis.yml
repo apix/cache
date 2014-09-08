@@ -35,7 +35,7 @@ before_script:
 
 script:
   - mkdir -p build/logs
-  - vendor/bin/phpunit --coverage-text --configuration phpunit.xml.dist
+  - phpunit --coverage-text --configuration phpunit.xml.dist
 
 notifications:
   irc: "irc.freenode.org#ouarz"
