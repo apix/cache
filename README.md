@@ -7,7 +7,7 @@ Some of its features:
 
 * Provides cache **tagging** and **indexing** -- *natively* and/or through *emulation*.
 * **100%** unit **tested** and compliant with PSR0, PSR1 and PSR2.
-* Continuously integrated using **PHP 5.3**, **5.4**, **5.5**, **5.6**, APC, Redis, MongoDB, Sqlite, MySQL, PgSQL and Memcached.
+* Continuously integrated with **PHP 5.3**, **5.4**, **5.5** and **5.6**; and against APC, Redis, MongoDB, Sqlite, MySQL, PgSQL and Memcached...
 * Available as a **[Composer](http://https://packagist.org/packages/apix/cache)** and as a **[PEAR](http://pear.ouarz.net)** package.
 
 Todo:
