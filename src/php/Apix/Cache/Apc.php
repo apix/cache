@@ -13,7 +13,7 @@
 namespace Apix\Cache;
 
 /**
- * APC cache wrapper with emulated tag support.
+ * APC Cache and APCu (User-Cache) wrapper with emulated tag support.
  *
  * @author Franck Cassedanne <franck at ouarz.net>
  */
