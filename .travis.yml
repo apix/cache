@@ -14,7 +14,7 @@ env:
   - DB=mysql
   - DB=pgsql
   - DB=memcache
-
+#  - hhvm
 
 before_script:
   - sh -c "if [ "$DB" = 'apc' -a ! `php-config --vernum` -ge 50500 ] ; then echo 'extension="apc.so"' >> ./tests/travis/php.ini; else printf "yes\n" | pecl install apcu-beta; fi"
