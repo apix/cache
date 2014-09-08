@@ -2,9 +2,10 @@ language: php
 
 php:
   - 5.3
-#  - 5.4
-#  - 5.5
+  - 5.4
+  - 5.5
   - 5.6
+  - hhvm
 
 env:
   - DB=apc
@@ -14,16 +15,9 @@ env:
   - DB=mysql
   - DB=pgsql
   - DB=memcache
-#  - hhvm
 
 before_script:
-  - sh -c "if [ '$DB' = 'apc' -a ! `php-config --vernum` -ge 50500 ] ; then echo 'extension="apc.so"' >> ./tests/travis/php.ini; else printf "yes\n" | pecl install apcu-beta; fi"
-#  - sh -c "if [ '$DB' = 'apc' ]; then if [ ! '$TRAVIS_PHP_VERSION' = '5.3' -a ! '$TRAVIS_PHP_VERSION' = '5.4' ]; then DB='apcu'; fi; fi;"
-#  - sh -c "if [ '$DB' = 'apc' ]; then curl -o APC.tgz http://pecl.php.net/get/APC; tar -xzf APC.tgz; fi"
-#  - sh -c "if [ '$DB' = 'apc' ]; then cd APC-* && phpize && ./configure && make && sudo make install && cd ..; rm -fr APC*; fi"
-#  - sh -c "if [ '$DB' = 'apc' ]; then echo 'extension=apc.so' >> `php --ini | grep 'Loaded Configuration' | sed -e 's|.*:\s*||'`; fi"
-#  - sh -c "if [ '$DB' = 'apcu' ]; then pecl install apcu-beta; fi"
-#  - sh -c "if [ '$DB' = 'apc' -o '$DB' = 'apcu' ]; then echo DB='$DB'; echo 'apc.enable_cli=1' >> `php --ini | grep 'Loaded Configuration' | sed -e 's|.*:\s*||'`; fi"
+  - sh -c "if [ '$DB' = 'apc' -a ! `php-config --vernum` -ge 50500 ]; then echo 'extension="apc.so"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; else printf "yes\n" | pecl install apcu-beta; fi"
   - sh -c "if [ '$DB' = 'redis' ]; then git clone --branch=master --depth=1 git://github.com/nicolasff/phpredis.git phpredis; cd phpredis && phpize && ./configure && make && sudo make install && cd ..; rm -fr phpredis; fi"
   - sh -c "if [ '$DB' = 'redis' ]; then echo 'extension=redis.so' >> `php --ini | grep 'Loaded Configuration' | sed -e 's|.*:\s*||'`; fi"
   - sh -c "if [ '$DB' = 'mongodb' ]; then sudo pecl install mongo; sudo /etc/init.d/mongodb start; fi"
