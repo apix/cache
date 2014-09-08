@@ -2,7 +2,7 @@
 .build
 .tmp
 /dist/
-/review/
+/build/
 /vendor/
 /review/
 *~

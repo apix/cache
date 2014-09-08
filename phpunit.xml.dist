@@ -18,6 +18,10 @@
         </testsuite>
     </testsuites>
 
+    <logging>
+        <log type="coverage-clover" target="build/logs/phpunit.xml"/>
+    </logging>
+
 </phpunit>
 
 <!-- vim: set tabstop=4 shiftwidth=4 expandtab: -->

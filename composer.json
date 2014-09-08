@@ -18,7 +18,8 @@
         "php": ">=5.3"
     },
     "require-dev": {
-        "apix/autoloader": "1.0.*"
+        "apix/autoloader": "1.0.*",
+        "satooshi/php-coveralls": "dev-master"
     },
     "suggest": {
         "ext-apc": "*",
