@@ -88,9 +88,6 @@ class PdoTest extends GenericTestCase
         }
 
         $this->cache = new $class($this->pdo, $this->options);
-
-        // create the indexes.
-        // $this->cache->createIndexes();
     }
 
     public function tearDown()
@@ -184,10 +181,9 @@ class PdoTest extends GenericTestCase
         $this->assertNull($this->cache->load('id2'));
     }
 
-    public function testcreateIndexTableReturnsBoolean()
+    public function testcreateIndexTableReturnsFalse()
     {
         $this->assertFalse( $this->cache->createIndexTable('not-defined') );
-        $this->assertTrue( $this->cache->createIndexTable('key_idx') );
     }
 
 }
