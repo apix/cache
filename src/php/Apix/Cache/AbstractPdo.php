@@ -29,37 +29,50 @@ abstract class AbstractPdo extends AbstractCache
     public function __construct(\PDO $pdo, array $options=null)
     {
         // default options
-        $this->options['db_table']   = 'cache';
-        $this->options['serializer'] = 'php'; // none, php, igBinary, json.
+        $this->options['db_table']   = 'cache'; // table to hold the cache
+        $this->options['serializer'] = 'php';   // null, php, igBinary, json
+        $this->options['preflight']  = true;    // wether to preflight the DB
 
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
         parent::__construct($pdo, $options);
         $this->setSerializer($this->options['serializer']);
 
-        // Initialises the database.
-        $this->adapter->exec( $this->getSql('init') );
+        if($this->options['preflight']) {
+            $this->initDb();
+        }
     }
 
     /**
-     * Creates the database indexes
+     * Initialises the database and its indexes (if required, non-destructive).
      *
      * @return self Provides a fluent interface
      */
-    public function createIndexes()
+    public function initDb()
     {
-        $this->createIndexe('key_idx');
-        $this->createIndexe('exp_idx');
-        $this->createIndexe('tag_idx');
+        $this->adapter->exec( $this->getSql('init') );
+
+        $this->createIndexTable('key_idx');
+        $this->createIndexTable('exp_idx');
+        $this->createIndexTable('tag_idx');
 
         return $this;
     }
 
-    private function createIndexe($index)
+    /**
+     * Creates the specified indexe table (if missing).
+     *
+     * @param   string  $index
+     * @return  boolean
+     */
+    public function createIndexTable($index)
     {
-        if (isset($this->options[$index]) && $this->options[$index]) {
-            return $this->adapter->exec($this->getSql($index));
+        if (!isset($this->sql_definitions[$index])) {
+            return false;
         }
+        $this->adapter->exec($this->getSql($index, $this->options['db_table']));
+
+        return $this->adapter->errorCode() == '00000';
     }
 
     /**

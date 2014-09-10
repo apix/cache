@@ -122,8 +122,9 @@ Note that if missing the required DB table(s) will be created on-the-fly.
 
 ```php
   // additional (default) options, specific to PDO
-  $options['db_table']   = 'cache';  // table to hold the cache
-  $options['serializer'] = 'php';    // null, php, igbinary, json
+  $options['db_table']   = 'cache'; // table to hold the cache
+  $options['serializer'] = 'php';   // null, php, igbinary, json
+  $options['preflight']  = true;    // wether to preflight the DB
   $options['format_timestamp'] = 'Y-m-d H:i:s'
 
   // start SQLITE
