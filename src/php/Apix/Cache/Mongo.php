@@ -33,7 +33,7 @@ class Mongo extends AbstractCache
     public $collection;
 
     /**
-     * Constructor Set eh Mongo DB adapter
+     * Constructor. Sets the Mongo DB adapter.
      *
      * @param \MongoClient $MongoClient A MongoClient instance.
      * @param array        $options     Array of options.

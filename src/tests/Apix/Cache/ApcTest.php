@@ -14,9 +14,11 @@ namespace Apix\Cache;
 
 /* php -d apc.enable_cli=1 `which phpunit` -v */
 
+/**
+ * Supports both APC and APCu user cache.
+*/
 class ApcTest extends GenericTestCase
 {
-
     protected $cache = null;
 
     protected $options = array(

@@ -1,4 +1,4 @@
-APIx Cache, caching for PHP 5.3+   [![Build Status](https://travis-ci.org/frqnck/apix-cache.png?branch=master)](https://travis-ci.org/frqnck/apix-cache)
+APIx Cache, caching for PHP 5.3+   [![Build Status](https://travis-ci.org/frqnck/apix-cache.png?branch=master)](https://travis-ci.org/frqnck/apix-cache)[![Coverage Status](https://coveralls.io/repos/frqnck/apix-cache/badge.png)](https://coveralls.io/r/frqnck/apix-cache)
 ================================
 
 APIx Cache is a generic and thin cache wrapper with a simple interface to various different caching backends and emphasising cache tagging and indexing.
@@ -7,7 +7,7 @@ Some of its features:
 
 * Provides cache **tagging** and **indexing** -- *natively* and/or through *emulation*.
 * **100%** unit **tested** and compliant with PSR0, PSR1 and PSR2.
-* Continuously integrated using **PHP 5.3**, **5.4**, **5.5**, APC, Redis, MongoDB, Sqlite, MySQL, PgSQL and Memcached.
+* Continuously integrated with **PHP 5.3**, **5.4**, **5.5** and **5.6**; and against APC, Redis, MongoDB, Sqlite, MySQL, PgSQL and Memcached...
 * Available as a **[Composer](http://https://packagist.org/packages/apix/cache)** and as a **[PEAR](http://pear.ouarz.net)** package.
 
 Todo:
@@ -118,12 +118,14 @@ Advanced usage
   $shared_cache = new Apix\Cache\Memcached($memcached, $options);
 ```
 ### Options for to the PDO backends
-Note that if missing the required DB table(s) will be created on-the-fly.
+
+Note if preflight is set to true (default), the required DB table(s), if missing, will be created on-the-fly. Set preflight to false in order to avoid the expensive checks... 
 
 ```php
   // additional (default) options, specific to PDO
-  $options['db_table']   = 'cache';  // table to hold the cache
-  $options['serializer'] = 'php';    // null, php, igbinary, json
+  $options['db_table']   = 'cache'; // table to hold the cache
+  $options['serializer'] = 'php';   // null, php, igbinary, json
+  $options['preflight']  = true;    // wether to preflight the DB
   $options['format_timestamp'] = 'Y-m-d H:i:s'
 
   // start SQLITE

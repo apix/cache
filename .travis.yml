@@ -4,6 +4,12 @@ php:
   - 5.3
   - 5.4
   - 5.5
+  - 5.6
+  - hhvm
+
+matrix:
+  allow_failures:
+    - php: hhvm
 
 env:
   - DB=apc
@@ -15,9 +21,7 @@ env:
   - DB=memcache
 
 before_script:
-  - sh -c "if [ '$DB' = 'apc' ]; then curl -o APC.tgz http://pecl.php.net/get/APC; tar -xzf APC.tgz; fi"
-  - sh -c "if [ '$DB' = 'apc' ]; then cd APC-* && phpize && ./configure && make && sudo make install && cd ..; rm -fr APC*; fi"
-  - sh -c "if [ '$DB' = 'apc' ]; then echo 'extension=apc.so' >> `php --ini | grep 'Loaded Configuration' | sed -e 's|.*:\s*||'`; fi"
+  - sh -c "if [ '$DB' = 'apc' -a ! `php-config --vernum` -ge 50500 ]; then echo 'extension="apc.so"' >> `php --ini | grep 'Loaded Configuration' | sed -e 's|.*:\s*||'`; else printf "yes\n" | pecl install apcu-beta; fi"
   - sh -c "if [ '$DB' = 'apc' ]; then echo 'apc.enable_cli=1' >> `php --ini | grep 'Loaded Configuration' | sed -e 's|.*:\s*||'`; fi"
   - sh -c "if [ '$DB' = 'redis' ]; then git clone --branch=master --depth=1 git://github.com/nicolasff/phpredis.git phpredis; cd phpredis && phpize && ./configure && make && sudo make install && cd ..; rm -fr phpredis; fi"
   - sh -c "if [ '$DB' = 'redis' ]; then echo 'extension=redis.so' >> `php --ini | grep 'Loaded Configuration' | sed -e 's|.*:\s*||'`; fi"
@@ -27,10 +31,11 @@ before_script:
   - sh -c "if [ '$DB' = 'pgsql' ]; then psql -c 'CREATE DATABASE apix_tests;' -U postgres; fi"
   - sh -c "if [ '$DB' = 'memcache' ]; then sudo pecl install memcached-2.0.1; /usr/bin/memcached -d; fi"
   - phpenv rehash
-  - composer install --dev --prefer-source
+  - composer install --dev --no-interaction --prefer-source
 
 script:
-  - phpunit --coverage-text --configuration phpunit.xml.dist
+  - mkdir -p build/logs
+  - phpunit --coverage-clover build/logs/clover.xml 
 
 notifications:
   irc: "irc.freenode.org#ouarz"
@@ -39,3 +44,6 @@ notifications:
       - dev-team@ouarz.net
     on_success: change
     on_failure: change
+
+after_script:
+- php vendor/bin/coveralls -v
