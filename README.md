@@ -118,7 +118,8 @@ Advanced usage
   $shared_cache = new Apix\Cache\Memcached($memcached, $options);
 ```
 ### Options for to the PDO backends
-Note that if missing the required DB table(s) will be created on-the-fly.
+
+Note if preflight is set to true (default), the required DB table(s), if missing, will be created on-the-fly. Set preflight to false in order to avoid the expensive checks... 
 
 ```php
   // additional (default) options, specific to PDO
