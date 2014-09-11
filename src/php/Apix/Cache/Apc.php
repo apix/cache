@@ -206,4 +206,23 @@ class Apc extends AbstractCache
         return false;
     }
 
+    /**
+     * Return a key's expiration time.
+     *
+     * @param string $key The name of the key.
+     *
+     * @return mixed Returns false when no keys are cached or when the key
+     *               does not exist. Returns int 0 when the key never expires
+     *               (ttl = 0) or an integer (unix timestamp) otherwise.
+     */
+    public function getExpiration($key)
+    {
+        $info = $this->getInternalInfos($key);
+        if ( $info && isset($info['ttl']) ) {
+            return $info['ttl'] > 0 $info['creation_time']+$info['ttl'] : 0;
+        }
+
+        return false;
+    }
+
 }
