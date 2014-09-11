@@ -32,6 +32,7 @@ abstract class AbstractPdo extends AbstractCache
         $this->options['db_table']   = 'cache'; // table to hold the cache
         $this->options['serializer'] = 'php';   // null, php, igBinary, json
         $this->options['preflight']  = true;    // wether to preflight the DB
+        $this->options['timestamp']  = 'Y-m-d H:i:s'; // timestamp db format
 
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
@@ -122,7 +123,7 @@ abstract class AbstractPdo extends AbstractCache
                         ? $this->serializer->serialize($data)
                         : $data,
             'exp'   => null !== $ttl && 0 !== $ttl ? time()+$ttl : null,
-            'dated' => $this->timestamp()
+            'dated' => $this->getTimestamp()
         );
 
         $values['tags'] = $this->options['tag_enable'] && null !== $tags
@@ -224,6 +225,19 @@ abstract class AbstractPdo extends AbstractCache
         $prep->execute($values);
 
         return $prep;
+    }
+
+    /**
+     * Returns a formated timestamp.
+     *
+     * @param integer|null $time If null, use the current time.
+     */
+    public function getTimestamp($time=null)
+    {
+        return date(
+            $this->options['timestamp'],
+            null != $time ? $time : time()
+        );
     }
 
 }
