@@ -1,13 +1,19 @@
+# System related
 .DS_Store
 .build
 .tmp
-/dist/
-/build/
-/vendor/
-/review/
 *~
 *.log
-phpunit.xml
+
+# Composer related
 composer.lock
 composer.phar
+/vendor/*
+
+# Keep for now (psr/cache is still a draft)
+!/vendor/psr/cache/
+
+# Development related
+/build/
+phpunit.xml
 TODO
