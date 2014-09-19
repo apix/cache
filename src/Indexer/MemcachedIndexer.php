@@ -27,7 +27,7 @@ class MemcachedIndexer extends AbstractIndexer
 
     /**
      * Holds an instane of a serializer.
-     * @var Serializer
+     * @var Serializer\Stringset
      */
     protected $serializer;
 
