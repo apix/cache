@@ -39,7 +39,6 @@ interface Adapter
     /**
      * Returns the indexed items.
      *
-     * @param  array   $context The elements to remove from the index.
      * @return Returns True on success or False on failure.
      */
     public function load();

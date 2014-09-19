@@ -13,9 +13,8 @@
 namespace Apix\Cache\PsrCache;
 
 use Apix\Cache\Adapter as CacheAdapter;
-
-use Psr\Cache\CacheItemInterface as ItemInterface,
-    Psr\Cache\CacheItemPoolInterface as ItemPoolInterface;
+use Psr\Cache\CacheItemInterface as ItemInterface;
+use Psr\Cache\CacheItemPoolInterface as ItemPoolInterface;
 
 class Pool implements ItemPoolInterface
 {
@@ -143,7 +142,7 @@ class Pool implements ItemPoolInterface
     /**
      * Returns the cache adapter for this pool.
      *
-     * @return Apix\Cache\Adapter
+     * @return CacheAdapter
      */
     public function getCacheAdapter()
     {

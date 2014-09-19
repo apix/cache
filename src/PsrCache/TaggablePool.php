@@ -13,9 +13,7 @@
 namespace Apix\Cache\PsrCache;
 
 use Apix\Cache\Adapter as CacheAdapter;
-
-use Psr\Cache\CacheItemInterface as ItemInterface,
-    Psr\Cache\CacheItemPoolInterface as ItemPoolInterface;
+use Psr\Cache\CacheItemInterface as ItemInterface;
 
 class TaggablePool extends Pool
 {
