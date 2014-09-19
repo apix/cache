@@ -31,7 +31,11 @@ Factory usage (PSR-Cache)
 ```php
   use Apix\Cache;
 
-  $pool = Cache\Factory::getPool(new \Redis(), $options);
+  $backend = 'apc';
+  // $backend = new \PDO('...');
+  // $backend = new \Redis(); // 
+
+  $pool = Cache\Factory::getPool($backend);
 
   $item = $pool->getItem('wibble_id');
 
@@ -156,7 +160,7 @@ Note if preflight is set to true (default), the required DB table(s), if missing
 
   // start PGSQL
   $pgsql = new \PDO('pgsql:dbname=apix_tests;host=127.0.0.1', 'postgres');
-  $postgres_cache = new Apix\Cache\Pdo\Postgres($pgsql, $options);
+  $postgres_cache = new Apix\Cache\Pdo\Pgsql($pgsql, $options);
 ```
 
 Installation
@@ -169,7 +173,7 @@ Installation
     ```json
     {
       "require": {
-        "apix/cache": "1.1.*"
+        "apix/cache": "1.2.*"
       }
     }
     ```
