@@ -53,10 +53,10 @@ class Item implements ItemInterface
      * Constructs a new Item.
      * You should never use this directly. It is used internally to create items
      * from the pool.
-     * @param string             $key   The item key
-     * @param mixed              $value The item value (unserialized)
-     * @param integer|null $ttl
-     * @param bool               $hit   Was this item retrived from cache?
+     * @param string                 $key   The item key
+     * @param mixed                  $value The item value (unserialized)
+     * @param \DateTime|integer|null $ttl
+     * @param bool                   $hit   Was this item retrived from cache?
      */
     public function __construct($key, $value = null, $ttl = null, $hit = false)
     {

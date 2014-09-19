@@ -265,9 +265,12 @@ class Memcached extends AbstractCache
 
     /**
      * Sets the namespace prefix.
-      *
-     * For memcache purpose, this is set as 'ns'+integer.
+     * Specific to memcache; this sets as 'ns'+integer (incremented).
      *
+     * @param  string          $ns
+     * @param  boolean         $renew
+     * @param  string          $suffix
+     * @return integer
      */
     public function setNamespace($ns, $renew=false, $suffix='_')
     {
@@ -295,8 +298,9 @@ class Memcached extends AbstractCache
     }
 
     /**
-     * Sets the namespace.
+     * Returns the namespace.
      *
+     * @return string
      */
     public function getNamespace()
     {

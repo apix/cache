@@ -111,7 +111,7 @@ class Apc extends AbstractCache
 
         if ($success = apc_delete($key) && $this->options['tag_enable']) {
 
-            $iterator = $this->iterator(
+            $iterator = $this->getIterator(
                 '/^' . preg_quote($this->options['prefix_tag']) . '/',
                 APC_ITER_VALUE
             );
@@ -166,7 +166,7 @@ class Apc extends AbstractCache
             return apc_clear_cache('user');
         }
 
-        $iterator = $this->iterator(
+        $iterator = $this->getIterator(
             '/^' . preg_quote($this->options['prefix_key'])
             .'|' . preg_quote($this->options['prefix_tag']) . '/',
             APC_ITER_KEY
@@ -181,9 +181,13 @@ class Apc extends AbstractCache
     }
 
     /**
+     * Returns an APC iterator.
+     *
      * @param string $search
+     * @param integer $format
+     * @return \APCIterator
      */
-    protected function iterator($search=null, $format=APC_ITER_ALL)
+    protected function getIterator($search=null, $format=APC_ITER_ALL)
     {
         return new \APCIterator('user', $search, $format, 100, APC_LIST_ACTIVE);
     }
@@ -196,7 +200,7 @@ class Apc extends AbstractCache
      */
     public function getInternalInfos($key)
     {
-        $iterator = $this->iterator(
+        $iterator = $this->getIterator(
             '/^' . preg_quote($this->options['prefix_key']) . '/'
         );
 
