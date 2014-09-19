@@ -10,10 +10,10 @@
  *
  */
 
-namespace Apix\Cache\tests\Psr;
+namespace Apix\Cache\tests\PsrCache;
 
 use Apix\Cache,
-    Apix\Cache\Psr\TaggablePool;
+    Apix\Cache\PsrCache\TaggablePool;
 
 class TaggablePoolTest extends PoolTest
 {
@@ -55,7 +55,7 @@ class TaggablePoolTest extends PoolTest
 
         $items = $this->pool->getItemsByTag('fooTag');
 
-        $this->assertInstanceOf('Apix\Cache\Psr\TaggableItem', $items['foo']);
+        $this->assertInstanceOf('Apix\Cache\PsrCache\TaggableItem', $items['foo']);
         $this->assertSame('foo', $items['foo']->getkey());
         $this->assertSame('foo value', $items['foo']->get());
 

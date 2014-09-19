@@ -10,7 +10,7 @@
  *
  */
 
-namespace Apix\Cache\Psr;
+namespace Apix\Cache\PsrCache;
 
 use Apix\Cache\Adapter as CacheAdapter;
 

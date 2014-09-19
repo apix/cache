@@ -10,7 +10,7 @@
  *
  */
 
-namespace Apix\Cache\Psr;
+namespace Apix\Cache\PsrCache;
 
 use Apix\Cache\Adapter as CacheAdapter;
 
@@ -29,7 +29,7 @@ class Pool implements ItemPoolInterface
     /**
      * Deferred cache items to be saved later.
      *
-     * @var array   Collection of \Apix\Psr\Item.
+     * @var array   Collection of \Apix\PsrCache\Item.
      */
     protected $deferred = array();
 

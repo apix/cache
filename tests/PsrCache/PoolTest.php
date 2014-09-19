@@ -10,12 +10,12 @@
  *
  */
 
-namespace Apix\Cache\tests\Psr;
+namespace Apix\Cache\tests\PsrCache;
 
 use Apix\Cache\Tests\TestCase;
 
 use Apix\Cache,
-    Apix\Cache\Psr\Pool;
+    Apix\Cache\PsrCache\Pool;
 
 class PoolTest extends TestCase
 {
@@ -44,7 +44,7 @@ class PoolTest extends TestCase
     }
 
     /**
-     * @expectedException \Apix\Cache\Psr\InvalidArgumentException
+     * @expectedException \Apix\Cache\PsrCache\InvalidArgumentException
      */
     public function testGetItemThrowsException()
     {

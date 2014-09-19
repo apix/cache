@@ -10,10 +10,10 @@
  *
  */
 
-namespace Apix\Cache\tests\Psr;
+namespace Apix\Cache\tests\PsrCache;
 
 use Apix\Cache\Tests\TestCase;
-use Apix\Cache\Psr\Item;
+use Apix\Cache\PsrCache\Item;
 
 class ItemTest extends TestCase
 {
@@ -61,7 +61,7 @@ class ItemTest extends TestCase
     }
 
     /**
-     * @expectedException Apix\Cache\Psr\InvalidArgumentException
+     * @expectedException Apix\Cache\PsrCache\InvalidArgumentException
      */
     public function testSetExpirationThrowAnException()
     {

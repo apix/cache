@@ -10,7 +10,7 @@
  *
  */
 
-namespace Apix\Cache\Psr;
+namespace Apix\Cache\PsrCache;
 
 class TaggableItem extends Item
 {

@@ -50,8 +50,8 @@ class Factory
      *                                                           or even a plain array() or \ArrayObject.
      * @param  array                                   $options  An array of options
      * @param  boolean                                 $taggable Wether to return a taggable pool.
-     * @return Psr\Pool|Psr\TaggablePool
-     * @throws Apix\Cache\Psr\InvalidArgumentException
+     * @return PsrCache\Pool|PsrCache\TaggablePool
+     * @throws PsrCache\InvalidArgumentException
      * @throws Apix\Cache\Exception
      */
     public static function getPool($mix, array $options=array(), $taggable=false)
@@ -91,7 +91,7 @@ class Factory
             break;
 
             default:
-                throw new Psr\InvalidArgumentException(
+                throw new PsrCache\InvalidArgumentException(
                     sprintf(self::ERROR, __CLASS__)
                 );
         }
@@ -110,12 +110,14 @@ class Factory
             throw new Cache\Exception($e);
         }
 
-        return $taggable ? new Psr\TaggablePool($cache) : new Psr\Pool($cache);
+        return $taggable
+                ? new PsrCache\TaggablePool($cache)
+                : new PsrCache\Pool($cache);
     }
 
     /**
      * @see self::getPool
-     * @return Psr\TaggablePool
+     * @return PsrCache\TaggablePool
      */
     public static function getTaggablePool($mix, array $options=array())
     {

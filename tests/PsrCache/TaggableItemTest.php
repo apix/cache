@@ -10,9 +10,9 @@
  *
  */
 
-namespace Apix\Cache\tests\Psr;
+namespace Apix\Cache\tests\PsrCache;
 
-use Apix\Cache\Psr;
+use Apix\Cache\PsrCache;
 
 class TaggableItemTest extends ItemTest
 {
@@ -20,7 +20,7 @@ class TaggableItemTest extends ItemTest
 
     public function setUp()
     {
-        $this->item = new Psr\TaggableItem('foo');
+        $this->item = new PsrCache\TaggableItem('foo');
     }
 
     public function tearDown()

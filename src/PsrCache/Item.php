@@ -10,7 +10,7 @@
  *
  */
 
-namespace Apix\Cache\Psr;
+namespace Apix\Cache\PsrCache;
 
 use Psr\Cache\CacheItemInterface as ItemInterface,
     Psr\Cache\CacheItemPoolInterface as ItemPoolInterface;
