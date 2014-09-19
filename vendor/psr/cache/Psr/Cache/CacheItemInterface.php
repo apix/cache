@@ -2,13 +2,9 @@
 namespace Psr\Cache;
 
 /**
- * ItemInterface defines an interface for interacting with objects inside a cache.
- *
- * ItemInterface defines an item inside a cache system.  Each Item object
- * MUST be associated with a specific key, which can be set according to the
- * implementing system and is typically passed by the Cache\PoolInterface object.
+ * CacheItemInterface defines an interface for interacting with objects inside a cache.
  */
-interface ItemInterface
+interface CacheItemInterface
 {
     /**
      * Returns the key for the current cache item.
@@ -19,7 +15,7 @@ interface ItemInterface
      * @return string
      *   The key string for this cache item.
      */
-    function getKey();
+    public function getKey();
 
     /**
      * Retrieves the value of the item from the cache associated with this objects key.
@@ -33,10 +29,10 @@ interface ItemInterface
      * @return mixed
      *   The value corresponding to this cache item's key, or null if not found.
      */
-    function get();
+    public function get();
 
     /**
-     * Stores a value into the cache.
+     * Sets the value represented by this cache item.
      *
      * The $value argument may be any item that can be serialized by PHP,
      * although the method of serialization is left up to the Implementing
@@ -49,19 +45,10 @@ interface ItemInterface
      *
      * @param mixed $value
      *   The serializable value to be stored.
-     * @param int|DateTime $ttl
-     *   - If an integer is passed, it is interpreted as the number of seconds
-     *     after which the item MUST be considered expired.
-     *   - If a DateTime object is passed, it is interpreted as the point in
-     *     time after which the the item MUST be considered expired.
-     *   - If no value is passed, a default value MAY be used. If none is set,
-     *     the value should be stored permanently or for as long as the
-     *     implementation allows.
-     * @return bool
-     *   Returns true if the item was successfully saved, or false if there was
-     *   an error.
+     * @return static
+     *   The invoked object.
      */
-    function set($value = null, $ttl = null);
+    public function set($value = null);
 
     /**
      * Confirms if the cache item lookup resulted in a cache hit.
@@ -69,28 +56,60 @@ interface ItemInterface
      * Note: This method MUST NOT have a race condition between calling isHit()
      * and calling get().
      *
-     * @return bool
+     * @return boolean
      *   True if the request resulted in a cache hit.  False otherwise.
      */
-    function isHit();
-
-    /**
-     * Removes the current key from the cache.
-     *
-     * @return \Psr\Cache\CacheInterface
-     *   The current item.
-     */
-    function delete();
+    public function isHit();
 
     /**
      * Confirms if the cache item exists in the cache.
      *
      * Note: This method MAY avoid retrieving the cached value for performance
      * reasons, which could result in a race condition between exists() and get().
+     * To avoid that potential race condition use isHit() instead.
      *
-     * @return bool
+     * @return boolean
      *  True if item exists in the cache, false otherwise.
      */
-     function exists();
+    public function exists();
+
+    /**
+     * This method is used to tell future calls to this item if re-regeneration of
+     * this item's data is in progress or not.
+     *
+     * This can be used to prevent the dogpile effect to stop lots of requests re-generating
+     * the fresh data over and over.
+     *
+     * @return boolean
+     */
+    public function isRegenerating();
+
+    /**
+     * Sets the expiration for this cache item.
+     *
+     * @param int|\DateTime $ttl
+     *   - If an integer is passed, it is interpreted as the number of seconds
+     *     after which the item MUST be considered expired.
+     *   - If a DateTime object is passed, it is interpreted as the point in
+     *     time after which the item MUST be considered expired.
+     *   - If null is passed, a default value MAY be used. If none is set,
+     *     the value should be stored permanently or for as long as the
+     *     implementation allows.
+     *
+     * @return static
+     *   The called object.
+     */
+    public function setExpiration($ttl = null);
+
+    /**
+     * Returns the expiration time of a not-yet-expired cache item.
+     *
+     * If this cache item is a Cache Miss, this method MAY return the time at
+     * which the item expired or the current time if that is not available.
+     *
+     * @return \DateTime
+     *   The timestamp at which this cache item will expire.
+     */
+    public function getExpiration();
 
 }

@@ -4,7 +4,7 @@ namespace Psr\Cache;
 /**
  * \Psr\Cache\PoolInterface generates Cache\Item objects.
  */
-interface PoolInterface
+interface CacheItemPoolInterface
 {
 
     /**
@@ -21,7 +21,7 @@ interface PoolInterface
      *   If the $key string is not a legal value a \Psr\Cache\InvalidArgumentException
      *   MUST be thrown.
      */
-    function getItem($key);
+    public function getItem($key);
 
     /**
      * Returns a traversable set of cache items.
