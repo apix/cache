@@ -25,15 +25,15 @@ Currently, the following cache store handlers are supported:
 
 Feel free to comment, send pull requests and patches...
 
-Factory usage (PSR-Cache)
+Factory usage (PSR-Cache wrapper)
 -------------
 
 ```php
   use Apix\Cache;
 
   $backend = 'apc';
+  // $backend = new \Redis();
   // $backend = new \PDO('...');
-  // $backend = new \Redis(); // 
 
   $pool = Cache\Factory::getPool($backend);
 
@@ -41,17 +41,17 @@ Factory usage (PSR-Cache)
 
   // does this item exists in the cache?
   if ( !$item->isHit() ) {
-
-    // do whatever...
+    // if not retrieve the data from some origin...
     $data = compute_expensive_stuff();
 
-    // set the item data value.
+    // then set the item data value.
     $item->set($data);
 
     // and save it to the cache pool.
     $pool->save($item);
   }
 
+  // get the item datat value
   return $item->get();
 ```
 
@@ -98,6 +98,8 @@ Advanced usage
 -----------------
 ###  Options shared by all the backends
 ```php
+  use Apix\Cache;
+  
   // default options
   $options = array(
       'prefix_key'  => 'apix-cache-key:', // prefix cache keys
@@ -106,7 +108,7 @@ Advanced usage
   );
 
   // start APC as a local cache
-  $local_cache = new Apix\Cache\Apc($options);
+  $local_cache = new Cache\Apc($options);
 ```
 ### Redis specific
 ```php
@@ -115,7 +117,7 @@ Advanced usage
   $options['serializer'] = 'php';    // null, php, igbinary and json
 
   $redis_client = new \Redis;        // instantiate phpredis*
-  $distributed_cache = new Apix\Cache\Redis($redis_client, $options);
+  $distributed_cache = new Cache\Redis($redis_client, $options);
 ```
 \* see [phpredis](https://github.com/nicolasff/phpredis) for instantiation usage.
 
@@ -127,7 +129,7 @@ Advanced usage
   $options['collection_name'] = 'cache';  // name of the mongo collection
 
   $mongo  = new \MongoClient;             // MongoDB native driver** instance
-  $cache = new Apix\Cache\Mongo($mongo, $options);
+  $cache = new Cache\Mongo($mongo, $options);
 ```
 \*\* see [MongoDB](http://php.net/manual/en/book.mongo.php) for more instantiation details.
 
@@ -141,7 +143,7 @@ Advanced usage
   $options['serializer'] = 'php';   // null, php, json, igbinary.
 
   $memcached  = new \Memcached;     // a Memcached instance
-  $shared_cache = new Apix\Cache\Memcached($memcached, $options);
+  $shared_cache = new Cache\Memcached($memcached, $options);
 ```
 ### Options for to the PDO backends
 
@@ -156,11 +158,11 @@ Note if preflight is set to true (default), the required DB table(s), if missing
 
   // start SQLITE
   $db = new \PDO('sqlite:/tmp/apix_tests.sqlite3');
-  $relational_cache = new Apix\Cache\Pdo\Sqlite($db, $options);
+  $relational_cache = new Cache\Pdo\Sqlite($db, $options);
 
   // start PGSQL
   $pgsql = new \PDO('pgsql:dbname=apix_tests;host=127.0.0.1', 'postgres');
-  $postgres_cache = new Apix\Cache\Pdo\Pgsql($pgsql, $options);
+  $postgres_cache = new Cache\Pdo\Pgsql($pgsql, $options);
 ```
 
 Installation
