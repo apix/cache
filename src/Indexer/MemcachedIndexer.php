@@ -32,6 +32,12 @@ class MemcachedIndexer extends AbstractIndexer
     protected $serializer;
 
     /**
+     * Holds the index store engine.
+     * @var Apix\Cache\Memcached
+     */
+    protected $engine;
+
+    /**
      * Constructor.
      *
      * @param string               $name
