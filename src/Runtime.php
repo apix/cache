@@ -30,9 +30,13 @@ class Runtime extends AbstractCache
      */
     public function __construct($array = null, array $options=array())
     {
-        $this->items = $array !== null ? $array : new \ArrayObject();
-
-        // if (! is_array($array) || is_a( $this->items, 'ArrayObject') ) )
+        if(null === $array) {
+            $this->items = new \ArrayObject();
+        } else if(is_array($array) || $array instanceof \Traversable) {
+            $this->items = $array;
+        } else {
+            throw new \Apix\Cache\Exception("Error Processing Request");
+        }
 
         parent::__construct(null, $options);
     }

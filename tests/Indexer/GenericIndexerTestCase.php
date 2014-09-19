@@ -12,43 +12,60 @@
 
 namespace Apix\Cache\tests\Indexer;
 
-use Apix\Cache\Tests\TestCase;
+use Apix\Cache\tests\TestCase;
 
 class GenericIndexerTestCase extends TestCase
 {
+    protected $indexKey = 'indexKey';
 
     public function testAddOneElement()
     {
-        $this->assertTrue( $this->indexer->add('str') );
-        $this->assertSame(array('str'), $this->indexer->load());
+        $this->assertTrue( $this->indexer->add('foo') );
+        $this->assertSame(array('foo'), $this->indexer->load());
     }
 
     public function testAddManyElements()
     {
-        $this->assertTrue( $this->indexer->add(array('a', 'b')));
-        $this->assertSame(array('a', 'b'), $this->indexer->load());
+        $this->assertTrue( $this->indexer->add('foo') );
+        $this->assertTrue( $this->indexer->add(array('bar', 'baz')));
+        $this->assertSame(array('foo', 'bar', 'baz'), $this->indexer->load());
     }
 
     public function testRemoveOneElement()
     {
         $this->assertNull($this->indexer->load());
 
-        $this->assertTrue( $this->indexer->add(array('a', 'b')) );
-        $this->assertSame(array('a', 'b'), $this->indexer->load());
+        $this->assertTrue( $this->indexer->add(array('foo', 'bar')) );
+        $this->assertSame(array('foo', 'bar'), $this->indexer->load());
 
-        $this->assertTrue( $this->indexer->remove('b') );
-        $this->assertSame(array('a'), $this->indexer->load());
+        $this->assertTrue( $this->indexer->remove('bar') );
+        $this->assertSame(array('foo'), $this->indexer->load());
     }
 
     public function testRemoveManyElements()
     {
+        $items = array('foo', 'bar', 'baz');
         $this->assertNull($this->indexer->load());
 
-        $this->assertTrue( $this->indexer->add(array('a', 'b', 'c')) );
-        $this->assertSame(array('a', 'b', 'c'), $this->indexer->load());
+        $this->assertTrue( $this->indexer->add($items) );
+        $this->assertSame($items, $this->indexer->load());
 
-        $this->assertTrue( $this->indexer->Remove(array('a', 'b')) );
-        $this->assertSame(array('c'), $this->indexer->load());
+        $this->assertTrue( $this->indexer->Remove(array('foo', 'bar')) );
+        $this->assertSame(array('baz'), $this->indexer->load());
+    }
+
+    public function testGetName()
+    {
+        $this->assertSame($this->indexKey, $this->indexer->getName());
+    }
+
+    public function testGetItems()
+    {
+        $this->assertSame(array(), $this->indexer->getItems());
+
+        // $items = array('foo', 'bar', 'baz');
+        // $this->assertTrue( $this->indexer->add($items) );
+        // $this->assertSame($items, $this->indexer->getItems());
     }
 
 }

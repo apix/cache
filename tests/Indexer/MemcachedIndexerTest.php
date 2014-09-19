@@ -12,7 +12,8 @@
 
 namespace Apix\Cache\tests\Indexer;
 
-use Apix\Cache;
+use Apix\Cache,
+    Apix\Cache\Indexer;
 
 class MemcachedIndexerTest extends GenericIndexerTestCase
 {
@@ -21,13 +22,6 @@ class MemcachedIndexerTest extends GenericIndexerTestCase
     const AUTH = null;
 
     protected $cache, $memcached, $indexer;
-
-    public $indexKey = 'indexKey';
-
-    protected $options = array(
-        'prefix_key' => 'unit_test-',
-        'prefix_tag' => 'unit_test-',
-    );
 
     public function getMemcached()
     {
@@ -53,9 +47,9 @@ class MemcachedIndexerTest extends GenericIndexerTestCase
     {
         $this->skipIfMissing('memcached');
         $this->memcached = $this->getMemcached();
-        $this->cache = new Memcached($this->memcached, $this->options);
+        $this->cache = new Cache\Memcached($this->memcached, $this->options);
 
-        $this->indexer = new MemcachedIndexer($this->indexKey, $this->cache);
+        $this->indexer = new Indexer\MemcachedIndexer($this->indexKey, $this->cache);
     }
 
     public function tearDown()

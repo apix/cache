@@ -41,7 +41,8 @@ class Apc extends AbstractCache
      */
     public function loadTag($tag)
     {
-        return $this->getIndex($this->mapTag($tag))->load();
+        return $this->get($this->mapTag($tag));
+        // TODO: return $this->getIndex($this->mapTag($tag))->load();
     }
 
     /**
@@ -64,10 +65,10 @@ class Apc extends AbstractCache
      * @param  string          $name The name of the index.
      * @return Indexer\Adapter
      */
-    public function getIndex($name)
-    {
-        return new Indexer\ApcIndexer($name, $this);
-    }
+    // public function getIndex($name)
+    // {
+    //     return new Indexer\ApcIndexer($name, $this);
+    // }
 
     /**
      * {@inheritdoc}

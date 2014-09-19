@@ -12,6 +12,8 @@
 
 namespace Apix\Cache\tests;
 
+use Apix\Cache;
+
 class MemcachedTest extends GenericTestCase
 {
     const HOST = '127.0.0.1';
@@ -51,7 +53,7 @@ class MemcachedTest extends GenericTestCase
     {
         $this->skipIfMissing('memcached');
         $this->memcached = $this->getMemcached();
-        $this->cache = new Memcached($this->memcached, $this->options);
+        $this->cache = new Cache\Memcached($this->memcached, $this->options);
     }
 
     public function tearDown()
@@ -234,7 +236,7 @@ class MemcachedTest extends GenericTestCase
     {
         $this->options = array('tag_enable' => true);
 
-        $this->cache = new Memcached($this->memcached, $this->options);
+        $this->cache = new Cache\Memcached($this->memcached, $this->options);
 
         $this->assertNull($this->cache->get('testInc'));
         $this->assertEquals(1, $this->cache->increment('testInc'));

@@ -34,8 +34,8 @@ class MemcachedIndexer extends AbstractIndexer
     /**
      * Constructor.
      *
-     * @param array                $options   Array of options.
-     * @param Apix\Cache\Memcached $Memcached A Memcached instance.
+     * @param string               $name
+     * @param Apix\Cache\Memcached $engine
      */
     public function __construct($name, Memcached $engine)
     {

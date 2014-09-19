@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * This file is part of the Apix Project.
@@ -35,14 +36,6 @@ class FactoryTest extends TestCase
     public function testPoolWithUnsurportedObjectThrowsException()
     {
         Cache\Factory::getPool( new \StdClass() );
-    }
-
-    public function testPoolFromApixObject()
-    {
-        $adapter = new Cache\Runtime(array(), $this->options);
-        $pool = Cache\Factory::getPool( $adapter, $this->options);
-        $this->assertInstanceOf('\Apix\Cache\Psr\Pool', $pool);
-        $this->assertInstanceOf('\Apix\Cache\Runtime', $pool->getCacheAdapter());
     }
 
     public function testPoolFromCacheClientObject()
@@ -100,12 +93,12 @@ class FactoryTest extends TestCase
     }
 
     /**
-     * @expectedException Apix\Cache\Exception
+     * @expectedException \Apix\Cache\Exception
      */
-    // public function testGetPoolThrowsApixCacheException()
-    // {
-    //     $adapter = new Cache\Runtime(new \StdClass, $this->options);
-    //     Cache\Factory::getPool($adapter);
-    // }
+    public function testGetPoolThrowsApixCacheException()
+    {
+        $adapter = new Cache\Runtime(new \StdClass, $this->options);
+        Cache\Factory::getPool($adapter);
+    }
 
 }

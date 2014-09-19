@@ -45,4 +45,41 @@ class RuntimeTest extends GenericTestCase
         $this->assertSame(array('foo'), $this->cache->loadTag('tag'));
     }
 
+    // AbstratcCache
+
+    public function testGetOption()
+    {
+        $this->assertSame($this->options['prefix_key'], $this->cache->getOption('prefix_key') );
+    }
+
+    public function testRemovePrefix()
+    {
+        $this->assertSame(
+            '-str', $this->cache->removePrefix('prefix-str', 'prefix')
+        );
+    }
+
+    public function testRemovePrefixKey()
+    {
+        $this->assertSame(
+            'foo',
+            $this->cache->removePrefixKey($this->options['prefix_key'] . 'foo')
+        );
+        $this->assertSame(
+            'not-prefixed-key',
+            $this->cache->removePrefixKey('not-prefixed-key')
+        );
+    }
+    public function testRemovePrefixTag()
+    {
+        $this->assertSame(
+            'foo',
+            $this->cache->removePrefixTag($this->options['prefix_tag'] . 'foo')
+        );
+        $this->assertSame(
+            'not-prefixed-key',
+            $this->cache->removePrefixTag('not-prefixed-key')
+        );
+    }
+
 }

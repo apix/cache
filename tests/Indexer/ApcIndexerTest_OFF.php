@@ -10,21 +10,14 @@
  *
  */
 
-namespace Apix\Cache\Indexer;
+namespace Apix\Cache\tests\Indexer;
 
-use Apix\TestCase,
-    Apix\Cache\Apc as Engine;
+use Apix\Cache,
+    Apix\Cache\Indexer;
 
-class ApcIndexerTest_OFF extends GenericIndexerTestCase
+class ApcIndexerTest extends GenericIndexerTestCase
 {
-    protected $cache,$indexer;
-
-    public $indexKey = 'indexKey';
-
-    protected $options = array(
-        'prefix_key' => 'unit_test-',
-        'prefix_tag' => 'unit_test-',
-    );
+    protected $cache, $indexer;
 
     public function setUp()
     {
@@ -36,9 +29,9 @@ class ApcIndexerTest_OFF extends GenericIndexerTestCase
             );
         }
 
-        $this->cache = new Engine($this->options);
+        $this->cache = new Cache\Apc($this->options);
 
-        $this->indexer = new ApcIndexer($this->indexKey, $this->cache);
+        $this->indexer = new Indexer\ApcIndexer($this->indexKey, $this->cache);
     }
 
     public function tearDown()
