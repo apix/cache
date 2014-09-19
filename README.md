@@ -6,19 +6,16 @@ APIx Cache is a generic and thin cache wrapper with a simple interface to variou
 Some of its features:
 
 * Provides cache **tagging** and **indexing** -- *natively* and/or through *emulation*.
+* The proposed **PSR-Cache** standard is provided thru a factory class.
 * Unit **tested** [![Coverage Status](https://coveralls.io/repos/frqnck/apix-cache/badge.png)](https://coveralls.io/r/frqnck/apix-cache) and compliant with PSR0, PSR1 and PSR2.
 * Continuously integrated with **PHP 5.3**, **5.4**, **5.5** and **5.6**; and against APC, Redis, MongoDB, Sqlite, MySQL, PgSQL and Memcached...
 * Available as a **[Composer](http://https://packagist.org/packages/apix/cache)** and as a **[PEAR](http://pear.ouarz.net)** package.
-
-Todo:
-* Factory class based on PSR-6
-* Rename this package.
 
 Cache backends
 --------------
 Currently, the following cache store handlers are supported:
 
-* **[APC](http://php.net/book.apc.php)** *with tagging support*,
+* **[APC](http://php.net/book.apc.php)** and **[APCu](http://pecl.php.net/package/APCu)** *with tagging support*,
 * **[Redis](http://redis.io)** using the [PhpRedis](https://github.com/nicolasff/phpredis) extension *with tagging support*,
 * **[MongoDB](http://www.mongodb.org/)** using the [mongo](http://php.net/book.mongo.php) native PHP extension *with tagging support*,
 * **[Memcached](http://memcached.org/)** using the [Memcached](http://php.net/book.memcached.php) extension *with indexing, tagging and namespacing support*,
@@ -28,44 +25,69 @@ Currently, the following cache store handlers are supported:
 
 Feel free to comment, send pull requests and patches...
 
+Factory usage (PSR-Cache)
+-------------
+
+```php
+  use Apix\Cache;
+
+  $pool = Cache\Factory::getPool(new \Redis(), $options);
+
+  $item = $pool->getItem('wibble_id');
+
+  // does this item exists in the cache?
+  if ( !$item->isHit() ) {
+
+    // do whatever...
+    $data = compute_expensive_stuff();
+
+    // set the item data value.
+    $item->set($data);
+
+    // and save it to the cache pool.
+    $pool->save($item);
+  }
+
+  return $item->get();
+```
+
 Basic usage
 -----------
 
 ```php
-  <?php
-      $cache = new Apix\Cache\Apc;
+  use Apix\Cache;
 
-      // try to retrieve 'wibble_id' from the cache
-      if (!$data = $cache->load('wibble_id')) {
-        
-        // otherwise, get some data from the origin
-        // example of arbitrary mixed data
-        $data = array('foo' => 'bar');
+  $cache = new Cache\Apc;
 
-        // and save it to the cache
-        $cache->save($data, 'wibble_id');
-      }
-      
-      return $data;
+  // try to retrieve 'wibble_id' from the cache
+  if (!$data = $cache->load('wibble_id')) {
+    
+    // otherwise, get some data from the origin
+    // example of arbitrary mixed data
+    $data = array('foo' => 'bar');
+
+    // and save it to the cache
+    $cache->save($data, 'wibble_id');
+  }
 ```
 You can also use the folowing in your use cases: 
 ```php
-      // save $data to the cache as 'wobble_id',
-      // tagging it along the way as 'baz' and 'flob',
-      // and set the ttl to 300 seconds (5 minutes)
-      $cache->save($data, 'wobble_id', array('baz', 'flob'), 300);
+  // save $data to the cache as 'wobble_id',
+  // tagging it along the way as 'baz' and 'flob',
+  // and set the ttl to 300 seconds (5 minutes)
+  $cache->save($data, 'wobble_id', array('baz', 'flob'), 300);
 
-      // retrieve all the cache ids under the tag 'baz'
-      $ids = $cache->loadTag('baz');
+  // retrieve all the cache ids under the tag 'baz'
+  $ids = $cache->loadTag('baz');
 
-      // clear out all items with a 'baz' tag
-      $cache->clean('baz');
+  // clear out all items with a 'baz' tag
+  $cache->clean('baz');
 
-      // remove the named item
-      $cache->delete('wibble_id');
+  // remove the named item
+  $cache->delete('wibble_id');
 
-      // flush out the cache (of all -your- stored items)
-      $cache->flush();
+  // flush out the cache (of all -your- stored items)
+  $cache->flush();
 ```
 
 Advanced usage
