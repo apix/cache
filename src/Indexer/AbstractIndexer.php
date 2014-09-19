@@ -22,7 +22,7 @@ abstract class AbstractIndexer implements Adapter
 
     /**
      * Holds the name of the index.
-     * @var array
+     * @var string
      */
     protected $name;
 
