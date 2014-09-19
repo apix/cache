@@ -10,11 +10,11 @@
     processIsolation="false"
     stopOnFailure="false"
     syntaxCheck="false"
-    bootstrap="src/tests/bootstrap.php"
+    bootstrap="vendor/autoload.php"
 >
     <testsuites>
         <testsuite name="Apix Cache Unit Tests">
-            <directory suffix="Test.php">./src/tests/Apix/Cache</directory>
+            <directory suffix="Test.php">tests</directory>
         </testsuite>
     </testsuites>
 

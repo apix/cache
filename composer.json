@@ -32,6 +32,12 @@
         "ext-pdo_pgsql": "*"
     },
     "autoload": {
-        "psr-0": { "Apix\\Cache": "src/php" }
+        "psr-0": {
+            "Psr\\Cache": "vendor/psr/cache"
+        },
+        "psr-4": {
+            "Apix\\Cache\\": "src/",
+            "Apix\\Cache\\tests\\": "tests/"
+        }
     }
 }
