@@ -1,12 +1,15 @@
-APIx Cache, caching for PHP 5.3+   [![Build Status](https://travis-ci.org/frqnck/apix-cache.png?branch=master)](https://travis-ci.org/frqnck/apix-cache)
+APIx Cache, caching for PHP 5.3+
 ================================
 
 APIx Cache is a generic and thin cache wrapper with a simple interface to various different caching backends and emphasising cache **tagging** and **indexing**.
 
-* The proposed **PSR-Cache** standard is provided thru a factory wrapper class.
-* Unit **tested** [![Coverage Status](https://coveralls.io/repos/frqnck/apix-cache/badge.png)](https://coveralls.io/r/frqnck/apix-cache) and compliant with PSR0, PSR1 and PSR2.
+* **PSR-Cache** (proposed) standard is provided thru a factory wrapper class.
+* Unit **tested** and compliant with PSR0, PSR1 and PSR2.
 * Continuously integrated with **PHP 5.3**, **5.4**, **5.5** and **5.6**; and against APC, Redis, MongoDB, Sqlite, MySQL, PgSQL and Memcached...
 * Available as a **[Composer](http://https://packagist.org/packages/apix/cache)** and as a **[PEAR](http://pear.ouarz.net)** package.
+
+---
+[![Latest Stable Version](https://poser.pugx.org/apix/cache/v/stable.svg)](https://packagist.org/packages/apix/cache)  [![Build Status](https://travis-ci.org/frqnck/apix-cache.png?branch=master)](https://travis-ci.org/frqnck/apix-cache)  [![Coverage Status](https://coveralls.io/repos/frqnck/apix-cache/badge.png)](https://coveralls.io/r/frqnck/apix-cache)
 
 Cache backends
 --------------
