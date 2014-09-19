@@ -14,7 +14,7 @@ namespace Apix\Cache;
 use Apix\Cache;
 
 /**
- * Apix Cache Factory class.
+ * Apix Cache Factory class provides a PSR-Cache wrapper.
  *
  * @author Franck Cassedanne <franck at ouarz.net>
  */
