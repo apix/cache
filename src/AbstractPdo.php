@@ -245,7 +245,6 @@ abstract class AbstractPdo extends AbstractCache
      * Returns the driver name for this .
      *
      * @param \PDO  $pdo     An instance of a PDO class.
-     * @param array $options Array of options.
      */
     public static function getDriverName(\PDO $pdo)
     {

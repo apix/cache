@@ -41,7 +41,6 @@ class Mongo extends AbstractCache
     /**
      * Constructor. Sets the Mongo DB adapter.
      *
-     * @param \MongoClient $MongoClient A MongoClient instance.
      * @param array        $options     Array of options.
      */
     public function __construct(\MongoClient $Mongo, array $options=null)

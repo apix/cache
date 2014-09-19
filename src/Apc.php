@@ -180,6 +180,9 @@ class Apc extends AbstractCache
         return empty($rmed) || in_array(false, $rmed) ? false : true;
     }
 
+    /**
+     * @param string $search
+     */
     protected function iterator($search=null, $format=APC_ITER_ALL)
     {
         return new \APCIterator('user', $search, $format, 100, APC_LIST_ACTIVE);
@@ -188,6 +191,7 @@ class Apc extends AbstractCache
     /**
      * Returns some internal informations about a APC cached item.
      *
+     * @param string $key
      * @return array|false
      */
     public function getInternalInfos($key)

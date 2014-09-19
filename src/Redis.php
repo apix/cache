@@ -144,6 +144,7 @@ class Redis extends AbstractCache
 
     /**
      * {@inheritdoc}
+     * @param string $serializer
      */
     public function setSerializer($serializer)
     {

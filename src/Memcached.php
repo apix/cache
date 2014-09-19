@@ -35,7 +35,7 @@ class Memcached extends AbstractCache
     /**
      * Constructor.
      *
-     * @param \Memcached $Memcached A Memcached instance.
+     * @param \Memcached $memcached A Memcached instance.
      * @param array      $options   Array of options.
      */
     public function __construct(\Memcached $memcached, array $options=null)
@@ -177,6 +177,7 @@ class Memcached extends AbstractCache
 
     /**
      * {@inheritdoc}
+     * @param string $serializer
      */
     public function setSerializer($serializer)
     {
@@ -267,7 +268,6 @@ class Memcached extends AbstractCache
       *
      * For memcache purpose, this is set as 'ns'+integer.
      *
-     * @param string $prefix
      */
     public function setNamespace($ns, $renew=false, $suffix='_')
     {
@@ -297,7 +297,6 @@ class Memcached extends AbstractCache
     /**
      * Sets the namespace.
      *
-     * @param string $prefix
      */
     public function getNamespace()
     {

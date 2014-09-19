@@ -35,7 +35,7 @@ abstract class AbstractIndexer implements Adapter
     /**
      * Returns the index name.
      *
-     * @return Returns a string.
+     * @return string a string.
      */
     public function getName()
     {

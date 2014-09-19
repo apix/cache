@@ -25,7 +25,7 @@ class TaggableItem extends Item
      * Sets this item tags.
      *
      * @param  array|null   $tags
-     * @return static|false The invoked object.
+     * @return TaggableItem The invoked object.
      *                          
      */
     public function setTags(array $tags=null)

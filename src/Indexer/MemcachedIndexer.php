@@ -12,8 +12,8 @@
 
 namespace Apix\Cache\Indexer;
 
-use Apix\Cache\Memcached,
-    Apix\Cache\Serializer;
+use Apix\Cache\Memcached;
+use Apix\Cache\Serializer;
 
 /**
  * Memcached index.
@@ -41,7 +41,7 @@ class MemcachedIndexer extends AbstractIndexer
      * Constructor.
      *
      * @param string               $name
-     * @param Apix\Cache\Memcached $engine
+     * @param Memcached $engine
      */
     public function __construct($name, Memcached $engine)
     {
@@ -90,7 +90,6 @@ class MemcachedIndexer extends AbstractIndexer
     /**
      * Returns the indexed items.
      *
-     * @param  array   $context The elements to remove from the index.
      * @return boolean Returns True on success or Null on failure.
      */
     public function load()
