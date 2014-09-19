@@ -41,14 +41,14 @@ Factory usage (PSR-Cache wrapper)
     // if not retrieve the data from some origin...
     $data = compute_expensive_stuff();
 
-    // then set the item data value.
+    // then set the item's data value
     $item->set($data);
 
-    // and save it to the cache pool.
+    // and save it to the cache pool
     $pool->save($item);
   }
 
-  // get the item datat value
+  // get the item's data value
   return $item->get();
 ```
 
