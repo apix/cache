@@ -1,5 +1,6 @@
 APIx Cache, caching for PHP 5.3+
 ================================
+[![Latest Stable Version](https://poser.pugx.org/apix/cache/v/stable.svg)](https://packagist.org/packages/apix/cache) [![Build Status](https://travis-ci.org/frqnck/apix-cache.png?branch=master)](https://travis-ci.org/frqnck/apix-cache) [![Code Quality](https://scrutinizer-ci.com/g/frqnck/apix-cache/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-cache/?branch=master) [![Coverage Status](https://coveralls.io/repos/frqnck/apix-cache/badge.png)](https://coveralls.io/r/frqnck/apix-cache) [![License](https://poser.pugx.org/apix/cache/license.svg)](https://packagist.org/packages/apix/cache)
 
 APIx Cache is a generic and thin cache wrapper with a simple interface to various different caching backends and emphasising cache **tagging** and **indexing**.
 
@@ -9,7 +10,6 @@ APIx Cache is a generic and thin cache wrapper with a simple interface to variou
 * Available as a **[Composer](http://https://packagist.org/packages/apix/cache)** and as a **[PEAR](http://pear.ouarz.net)** package.
 
 ---
-[![Latest Stable Version](https://poser.pugx.org/apix/cache/v/stable.svg)](https://packagist.org/packages/apix/cache)  [![Build Status](https://travis-ci.org/frqnck/apix-cache.png?branch=master)](https://travis-ci.org/frqnck/apix-cache)  [![Code Quality](https://scrutinizer-ci.com/g/frqnck/apix-cache/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-cache/?branch=master) [![Coverage Status](https://coveralls.io/repos/frqnck/apix-cache/badge.png)](https://coveralls.io/r/frqnck/apix-cache) [![License](https://poser.pugx.org/apix/cache/license.svg)](https://packagist.org/packages/apix/cache)
 
 Cache backends
 --------------
@@ -55,7 +55,7 @@ Factory usage (PSR-Cache wrapper)
   return $item->get();
 ```
 
-Basic usage
+Basic usage (APIx native)
 -----------
 
 ```php
@@ -94,8 +94,8 @@ You can also use the folowing in your use cases:
   $cache->flush();
 ```
 
-Advanced usage
------------------
+Advanced usage (APIx native)
+--------------
 ###  Options shared by all the backends
 ```php
   use Apix\Cache;
