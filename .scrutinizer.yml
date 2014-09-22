@@ -1,6 +1,7 @@
 # .scrutinizer.yml
 tools:
     external_code_coverage: true
+    # runs: 2    # Scrutinizer will wait for two code coverage submissions
 
 checks:
     php:
