@@ -1,4 +1,4 @@
-# .scrutinizer.yml
+# .scrutinizer.yml #
 tools:
     external_code_coverage:
         runs: 28
