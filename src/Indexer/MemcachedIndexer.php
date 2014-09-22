@@ -113,6 +113,7 @@ class MemcachedIndexer extends AbstractIndexer
     /**
      * Purge atomically the index.
      *
+     * @param double|null $cas_token
      * @return float $cas_token The Memcache CAS token.
      */
     protected function purge($cas_token)
