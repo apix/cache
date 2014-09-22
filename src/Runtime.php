@@ -27,13 +27,16 @@ class Runtime extends AbstractCache
 
     /**
      * Constructor.
+     *
+     * @param array|\Traversable|null $mix
+     * @param array|null  $options An array of user options.
      */
-    public function __construct($array = null, array $options=array())
+    public function __construct($mix = null, array $options=null)
     {
-        if(null === $array) {
+        if(null === $mix) {
             $this->items = new \ArrayObject();
-        } else if(is_array($array) || $array instanceof \Traversable) {
-            $this->items = $array;
+        } else if(is_array($mix) || $mix instanceof \Traversable) {
+            $this->items = $mix;
         } else {
             throw new \Apix\Cache\Exception("Error Processing Request");
         }

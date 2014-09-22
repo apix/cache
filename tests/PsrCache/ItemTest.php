@@ -12,7 +12,7 @@
 
 namespace Apix\Cache\tests\PsrCache;
 
-use Apix\Cache\Tests\TestCase;
+use Apix\Cache\tests\TestCase;
 use Apix\Cache\PsrCache\Item;
 
 class ItemTest extends TestCase

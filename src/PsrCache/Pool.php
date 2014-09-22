@@ -87,7 +87,6 @@ class Pool implements ItemPoolInterface
      */
     public function deleteItems(array $keys)
     {
-        $items = array();
         foreach ($keys as $key) {
             $this->cache_adapter->delete($key);
         }
