@@ -76,7 +76,7 @@ class GenericTestCase extends TestCase
         );
 
         $this->assertTrue($this->cache->save('data', 'id', null, 3600));
-        $this->assertEquals(3600, $this->cache->getTtl('id'));
+        $this->assertEquals(3600, $this->cache->getTtl('id'), null, 5);
         // $this->assertLessThanOrEqual(3600, $this->cache->getTtl('id'));
     }
 
@@ -91,7 +91,7 @@ class GenericTestCase extends TestCase
 
         $this->assertTrue($this->cache->save('data', 'id', null, 3600));
         $this->assertEquals('data', $this->cache->load('id'));
-        $this->assertEquals(3600, $this->cache->getTtl('id'));
+        $this->assertEquals(3600, $this->cache->getTtl('id'), null, 5);
         // $this->assertLessThanOrEqual(3600, $this->cache->getTtl('id'));
     }
 
