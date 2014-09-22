@@ -32,7 +32,7 @@ class Sql1999 extends AbstractPdo
      * Holds a generic SQL-99'ish schema definitions.
      * @see http://www.contrib.andrew.cmu.edu/~shadow/sql/sql1992.txt
      */
-    public $sql_definitions = array(
+    protected $sql_definitions = array(
         'init'      => 'CREATE TABLE "%s" ("key" VARCHAR PRIMARY KEY, "data" TEXT,
                         "tags" TEXT, "expire" INTEGER, "dated" TIMESTAMP);',
         'key_idx'   => 'CREATE INDEX "%s_key_idx" ON "%s" ("key");',

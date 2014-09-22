@@ -25,7 +25,7 @@ class Pgsql extends AbstractPdo
     /**
      * Holds the SQL definitions for PostgreSQL.
      */
-    public $sql_definitions = array(
+    protected $sql_definitions = array(
         'init'      => 'CREATE TABLE IF NOT EXISTS "%s"
                         ("key" VARCHAR PRIMARY KEY, "data" TEXT, "tags" TEXT,
                         "expire" INTEGER, "dated" TIMESTAMP);',

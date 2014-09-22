@@ -21,6 +21,12 @@ abstract class AbstractPdo extends AbstractCache
 {
 
     /**
+     * Holds the SQL definitions.
+     * @var array
+     */
+    protected $sql_definitions;
+
+    /**
      * Holds the array of TTLs.
      * @var array
      */

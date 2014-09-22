@@ -25,7 +25,7 @@ class Sqlite extends AbstractPdo
     /**
      * Holds the SQL definitions for SQLite v2/v3.
      */
-    public $sql_definitions = array(
+    protected $sql_definitions = array(
         'init'      => 'CREATE TABLE IF NOT EXISTS %s (key VARCHAR PRIMARY KEY,
                         data TEXT, tags TEXT, expire INTEGER, dated TIMESTAMP);',
         'key_idx'   => 'CREATE INDEX IF NOT EXISTS %s_key_idx ON %s (key);',

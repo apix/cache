@@ -25,7 +25,7 @@ class Mysql extends AbstractPdo
     /**
      * Holds the SQL definitions for MySQL 3.x, 4.x and 5.x.
      */
-    public $sql_definitions = array(
+    protected $sql_definitions = array(
         'init'      => 'CREATE TABLE IF NOT EXISTS %s (`key` VARCHAR(255) NOT NULL,
                         `data` LONGTEXT NULL, `tags` TEXT NULL, `expire` INTEGER
                         UNSIGNED, `dated` TIMESTAMP, PRIMARY KEY (`key`))
