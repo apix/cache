@@ -1,7 +1,8 @@
 # .scrutinizer.yml #
 tools:
     external_code_coverage:
-        runs: 28
+        timeout: 600
+        runs: 7
 
 checks:
     php:
