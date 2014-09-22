@@ -21,7 +21,7 @@ class Runtime extends AbstractCache
     /**
      * Holds the cached items.
      * e.g. ['key' => ['data', 'tags', 'expire']]
-     * @var \ArrayObject
+     * @var array|\ArrayObject|\Traversable
      */
     protected $items;
 

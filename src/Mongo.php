@@ -163,7 +163,8 @@ class Mongo extends AbstractCache
         }
 
         if (null !== $ttl && 0 !== $ttl) {
-            $cache['expire'] = new \MongoDate(time()+$ttl);
+            $expire = time()+$ttl;
+            $cache['expire'] = new \MongoDate($expire);
         }
 
         $this->ttls[$key] = isset($cache['expire'])

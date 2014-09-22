@@ -33,7 +33,7 @@ class MemcachedIndexer extends AbstractIndexer
 
     /**
      * Holds the index store engine.
-     * @var Apix\Cache\Memcached
+     * @var Memcached
      */
     protected $engine;
 

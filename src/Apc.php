@@ -109,7 +109,7 @@ class Apc extends AbstractCache
     {
         $key = $this->mapKey($key);
 
-        if ($success = apc_delete($key) && $this->options['tag_enable']) {
+        if ( ($success = apc_delete($key)) && $this->options['tag_enable']) {
 
             $iterator = $this->getIterator(
                 '/^' . preg_quote($this->options['prefix_tag']) . '/',
