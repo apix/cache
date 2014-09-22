@@ -89,7 +89,7 @@ class ItemTest extends TestCase
         $expire = $this->item->getExpiration();
         $this->assertInstanceOf('DateTime', $expire);
 
-        $this->assertEquals((int) $date->format('U'), $expire->format('U'), '', 5);
+        $this->assertEquals((int) $date->format('U'), $expire->format('U'), '', 10);
     }
 
     /**
@@ -99,7 +99,7 @@ class ItemTest extends TestCase
     {
         if ($sec !== null) {
             $this->item->setExpiration($from);
-            $this->assertEquals($sec, $this->item->getTtlInSecond(), '', 5);
+            $this->assertEquals($sec, $this->item->getTtlInSecond(), '', 10);
         }
     }
 
