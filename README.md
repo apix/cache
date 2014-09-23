@@ -13,7 +13,7 @@ APIx Cache is a generic and thin cache wrapper with a simple interface to variou
 
 Cache backends
 --------------
-Currently, the following cache store handlers are supported:
+Currently, the following cache store are supplied:
 
 * **[APC](http://php.net/book.apc.php)** and **[APCu](http://pecl.php.net/package/APCu)** *with tagging support*,
 * **[Redis](http://redis.io)** using the [PhpRedis](https://github.com/nicolasff/phpredis) extension *with tagging support*,
@@ -22,6 +22,7 @@ Currently, the following cache store handlers are supported:
 * and relational databases usign **[PDO](http://php.net/book.pdo.php)** *with tagging support*:
  * Fully tested with **[SQLite](http://www.sqlite.org)**, **[PostgreSQL](http://www.postgresql.org)** and **[MySQL](http://www.mysql.com)**.
  * Assumed to work but not tested [4D](http://www.4d.com/), [Cubrid](http://www.cubrid.org), [MS SQL Server](http://www.microsoft.com/sqlserver/), [Sybase](http://www.sybase.com), [Firebird](http://www.firebirdsql.org), ODBC, [Interbase](http://www.embarcadero.com/products/interbase), [IBM DB2](www.ibm.com/software/data/db2/), [IDS](http://www-01.ibm.com/software/data/informix/) and [Oracle](http://www.oracle.com/database/).
+* Runtime (in-memory array storage).
 
 Feel free to comment, send pull requests and patches...
 
