@@ -18,18 +18,19 @@
         "php": ">=5.3"
     },
     "require-dev": {
+        "phpunit/phpunit": "~3.7.0",
         "satooshi/php-coveralls": "dev-master"
     },
     "suggest": {
-        "ext-apc": "*",
-        "ext-apcu": "*",
-        "ext-redis": "*",
-        "ext-mongo": "*",
-        "ext-memcached": "*",
-        "ext-pdo": "*",
-        "ext-pdo_sqlite": "*",
-        "ext-pdo_mysql": "*",
-        "ext-pdo_pgsql": "*"
+        "ext-apc": "Allows to cache into APC data store (up to PHP 5.4).",
+        "ext-apcu": "Allows to use APCu userland caching (any PHP version).",
+        "ext-redis": "So you can cache into Redis server(s).",
+        "ext-mongo": "Allows to cache into MongoDB instance(s).",
+        "ext-memcached": "Allows to use Memcached distributed memory caching system",
+        "ext-pdo": "Allows to cache into PDO supported DBs.",
+        "ext-pdo_sqlite": "Allows to cache into SQLite.",
+        "ext-pdo_mysql": "Allows to use MySQL.",
+        "ext-pdo_pgsql": "Allows to use PostgreSQL"
     },
     "autoload": {
         "psr-0": {
@@ -39,5 +40,8 @@
             "Apix\\Cache\\": "src/",
             "Apix\\Cache\\tests\\": "tests/"
         }
+    },
+    "provide": {
+        "psr/cache-implementation": "~1.0"
     }
 }
