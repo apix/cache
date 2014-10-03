@@ -36,8 +36,9 @@ Factory usage (PSR-Cache wrapper)
   // $backend = 'apc';
   // $backend = new \PDO('...');
 
-  $pool = Cache\Factory::getPool($backend);
-
+  $pool = Cache\Factory::getPool($backend); // without tagging support
+  // or $pool = Cache\Factory::getTaggablePool($backend); // with tagging!
+  
   $item = $pool->getItem('wibble_id');
   
   if (!$item->exists()) {
