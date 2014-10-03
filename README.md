@@ -40,19 +40,12 @@ Factory usage (PSR-Cache wrapper)
 
   $item = $pool->getItem('wibble_id');
 
-  // does this item exists in the cache?
-  if ( !$item->isHit() ) {
-    // if not retrieve the data from some origin...
+  if ( !$item->exists() ) {
     $data = compute_expensive_stuff();
-
-    // then set the item's data value
     $item->set($data);
-
-    // and save it to the cache pool
     $pool->save($item);
   }
 
-  // get the item's data value
   return $item->get();
 ```
 
