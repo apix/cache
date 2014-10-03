@@ -32,15 +32,15 @@ Factory usage (PSR-Cache wrapper)
 ```php
   use Apix\Cache;
 
-  $backend = 'apc';
-  // $backend = new \Redis();
+  $backend = new \Redis();
+  // $backend = 'apc';
   // $backend = new \PDO('...');
 
   $pool = Cache\Factory::getPool($backend);
 
   $item = $pool->getItem('wibble_id');
-
-  if ( !$item->exists() ) {
+  
+  if (!$item->exists()) {
     $data = compute_expensive_stuff();
     $item->set($data);
     $pool->save($item);
