@@ -73,9 +73,24 @@ abstract class AbstractCache implements Adapter
      */
     public function getOption($key)
     {
-        if (isset($this->options[$key])) {
-            return $this->options[$key];
+        if (!isset($this->options[$key])) {
+            throw new PsrCache\InvalidArgumentException(
+                sprintf('Invalid option "%s"', $key)
+            );
         }
+
+        return $this->options[$key];
+    }
+
+    /**
+     * Sets the named option.
+     *
+     * @param   string $key
+     * @param   mixed  $value
+     */
+    public function setOption($key, $value)
+    {
+        return $this->options[$key] = $value;
     }
 
     /**
