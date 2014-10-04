@@ -9,6 +9,10 @@
         {
             "name": "Franck Cassedanne",
             "email": "franck@ouarz.net"
+        },
+        {
+            "name": "Apix Cache Community",
+            "homepage": "https://github.com/frqnck/apix-cache/contributors"
         }
     ],
     "support": {
