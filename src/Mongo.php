@@ -49,7 +49,7 @@ class Mongo extends AbstractCache
         // default options
         $this->options['db_name'] = 'apix';
         $this->options['collection_name'] = 'cache';
-        $this->options['object_serializer'] = 'php'; // none, php, json, igBinary.
+        $this->options['object_serializer'] = 'php'; // null, php, json, igBinary.
 
         // Set the adapter and merge the user+default options
         parent::__construct($Mongo, $options);

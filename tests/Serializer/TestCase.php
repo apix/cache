@@ -12,7 +12,7 @@
 
 namespace Apix\Cache\tests\Serializer;
 
-use Apix\Cache\Tests\TestCase as ApixTestCase;
+use Apix\Cache\tests\TestCase as ApixTestCase;
 
 class TestCase extends ApixTestCase
 {
