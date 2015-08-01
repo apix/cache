@@ -14,6 +14,11 @@ namespace Apix\Cache\tests\Serializer;
 
 use Apix\Cache\Serializer\Php;
 
+/**
+ * Class PhpTest
+ *
+ * @package Apix\Cache\tests\Serializer
+ */
 class PhpTest extends TestCase
 {
 
@@ -23,7 +28,7 @@ class PhpTest extends TestCase
     public function testSerialize($var)
     {
         $formatter = new Php();
-        $this->assertEquals(
+        self::assertEquals(
             serialize($var), $formatter->serialize($var)
         );
     }
@@ -34,7 +39,7 @@ class PhpTest extends TestCase
     public function testUnserialize($var)
     {
         $formatter = new Php();
-        $this->assertEquals(
+        self::assertEquals(
             $var, $formatter->unserialize(serialize($var))
         );
     }
@@ -45,9 +50,9 @@ class PhpTest extends TestCase
     public function testIsSerialized($var)
     {
         $formatter = new Php();
-        $this->assertFalse($formatter->isSerialized($var));
+        self::assertFalse($formatter->isSerialized($var));
 
-        $this->assertTrue(
+        self::assertTrue(
             $formatter->isSerialized(
                 $formatter->serialize($var)
             )

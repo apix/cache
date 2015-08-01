@@ -17,9 +17,22 @@ use Apix\Cache\tests\TestCase;
 use Apix\Cache,
     Apix\Cache\PsrCache\Pool;
 
+/**
+ * Class PoolTest
+ *
+ * @package Apix\Cache\tests\PsrCache
+ */
 class PoolTest extends TestCase
 {
-    protected $pool = null, $item = null;
+    /**
+     * @var \Apix\Cache\PsrCache\Pool
+     */
+    protected $pool = null;
+
+    /**
+     * @var \Apix\Cache\PsrCache\Item
+     */
+    protected $item = null;
 
     public function setUp()
     {
@@ -29,7 +42,7 @@ class PoolTest extends TestCase
         $this->item = $this->pool->getItem('foo')->set('foo value');
         $this->pool->save($this->item);
 
-        $this->assertTrue($this->item->isHit());
+        self::assertTrue($this->item->isHit());
     }
 
     public function tearDown()
@@ -40,7 +53,7 @@ class PoolTest extends TestCase
     public function testGetItemWithNonExistantKey()
     {
         $item = $this->pool->getItem('non-existant');
-        $this->assertInstanceOf('Psr\Cache\CacheItemInterface', $item);
+        self::assertInstanceOf('Psr\Cache\CacheItemInterface', $item);
     }
 
     /**
@@ -55,75 +68,75 @@ class PoolTest extends TestCase
     {
         $item = $this->pool->getItem('bar');
         $item->set('bar value');
-        $this->assertNull($item->get());
+        self::assertNull($item->get());
 
         $this->pool->save($item);
-        $this->assertEquals('bar value', $item->get());
+        self::assertEquals('bar value', $item->get());
 
-        $this->assertEquals($item, $this->pool->getItem('bar'), "mm");
+        self::assertEquals($item, $this->pool->getItem('bar'), "mm");
 
         // Update an existing item.
         $item->set('new bar value');
-        $this->assertNull($item->get());
+        self::assertNull($item->get());
 
         $this->pool->save($item);
         // array_map(array($this->pool, 'save'), array($item));
 
-        $this->assertEquals('new bar value', $item->get());
+        self::assertEquals('new bar value', $item->get());
     }
 
     public function testGetItems()
     {
-        $this->assertSame(array(), $this->pool->getItems());
+        self::assertSame(array(), $this->pool->getItems());
 
         $items = $this->pool->getItems(array('non-existant'));
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             '\Psr\Cache\CacheItemInterface', $items['non-existant']
         );
 
         $items = $this->pool->getItems(array('foo'));
-        $this->assertEquals('foo value', $items['foo']->get());
+        self::assertEquals('foo value', $items['foo']->get());
     }
 
     public function testSave()
     {
         $item = $this->pool->getItem('baz')->set('foo value');
-        $this->assertFalse($item->isHit());
-        $this->assertSame($this->pool, $this->pool->save($item));
-        $this->assertTrue($item->isHit());
+        self::assertFalse($item->isHit());
+        self::assertSame($this->pool, $this->pool->save($item));
+        self::assertTrue($item->isHit());
     }
 
     public function testClear()
     {
-        $this->assertTrue($this->pool->clear());
+        self::assertTrue($this->pool->clear());
 
         $item = $this->pool->getItem('foo');
 
-        $this->assertFalse($item->isHit());
-        $this->assertFalse($item->exists());
+        self::assertFalse($item->isHit());
+        self::assertFalse($item->exists());
     }
 
     public function testDeleteItems()
     {
-        $this->assertSame($this->pool,
+        self::assertSame($this->pool,
             $this->pool->deleteItems(array('foo', 'non-existant'))
         );
 
         $item = $this->pool->getItem('foo');
-        $this->assertFalse($item->isHit());
-        $this->assertFalse($item->exists());
+        self::assertFalse($item->isHit());
+        self::assertFalse($item->exists());
     }
 
     public function testSaveDeferredAndCommit()
     {
         $item = $this->pool->getItem('foo')->set('foo value');
-        $this->assertSame($this->pool, $this->pool->saveDeferred($item));
-        $this->assertNull($item->get());
-        $this->assertTrue($this->pool->commit());
-        $this->assertEquals('foo value', $item->get());
+        self::assertSame($this->pool, $this->pool->saveDeferred($item));
+        self::assertNull($item->get());
+        self::assertTrue($this->pool->commit());
+        self::assertEquals('foo value', $item->get());
 
         $items = $this->pool->getItems(array('foo', 'bar'));
-        $this->assertEquals('foo value', $items['foo']->get());
-        // $this->assertEquals($item, $items['foo']);
+        self::assertEquals('foo value', $items['foo']->get());
+        // self::assertEquals($item, $items['foo']);
     }
 }

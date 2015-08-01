@@ -250,7 +250,9 @@ abstract class AbstractPdo extends AbstractCache
     /**
      * Returns the driver name for this .
      *
-     * @param \PDO  $pdo     An instance of a PDO class.
+     * @param \PDO $pdo An instance of a PDO class.
+     *
+     * @return string
      */
     public static function getDriverName(\PDO $pdo)
     {
@@ -266,6 +268,8 @@ abstract class AbstractPdo extends AbstractCache
      * Returns a formated timestamp.
      *
      * @param integer|null $time If null, use the current time.
+     *
+     * @return bool|string
      */
     public function getTimestamp($time=null)
     {

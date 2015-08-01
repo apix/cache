@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * This file is part of the Apix Project.
@@ -15,8 +14,16 @@ namespace Apix\Cache\tests\PsrCache;
 use Apix\Cache\tests\TestCase;
 use Apix\Cache\PsrCache\Item;
 
+/**
+ * Class ItemTest
+ *
+ * @package Apix\Cache\tests\PsrCache
+ */
 class ItemTest extends TestCase
 {
+    /**
+     * @var \Apix\Cache\PsrCache\Item
+     */
     protected $item = null;
 
     public function setUp()
@@ -34,40 +41,43 @@ class ItemTest extends TestCase
     public function testItemConstructor()
     {
         $item = new Item('foo', 'bar');
-        $this->assertEquals('foo', $item->getKey());
-        $this->assertNull($item->get());
+        self::assertEquals('foo', $item->getKey());
+        self::assertNull($item->get());
 
-        $this->assertFalse($item->isHit());
-        $this->assertFalse($item->exists());
+        self::assertFalse($item->isHit());
+        self::assertFalse($item->exists());
     }
 
     public function testItemConstructorHittingCache()
     {
         $item = new Item('foo', 'bar', null, true);
-        $this->assertEquals('foo', $item->getKey());
-        $this->assertEquals('bar', $item->get());
+        self::assertEquals('foo', $item->getKey());
+        self::assertEquals('bar', $item->get());
 
-        $this->assertTrue($item->isHit());
-        $this->assertTrue($item->exists());
+        self::assertTrue($item->isHit());
+        self::assertTrue($item->exists());
     }
 
     public function testSetAndisHit()
     {
-        $this->assertSame($this->item, $this->item->set('new foo value'));
-        $this->assertFalse($this->item->isHit());
+        self::assertSame($this->item, $this->item->set('new foo value'));
+        self::assertFalse($this->item->isHit());
 
-        $this->assertSame($this->item, $this->item->setHit(true));
-        $this->assertSame('new foo value', $this->item->get());
+        self::assertSame($this->item, $this->item->setHit(true));
+        self::assertSame('new foo value', $this->item->get());
     }
 
     /**
-     * @expectedException Apix\Cache\PsrCache\InvalidArgumentException
+     * @expectedException \Apix\Cache\PsrCache\InvalidArgumentException
      */
     public function testSetExpirationThrowAnException()
     {
         $this->item->setExpiration('string');
     }
 
+    /**
+     * @return array
+     */
     public function dateProvider()
     {
         return array(
@@ -83,13 +93,13 @@ class ItemTest extends TestCase
      */
     public function testSetExpiration($from, $to)
     {
-        $this->assertSame($this->item, $this->item->setExpiration($from));
+        self::assertSame($this->item, $this->item->setExpiration($from));
         $date = new \DateTime($to);
 
         $expire = $this->item->getExpiration();
-        $this->assertInstanceOf('DateTime', $expire);
+        self::assertInstanceOf('DateTime', $expire);
 
-        $this->assertEquals((int) $date->format('U'), $expire->format('U'), '', 10);
+        self::assertEquals((int) $date->format('U'), $expire->format('U'), '', 10);
     }
 
     /**
@@ -99,13 +109,13 @@ class ItemTest extends TestCase
     {
         if ($sec !== null) {
             $this->item->setExpiration($from);
-            $this->assertEquals($sec, $this->item->getTtlInSecond(), '', 10);
+            self::assertEquals($sec, $this->item->getTtlInSecond(), '', 10);
         }
     }
 
     public function testItemIsRegenerating()
     {
-        $this->assertFalse($this->item->isRegenerating());
+        self::assertFalse($this->item->isRegenerating());
     }
 
 }

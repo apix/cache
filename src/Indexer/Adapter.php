@@ -24,7 +24,7 @@ interface Adapter
      * Adds one or many element(s) to the index.
      *
      * @param  array|string $elements The element(s) to remove from the index.
-     * @return Returns      TRUE on success or FALSE on failure.
+     * @return bool         Returns TRUE on success or FALSE on failure.
      */
     public function add($elements);
 
@@ -32,14 +32,14 @@ interface Adapter
      * Removes one or many element(s) from the index.
      *
      * @param  array|string $elements The element(s) to remove from the index.
-     * @return Returns      True on success or False on failure.
+     * @return bool         Returns True on success or False on failure.
      */
     public function remove($elements);
 
     /**
      * Returns the indexed items.
      *
-     * @return Returns True on success or False on failure.
+     * @return bool Returns True on success or False on failure.
      */
     public function load();
 

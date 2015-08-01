@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * This file is part of the Apix Project.
@@ -14,8 +13,16 @@ namespace Apix\Cache\tests;
 
 use Apix\Cache;
 
+/**
+ * Class AbstractCacheTest
+ *
+ * @package Apix\Cache\tests
+ */
 class AbstractCacheTest extends TestCase
 {
+    /**
+     * @var \Apix\Cache\Runtime
+     */
     protected $cache = null;
 
     public function setUp()
@@ -33,14 +40,14 @@ class AbstractCacheTest extends TestCase
 
     public function testGetOption()
     {
-        $this->assertSame(
+        self::assertSame(
             $this->options['prefix_key'],
             $this->cache->getOption('prefix_key')
         );
     }
 
     /**
-     * @expectedException Apix\Cache\PsrCache\InvalidArgumentException
+     * @expectedException \Apix\Cache\PsrCache\InvalidArgumentException
      */
     public function testGetOptionThrowAnInvalidArgumentException()
     {
@@ -51,6 +58,6 @@ class AbstractCacheTest extends TestCase
     {
         $this->cache->setOption('prefix_key', 'foo');
 
-        $this->assertSame('foo', $this->cache->getOption('prefix_key'));
+        self::assertSame('foo', $this->cache->getOption('prefix_key'));
     }
 }

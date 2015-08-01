@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * This file is part of the Apix Project.
@@ -12,26 +11,29 @@
 
 namespace Apix\Cache\tests;
 
+/**
+ * Class TestCase
+ *
+ * @package Apix\Cache\tests
+ */
 class TestCase extends \PHPUnit_Framework_TestCase
 {
-
     protected $options = array(
         'prefix_key' => 'unittest-apix-key:',
         'prefix_tag' => 'unittest-apix-tag:'
     );
 
+    /**
+     * @param string $name
+     */
     public function skipIfMissing($name)
     {
+        // do not try to load a missing extension on runtime
+        // the required function is deprecated
         if (!extension_loaded($name)) {
-            $prefix = (PHP_SHLIB_SUFFIX === 'dll') ? 'php_' : '';
-            if (
-                !ini_get('enable_dl')
-                || !dl($prefix . "$name." . PHP_SHLIB_SUFFIX)) {
-                self::markTestSkipped(
-                    sprintf('The "%s" extension is required.', $name)
-                );
-            }
+            self::markTestSkipped(
+                sprintf('The "%s" extension is required.', $name)
+            );
         }
     }
-
 }

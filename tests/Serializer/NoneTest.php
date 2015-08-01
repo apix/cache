@@ -14,6 +14,11 @@ namespace Apix\Cache\tests\Serializer;
 
 use Apix\Cache\Serializer\None;
 
+/**
+ * Class NoneTest
+ *
+ * @package Apix\Cache\tests\Serializer
+ */
 class NoneTest extends TestCase
 {
 
@@ -23,7 +28,7 @@ class NoneTest extends TestCase
     public function testSerialize($var)
     {
         $formatter = new None();
-        $this->assertEquals(
+        self::assertEquals(
             $var, $formatter->serialize($var)
         );
     }
@@ -34,7 +39,7 @@ class NoneTest extends TestCase
     public function testUnserialize($var)
     {
         $formatter = new None();
-        $this->assertEquals(
+        self::assertEquals(
             $var, $formatter->unserialize($var)
         );
     }
@@ -45,7 +50,7 @@ class NoneTest extends TestCase
     public function testIsSerialized($var)
     {
         $formatter = new None();
-        $this->assertFalse($formatter->isSerialized($var));
+        self::assertFalse($formatter->isSerialized($var));
     }
 
 }

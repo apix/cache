@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * This file is part of the Apix Project.
@@ -23,13 +22,29 @@ use Apix\Cache;
  */
 class PdoTest extends GenericTestCase
 {
-    protected $cache, $pdo;
+    /**
+     * @var \Apix\Cache\AbstractPdo
+     */
+    protected $cache;
+
+    /**
+     * @var \PDO
+     */
+    protected $pdo;
 
     protected $options = array(
         'db_name'  => 'apix_tests',
         'db_table' => 'cache'
     );
 
+    /**
+     * @var string
+     */
+    protected $classname = '';
+
+    /**
+     * @return array|void
+     */
     public function pdoProvider()
     {
         $dbs = array(
@@ -73,7 +88,7 @@ class PdoTest extends GenericTestCase
             return $dbs[$DB];
         }
 
-        $this->markTestSkipped("Unsupported DB ($DB) environment.");
+        self::markTestSkipped("Unsupported DB ($DB) environment.");
     }
 
     public function setUp()
@@ -86,7 +101,7 @@ class PdoTest extends GenericTestCase
         try {
             $this->pdo = $dbh();
         } catch (\Exception $e) {
-            $this->markTestSkipped( $e->getMessage() );
+            self::markTestSkipped( $e->getMessage() );
         }
 
         $this->classname = 'Apix\\Cache\\Pdo\\' . $class;
@@ -103,18 +118,18 @@ class PdoTest extends GenericTestCase
 
     public function testSaveIsUnique()
     {
-        $this->assertTrue($this->cache->save('bar_1', 'foo'));
-        $this->assertEquals('bar_1', $this->cache->load('foo'));
+        self::assertTrue($this->cache->save('bar_1', 'foo'));
+        self::assertEquals('bar_1', $this->cache->load('foo'));
 
-        $this->assertTrue($this->cache->save('bar_2', 'foo'));
-        $this->assertEquals('bar_2', $this->cache->load('foo'));
+        self::assertTrue($this->cache->save('bar_2', 'foo'));
+        self::assertEquals('bar_2', $this->cache->load('foo'));
 
-        // $this->assertEquals(1, $this->cache->getAdapter()->rowCount() );
+        // self::assertEquals(1, $this->cache->getAdapter()->rowCount() );
     }
 
     public function testFlushCacheOnly()
     {
-        $this->assertTrue(
+        self::assertTrue(
             $this->cache->save('data1', 'id1', array('tag1', 'tag2'))
             && $this->cache->save('data2', 'id2', array('tag2', 'tag3'))
             && $this->cache->save('data3', 'id3', array('tag3', 'tag4'))
@@ -122,77 +137,77 @@ class PdoTest extends GenericTestCase
         // $foo = array('foo' => 'bar');
         // $this->cache->getAdapter()->add($foo);
 
-        $this->assertTrue($this->cache->flush());
+        self::assertTrue($this->cache->flush());
 
-        // $this->assertEquals(
+        // self::assertEquals(
         //     $foo,
         //     $this->cache->getAdapter()->findOne(array('foo'=>'bar'))
         // );
 
-        $this->assertNull($this->cache->load('id3'));
-        $this->assertNull($this->cache->load('tag1', 'tag'));
+        self::assertNull($this->cache->load('id3'));
+        self::assertNull($this->cache->load('tag1', 'tag'));
     }
 
     /**
-     * @expectedException PDOException
+     * @expectedException \PDOException
      */
     public function testFlushAll()
     {
-        $this->assertTrue(
+        self::assertTrue(
             $this->cache->save('data1', 'id1', array('tag1', 'tag2'))
             && $this->cache->save('data2', 'id2', array('tag2', 'tag3'))
             && $this->cache->save('data3', 'id3', array('tag3', 'tag4'))
         );
 
-        $this->assertTrue($this->cache->flush(true));
+        self::assertTrue($this->cache->flush(true));
 
-        $this->assertNull($this->cache->load('id3'));
-        $this->assertNull($this->cache->load('tag1', 'tag'));
+        self::assertNull($this->cache->load('id3'));
+        self::assertNull($this->cache->load('tag1', 'tag'));
     }
 
     public function testShortTtlDoesExpunge()
     {
-        $this->assertTrue(
+        self::assertTrue(
             $this->cache->save('ttl-1', 'ttlId', array('someTags!'), -1)
         );
 
-        $this->assertNull( $this->cache->load('ttlId') );
+        self::assertNull( $this->cache->load('ttlId') );
     }
 
     public function testTtlSetToNull()
     {
-        $this->assertTrue(
+        self::assertTrue(
             $this->cache->save('ttl-null', 'ttlId', array('someTags!'), null)
         );
 
-        $this->assertEquals('ttl-null', $this->cache->load('ttlId') );
+        self::assertEquals('ttl-null', $this->cache->load('ttlId') );
     }
 
     public function testPurge()
     {
-        $this->assertTrue(
+        self::assertTrue(
             $this->cache->save('120s', 'id1', null, 120)
             && $this->cache->save('600s', 'id2', null, 600)
         );
-        $this->assertEquals('120s', $this->cache->load('id1'));
-        $this->assertTrue($this->cache->purge(130));
-        $this->assertFalse($this->cache->purge());
-        $this->assertNull($this->cache->load('id1'));
+        self::assertEquals('120s', $this->cache->load('id1'));
+        self::assertTrue($this->cache->purge(130));
+        self::assertFalse($this->cache->purge());
+        self::assertNull($this->cache->load('id1'));
 
-        $this->assertEquals('600s', $this->cache->load('id2'));
-        $this->assertTrue($this->cache->purge(630));
-        $this->assertNull($this->cache->load('id2'));
+        self::assertEquals('600s', $this->cache->load('id2'));
+        self::assertTrue($this->cache->purge(630));
+        self::assertNull($this->cache->load('id2'));
     }
 
     public function testcreateIndexTableReturnsFalse()
     {
-        $this->assertFalse( $this->cache->createIndexTable('not-defined') );
+        self::assertFalse( $this->cache->createIndexTable('not-defined') );
     }
 
     public function testGetDriverName()
     {
         if ($this->classname != 'Apix\Cache\Pdo\Sql1999') {
-            $this->assertSame(
+            self::assertSame(
                 $this->classname,
                 'Apix\\Cache\\Pdo\\'
                 . Cache\AbstractPdo::getDriverName($this->pdo)

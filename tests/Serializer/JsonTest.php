@@ -14,6 +14,11 @@ namespace Apix\Cache\tests\Serializer;
 
 use Apix\Cache\Serializer\Json;
 
+/**
+ * Class JsonTest
+ *
+ * @package Apix\Cache\tests\Serializer
+ */
 class JsonTest extends TestCase
 {
 
@@ -23,7 +28,7 @@ class JsonTest extends TestCase
     public function testSerialize($var)
     {
         $formatter = new Json();
-        $this->assertEquals(
+        self::assertEquals(
             json_encode($var), $formatter->serialize($var)
         );
     }
@@ -35,7 +40,7 @@ class JsonTest extends TestCase
     {
         $formatter = new Json();
         if(is_array($var)) $var = (object) $var;
-        $this->assertEquals(
+        self::assertEquals(
             $var, $formatter->unserialize(json_encode($var))
         );
     }
@@ -46,9 +51,9 @@ class JsonTest extends TestCase
     public function testIsSerialized($var)
     {
         $formatter = new Json();
-        $this->assertFalse($formatter->isSerialized($var));
+        self::assertFalse($formatter->isSerialized($var));
 
-        $this->assertTrue(
+        self::assertTrue(
             $formatter->isSerialized(
                 $formatter->serialize($var)
             )

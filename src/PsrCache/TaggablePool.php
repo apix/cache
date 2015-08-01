@@ -15,6 +15,11 @@ namespace Apix\Cache\PsrCache;
 use Apix\Cache\Adapter as CacheAdapter;
 use Psr\Cache\CacheItemInterface as ItemInterface;
 
+/**
+ * Class TaggablePool
+ *
+ * @package Apix\Cache\PsrCache
+ */
 class TaggablePool extends Pool
 {
 
@@ -83,7 +88,7 @@ class TaggablePool extends Pool
      * Retrieves the cache keys for the given tag.
      *
      * @param  string $tag The cache tag to retrieve.
-     * @return array  Returns an array of cache keys.
+     * @return \Apix\Cache\PsrCache\TaggableItem[]  Returns an array of cache keys.
      */
     public function getItemsByTag($tag)
     {

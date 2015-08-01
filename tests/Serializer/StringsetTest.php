@@ -14,14 +14,26 @@ namespace Apix\Cache\tests\Serializer;
 
 use Apix\Cache\Serializer\Stringset;
 
+/**
+ * Class StringsetTest
+ *
+ * @package Apix\Cache\tests\Serializer
+ */
 class StringsetTest extends TestCase
 {
+    /**
+     * @var \Apix\Cache\Serializer\Stringset
+     */
+    protected $formatter = null;
 
     public function setUp()
     {
         $this->formatter = new Stringset();
     }
 
+    /**
+     * @return array
+     */
     public function serializerProvider()
     {
         return array(
@@ -38,9 +50,12 @@ class StringsetTest extends TestCase
      */
     public function testSerialize($arr, $str)
     {
-        $this->assertEquals( $str, $this->formatter->serialize($arr) );
+        self::assertEquals( $str, $this->formatter->serialize($arr) );
     }
 
+    /**
+     * @return array
+     */
     public function unserializerProvider()
     {
         return array(
@@ -56,10 +71,13 @@ class StringsetTest extends TestCase
      */
     public function testUnserializer($arr, $str, $dirt)
     {
-        $this->assertEquals($arr, $this->formatter->unserialize($str));
-        $this->assertEquals($dirt, $this->formatter->getDirtiness());
+        self::assertEquals($arr, $this->formatter->unserialize($str));
+        self::assertEquals($dirt, $this->formatter->getDirtiness());
     }
 
+    /**
+     * @return array
+     */
     public function isSerializerProvider()
     {
         return array(
@@ -74,7 +92,7 @@ class StringsetTest extends TestCase
      */
     public function testIsSerialized($arr, $str)
     {
-        $this->assertFalse($this->formatter->isSerialized($arr));
-        $this->assertTrue($this->formatter->isSerialized($str));
+        self::assertFalse($this->formatter->isSerialized($arr));
+        self::assertTrue($this->formatter->isSerialized($str));
     }
 }

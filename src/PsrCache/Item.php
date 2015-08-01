@@ -15,6 +15,11 @@ namespace Apix\Cache\PsrCache;
 use Psr\Cache\CacheItemInterface as ItemInterface;
 use Psr\Cache\CacheItemPoolInterface as ItemPoolInterface;
 
+/**
+ * Class Item
+ *
+ * @package Apix\Cache\PsrCache
+ */
 class Item implements ItemInterface
 {
     const DEFAULT_EXPIRATION = 'now +1 year';
@@ -62,7 +67,7 @@ class Item implements ItemInterface
     {
         if (strpbrk($key, '{}()/\@:')) {
             throw new InvalidArgumentException(
-                'Item key contains an invalide character.' . $key
+                'Item key contains an invalid character.' . $key
             );
         }
         $this->key = $key;

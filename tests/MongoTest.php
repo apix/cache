@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * This file is part of the Apix Project.
@@ -14,9 +13,17 @@ namespace Apix\Cache\tests;
 
 use Apix\Cache;
 
+/**
+ * Class MongoTest
+ *
+ * @package Apix\Cache\tests
+ */
 class MongoTest extends GenericTestCase
 {
-    protected $cache, $mongo;
+    /**
+     * @var \MongoClient
+     */
+    protected $mongo;
 
     public function setUp()
     {
@@ -25,7 +32,7 @@ class MongoTest extends GenericTestCase
         try {
             $this->mongo = new \MongoClient();
         } catch (\Exception $e) {
-            $this->markTestSkipped( $e->getMessage() );
+            self::markTestSkipped( $e->getMessage() );
         }
 
        $this->cache = new Cache\Mongo($this->mongo, $this->options);
@@ -42,12 +49,12 @@ class MongoTest extends GenericTestCase
 
     public function testSaveIsUnique()
     {
-        $this->assertTrue($this->cache->save('bar1', 'foo'));
-        $this->assertTrue($this->cache->save('bar2', 'foo'));
+        self::assertTrue($this->cache->save('bar1', 'foo'));
+        self::assertTrue($this->cache->save('bar2', 'foo'));
 
-        $this->assertEquals('bar2', $this->cache->loadKey('foo'));
+        self::assertEquals('bar2', $this->cache->loadKey('foo'));
 
-        $this->assertEquals(1, $this->cache->count('foo') );
+        self::assertEquals(1, $this->cache->count('foo') );
     }
 
     public function testFlushCacheOnly()
@@ -59,14 +66,14 @@ class MongoTest extends GenericTestCase
         $foo = array('foo' => 'bar');
         $this->cache->collection->insert($foo);
 
-        $this->assertTrue($this->cache->flush());
+        self::assertTrue($this->cache->flush());
 
-        $this->assertEquals(
+        self::assertEquals(
             $foo, $this->cache->collection->findOne(array('foo'=>'bar'))
         );
 
-        $this->assertNull($this->cache->loadKey('id3'));
-        $this->assertNull($this->cache->loadTag('tag1'));
+        self::assertNull($this->cache->loadKey('id3'));
+        self::assertNull($this->cache->loadTag('tag1'));
     }
 
     public function testFlushAll()
@@ -77,16 +84,16 @@ class MongoTest extends GenericTestCase
 
         $this->cache->collection->insert(array('key' => 'foobar'));
 
-        $this->assertTrue($this->cache->flush(true));
-        $this->assertNull($this->cache->collection->findOne(array('key')));
+        self::assertTrue($this->cache->flush(true));
+        self::assertNull($this->cache->collection->findOne(array('key')));
 
-        $this->assertNull($this->cache->loadKey('id3'));
-        $this->assertNull($this->cache->loadTag('tag1'));
+        self::assertNull($this->cache->loadKey('id3'));
+        self::assertNull($this->cache->loadTag('tag1'));
     }
 
     public function testShortTtlDoesExpunge()
     {
-        $this->assertTrue(
+        self::assertTrue(
             $this->cache->save('ttl-1', 'ttlId', array('someTags!'), -1)
         );
 
@@ -95,7 +102,7 @@ class MongoTest extends GenericTestCase
         //     'reIndex' => 'cache'
         // ));
 
-        $this->assertNull( $this->cache->loadKey('ttlId') );
+        self::assertNull( $this->cache->loadKey('ttlId') );
     }
 
 }

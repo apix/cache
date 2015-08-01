@@ -22,6 +22,8 @@ class Apc extends AbstractCache
 
     /**
      * Constructor.
+     *
+     * @param array $options
      */
     public function __construct(array $options=array())
     {

@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * This file is part of the Apix Project.
@@ -21,6 +20,9 @@ use Apix\Cache;
  */
 class ApcTest extends GenericTestCase
 {
+    /**
+     * @var \Apix\Cache\Apc
+     */
     protected $cache = null;
 
     public function setUp()
@@ -46,42 +48,42 @@ class ApcTest extends GenericTestCase
 
     public function testComplyWithApc()
     {
-        $this->assertTrue($this->cache->save('data', 'id'));
+        self::assertTrue($this->cache->save('data', 'id'));
         $id = $this->cache->mapKey('id');
-        $this->assertEquals('data', apc_fetch($id));
+        self::assertEquals('data', apc_fetch($id));
     }
 
     public function testFlushSelected()
     {
-        $this->assertTrue(
+        self::assertTrue(
             $this->cache->save('data1', 'id1', array('tag1', 'tag2'))
             && $this->cache->save('data2', 'id2', array('tag2', 'tag3'))
             && $this->cache->save('data3', 'id3', array('tag3', 'tag4'))
         );
         apc_add('foo', 'bar');
-        $this->assertTrue($this->cache->flush());
-        $this->assertFalse($this->cache->flush());
-        $this->assertEquals('bar', apc_fetch('foo'));
+        self::assertTrue($this->cache->flush());
+        self::assertFalse($this->cache->flush());
+        self::assertEquals('bar', apc_fetch('foo'));
 
-        $this->assertNull($this->cache->load('id3'));
-        $this->assertNull($this->cache->load('tag1', 'tag'));
+        self::assertNull($this->cache->load('id3'));
+        self::assertNull($this->cache->load('tag1', 'tag'));
     }
 
     public function testFlushAll()
     {
-        $this->assertTrue(
+        self::assertTrue(
             $this->cache->save('data1', 'id1', array('tag1', 'tag2'))
             && $this->cache->save('data2', 'id2', array('tag2', 'tag3'))
             && $this->cache->save('data3', 'id3', array('tag3', 'tag4'))
         );
 
         apc_add('foo', 'bar');
-        $this->assertTrue($this->cache->flush(true)); // always true!
+        self::assertTrue($this->cache->flush(true)); // always true!
 
-        $this->assertEquals(false, apc_fetch('foo'));
+        self::assertEquals(false, apc_fetch('foo'));
 
-        $this->assertNull($this->cache->load('id3'));
-        $this->assertNull($this->cache->load('tag1', 'tag'));
+        self::assertNull($this->cache->load('id3'));
+        self::assertNull($this->cache->load('tag1', 'tag'));
     }
 
     /**
@@ -92,26 +94,26 @@ class ApcTest extends GenericTestCase
      */
     public function testShortTtlDoesExpunge()
     {
-        $this->markTestSkipped(
+        self::markTestSkipped(
             "APC will only expunged its cache on the next request which makes "
             . "this specific unit untestable!?... :-("
         );
         $this->cache->save('ttl-1', 'ttlId', null, -1);
-        // $this->assertSame('ttl-1', apc_fetch($this->cache->mapKey('ttlId')));
-        // $this->assertSame('ttl-1', $this->cache->load('ttlId'));
-        $this->assertNull( $this->cache->load('ttlId'), "Should be null");
+        // self::assertSame('ttl-1', apc_fetch($this->cache->mapKey('ttlId')));
+        // self::assertSame('ttl-1', $this->cache->load('ttlId'));
+        self::assertNull( $this->cache->load('ttlId'), "Should be null");
     }
 
     public function testGetInternalInfos()
     {
         $this->cache->save('someData', 'someId', null, 69);
         $infos = $this->cache->getInternalInfos('someId');
-        $this->assertSame(69, $infos['ttl']);
+        self::assertSame(69, $infos['ttl']);
     }
 
     public function testGetInternalInfosReturnFalseWhenNonExistant()
     {
-        $this->assertFalse(
+        self::assertFalse(
             $this->cache->getInternalInfos('non-existant')
         );
     }

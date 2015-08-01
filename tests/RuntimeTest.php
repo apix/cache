@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * This file is part of the Apix Project.
@@ -14,8 +13,16 @@ namespace Apix\Cache\tests;
 
 use Apix\Cache;
 
+/**
+ * Class RuntimeTest
+ *
+ * @package Apix\Cache\tests
+ */
 class RuntimeTest extends GenericTestCase
 {
+    /**
+     * @var \Apix\Cache\Runtime
+     */
     protected $cache = null;
 
     public function setUp()
@@ -41,42 +48,42 @@ class RuntimeTest extends GenericTestCase
         );
 
         $this->cache = new Cache\Runtime($pre_cached_items, $options);
-        $this->assertSame('foo value', $this->cache->loadKey('foo'));
-        $this->assertSame(array('foo'), $this->cache->loadTag('tag'));
+        self::assertSame('foo value', $this->cache->loadKey('foo'));
+        self::assertSame(array('foo'), $this->cache->loadTag('tag'));
     }
 
     // AbstratcCache
 
     public function testGetOption()
     {
-        $this->assertSame($this->options['prefix_key'], $this->cache->getOption('prefix_key') );
+        self::assertSame($this->options['prefix_key'], $this->cache->getOption('prefix_key') );
     }
 
     public function testRemovePrefix()
     {
-        $this->assertSame(
+        self::assertSame(
             '-str', $this->cache->removePrefix('prefix-str', 'prefix')
         );
     }
 
     public function testRemovePrefixKey()
     {
-        $this->assertSame(
+        self::assertSame(
             'foo',
             $this->cache->removePrefixKey($this->options['prefix_key'] . 'foo')
         );
-        $this->assertSame(
+        self::assertSame(
             'not-prefixed-key',
             $this->cache->removePrefixKey('not-prefixed-key')
         );
     }
     public function testRemovePrefixTag()
     {
-        $this->assertSame(
+        self::assertSame(
             'foo',
             $this->cache->removePrefixTag($this->options['prefix_tag'] . 'foo')
         );
-        $this->assertSame(
+        self::assertSame(
             'not-prefixed-key',
             $this->cache->removePrefixTag('not-prefixed-key')
         );

@@ -29,7 +29,9 @@ class Runtime extends AbstractCache
      * Constructor.
      *
      * @param array|\Traversable|null $mix
-     * @param array|null  $options An array of user options.
+     * @param array|null              $options An array of user options.
+     *
+     * @throws \Apix\Cache\Exception
      */
     public function __construct($mix = null, array $options=null)
     {
@@ -72,6 +74,8 @@ class Runtime extends AbstractCache
 
             return empty($keys) ? null : $keys;
         }
+
+        return null;
     }
 
     /**

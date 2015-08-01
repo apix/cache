@@ -19,7 +19,6 @@ namespace Apix\Cache;
  */
 interface Adapter
 {
-
     /**
      * Retrieves the cache content for the given key.
      *
@@ -71,7 +70,7 @@ interface Adapter
      *                      the entries prefixed with prefix_key and prefix_tag.
      * @return boolean Returns True on success or False on failure.
      */
-     public function flush($all=false);
+    public function flush($all=false);
 
     /**
      * Returns the time-to-live (in seconds) for the given key.

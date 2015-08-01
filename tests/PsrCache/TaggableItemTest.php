@@ -14,8 +14,16 @@ namespace Apix\Cache\tests\PsrCache;
 
 use Apix\Cache\PsrCache;
 
+/**
+ * Class TaggableItemTest
+ *
+ * @package Apix\Cache\tests\PsrCache
+ */
 class TaggableItemTest extends ItemTest
 {
+    /**
+     * @var \Apix\Cache\PsrCache\TaggableItem
+     */
     protected $item = null;
 
     public function setUp()
@@ -30,14 +38,14 @@ class TaggableItemTest extends ItemTest
 
     public function testGetItemTagsIsNullByDefault()
     {
-        $this->assertNull($this->item->getTags());
+        self::assertNull($this->item->getTags());
     }
 
     public function testSetItemTags()
     {
         $tags = array('fooTag', 'barTag');
-        $this->assertSame($this->item, $this->item->setTags($tags));
-        $this->assertSame($tags, $this->item->getTags());
+        self::assertSame($this->item, $this->item->setTags($tags));
+        self::assertSame($tags, $this->item->getTags());
     }
 
 }

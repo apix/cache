@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * This file is part of the Apix Project.
@@ -14,13 +13,26 @@ namespace Apix\Cache\tests;
 
 use Apix\Cache;
 
+/**
+ * Class RedisTest
+ *
+ * @package Apix\Cache\tests
+ */
 class RedisTest extends GenericTestCase
 {
     const HOST = '127.0.0.1';
     const PORT = 6379;
     const AUTH = null;
 
-    protected $cache, $redis;
+    /**
+     * @var \Apix\Cache\Redis
+     */
+    protected $cache;
+
+    /**
+     * @var \Redis
+     */
+    protected $redis;
 
     public function setUp()
     {
@@ -34,7 +46,7 @@ class RedisTest extends GenericTestCase
             }
             $this->redis->ping();
         } catch (\Exception $e) {
-            $this->markTestSkipped( $e->getMessage() );
+            self::markTestSkipped( $e->getMessage() );
         }
 
        $this->cache = new Cache\Redis($this->redis, $this->options);
@@ -51,47 +63,47 @@ class RedisTest extends GenericTestCase
 
     public function testFlushSelected()
     {
-        $this->assertTrue(
+        self::assertTrue(
             $this->cache->save('data1', 'id1', array('tag1', 'tag2'))
             && $this->cache->save('data2', 'id2', array('tag2', 'tag3'))
             && $this->cache->save('data3', 'id3', array('tag3', 'tag4'))
         );
 
         $this->redis->set('foo', 'bar');
-        $this->assertTrue($this->cache->flush());
-        $this->assertFalse($this->cache->flush());
-        $this->assertTrue($this->redis->exists('foo'));
+        self::assertTrue($this->cache->flush());
+        self::assertFalse($this->cache->flush());
+        self::assertTrue($this->redis->exists('foo'));
 
-        $this->assertNull($this->cache->loadKey('id3'));
-        $this->assertNull($this->cache->loadTag('tag1'));
+        self::assertNull($this->cache->loadKey('id3'));
+        self::assertNull($this->cache->loadTag('tag1'));
     }
 
     public function testFlushAll()
     {
-        $this->assertTrue(
+        self::assertTrue(
             $this->cache->save('data1', 'id1', array('tag1', 'tag2'))
             && $this->cache->save('data2', 'id2', array('tag2', 'tag3'))
             && $this->cache->save('data3', 'id3', array('tag3', 'tag4'))
         );
 
         $this->redis->set('foo', 'bar');
-        $this->assertTrue($this->cache->flush(true)); // always true!
-        $this->assertFalse($this->redis->exists('foo'));
+        self::assertTrue($this->cache->flush(true)); // always true!
+        self::assertFalse($this->redis->exists('foo'));
 
-        $this->assertNull($this->cache->loadKey('id3'));
-        $this->assertNull($this->cache->loadTag('tag1'));
+        self::assertNull($this->cache->loadKey('id3'));
+        self::assertNull($this->cache->loadTag('tag1'));
     }
 
     public function testShortTtlDoesExpunge()
     {
         $this->cache->save('ttl-1', 'ttlId', null, -1);
-        $this->assertNull( $this->cache->load('ttlId'));
+        self::assertNull( $this->cache->load('ttlId'));
     }
 
     public function testSetSerializerToPhp()
     {
         $this->cache->setSerializer('php');
-        $this->assertSame(
+        self::assertSame(
             \Redis::SERIALIZER_PHP, $this->cache->getSerializer()
         );
     }
@@ -100,7 +112,7 @@ class RedisTest extends GenericTestCase
     {
         if (defined('Redis::SERIALIZER_IGBINARY')) {
             $this->cache->setSerializer('igBinary');
-            $this->assertSame(
+            self::assertSame(
                 \Redis::SERIALIZER_IGBINARY, $this->cache->getSerializer()
             );
         }
@@ -109,7 +121,7 @@ class RedisTest extends GenericTestCase
     public function testSetSerializerToNull()
     {
         $this->cache->setSerializer(null);
-        $this->assertSame(
+        self::assertSame(
             \Redis::SERIALIZER_NONE, $this->cache->getSerializer()
         );
     }
@@ -117,7 +129,7 @@ class RedisTest extends GenericTestCase
     public function testSetSerializerToJson()
     {
         $this->cache->setSerializer('json');
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             'Apix\Cache\Serializer\Json', $this->cache->getSerializer()
         );
     }

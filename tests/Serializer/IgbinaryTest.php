@@ -14,6 +14,11 @@ namespace Apix\Cache\tests\Serializer;
 
 use Apix\Cache\Serializer\Igbinary;
 
+/**
+ * Class IgbinaryTest
+ *
+ * @package Apix\Cache\tests\Serializer
+ */
 class IgbinaryTest extends TestCase
 {
 
@@ -28,7 +33,7 @@ class IgbinaryTest extends TestCase
     public function testSerialize($var)
     {
         $formatter = new Igbinary();
-        $this->assertEquals(
+        self::assertEquals(
             igbinary_serialize($var), $formatter->serialize($var)
         );
     }
@@ -39,7 +44,7 @@ class IgbinaryTest extends TestCase
     public function testUnserialize($var)
     {
         $formatter = new IgBinary();
-        $this->assertEquals(
+        self::assertEquals(
             $var, $formatter->unserialize(igbinary_serialize($var))
         );
     }
@@ -50,9 +55,9 @@ class IgbinaryTest extends TestCase
     public function testIsSerialized($var)
     {
         $formatter = new Igbinary();
-        $this->assertFalse($formatter->isSerialized($var));
+        self::assertFalse($formatter->isSerialized($var));
 
-        $this->assertTrue(
+        self::assertTrue(
             $formatter->isSerialized(
                 $formatter->serialize($var)
             )

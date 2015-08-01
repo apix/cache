@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * This file is part of the Apix Project.
@@ -14,8 +13,14 @@ namespace Apix\Cache\tests;
 
 use Apix\Cache;
 
+/**
+ * Class FactoryTest
+ *
+ * @package Apix\Cache\tests
+ */
 class FactoryTest extends TestCase
 {
+    /*
     protected $cache = null;
 
     public function setUp()
@@ -29,9 +34,10 @@ class FactoryTest extends TestCase
             unset($this->cache);
         }
     }
+    /**/
 
     /**
-     * @expectedException Apix\Cache\PsrCache\InvalidArgumentException
+     * @expectedException \Apix\Cache\PsrCache\InvalidArgumentException
      */
     public function testPoolWithUnsurportedObjectThrowsException()
     {
@@ -42,12 +48,12 @@ class FactoryTest extends TestCase
     {
         $adapter = new \ArrayObject();
         $pool = Cache\Factory::getPool($adapter, $this->options);
-        $this->assertInstanceOf('\Apix\Cache\PsrCache\Pool', $pool);
-        $this->assertInstanceOf('\Apix\Cache\Runtime', $pool->getCacheAdapter());
+        self::assertInstanceOf('\Apix\Cache\PsrCache\Pool', $pool);
+        self::assertInstanceOf('\Apix\Cache\Runtime', $pool->getCacheAdapter());
     }
 
     /**
-     * @expectedException Apix\Cache\PsrCache\InvalidArgumentException
+     * @expectedException \Apix\Cache\PsrCache\InvalidArgumentException
      */
     public function testPoolWithUnsurportedStringThrowsException()
     {
@@ -57,39 +63,39 @@ class FactoryTest extends TestCase
     public function testPoolFromString()
     {
         $pool = Cache\Factory::getPool('Runtime', $this->options);
-        $this->assertInstanceOf('\Apix\Cache\PsrCache\Pool', $pool);
+        self::assertInstanceOf('\Apix\Cache\PsrCache\Pool', $pool);
 
         $pool = Cache\Factory::getPool('Array', $this->options);
-        $this->assertInstanceOf('\Apix\Cache\PsrCache\Pool', $pool);
-        $this->assertInstanceOf('\Apix\Cache\Runtime', $pool->getCacheAdapter());
+        self::assertInstanceOf('\Apix\Cache\PsrCache\Pool', $pool);
+        self::assertInstanceOf('\Apix\Cache\Runtime', $pool->getCacheAdapter());
     }
 
     public function testPoolFromStringMixedCase()
     {
         $pool = Cache\Factory::getPool('arRay', $this->options);
-        $this->assertInstanceOf('\Apix\Cache\PsrCache\Pool', $pool);
-        $this->assertInstanceOf('\Apix\Cache\Runtime', $pool->getCacheAdapter());
+        self::assertInstanceOf('\Apix\Cache\PsrCache\Pool', $pool);
+        self::assertInstanceOf('\Apix\Cache\Runtime', $pool->getCacheAdapter());
     }
 
     public function testPoolFromArray()
     {
         $pool = Cache\Factory::getPool(array(), $this->options);
-        $this->assertInstanceOf('\Apix\Cache\PsrCache\Pool', $pool);
-        $this->assertInstanceOf('\Apix\Cache\Runtime', $pool->getCacheAdapter());
+        self::assertInstanceOf('\Apix\Cache\PsrCache\Pool', $pool);
+        self::assertInstanceOf('\Apix\Cache\Runtime', $pool->getCacheAdapter());
     }
 
     public function testTaggablePoolFromString()
     {
         $pool = Cache\Factory::getPool('ArrayObject', $this->options, true);
-        $this->assertInstanceOf('\Apix\Cache\PsrCache\TaggablePool', $pool);
-        $this->assertInstanceOf('\Apix\Cache\Runtime', $pool->getCacheAdapter());
+        self::assertInstanceOf('\Apix\Cache\PsrCache\TaggablePool', $pool);
+        self::assertInstanceOf('\Apix\Cache\Runtime', $pool->getCacheAdapter());
     }
 
     public function testGetTaggablePool()
     {
         $pool = Cache\Factory::getTaggablePool(array(), $this->options, true);
-        $this->assertInstanceOf('\Apix\Cache\PsrCache\TaggablePool', $pool);
-        $this->assertInstanceOf('\Apix\Cache\Runtime', $pool->getCacheAdapter());
+        self::assertInstanceOf('\Apix\Cache\PsrCache\TaggablePool', $pool);
+        self::assertInstanceOf('\Apix\Cache\Runtime', $pool->getCacheAdapter());
     }
 
     /**

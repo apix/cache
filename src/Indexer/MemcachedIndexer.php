@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * This file is part of the Apix Project.
@@ -22,7 +21,6 @@ use Apix\Cache\Serializer;
  */
 class MemcachedIndexer extends AbstractIndexer
 {
-
     const DIRTINESS_THRESHOLD = 100;
 
     /**
