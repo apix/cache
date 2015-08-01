@@ -31,7 +31,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
         // do not try to load a missing extension on runtime
         // the required function is deprecated
         if (!extension_loaded($name)) {
-            self::markTestSkipped(
+            $this->markTestSkipped(
                 sprintf('The "%s" extension is required.', $name)
             );
         }

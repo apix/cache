@@ -30,7 +30,7 @@ class ApcTest extends GenericTestCase
         $this->skipIfMissing('apc');
 
         if (!ini_get('apc.enable_cli')) {
-            self::markTestSkipped(
+            $this->markTestSkipped(
                 'apc.enable_cli MUST be enabled in order to run this unit test'
             );
         }
@@ -94,7 +94,7 @@ class ApcTest extends GenericTestCase
      */
     public function testShortTtlDoesExpunge()
     {
-        self::markTestSkipped(
+        $this->markTestSkipped(
             "APC will only expunged its cache on the next request which makes "
             . "this specific unit untestable!?... :-("
         );

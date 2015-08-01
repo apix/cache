@@ -32,7 +32,7 @@ class MongoTest extends GenericTestCase
         try {
             $this->mongo = new \MongoClient();
         } catch (\Exception $e) {
-            self::markTestSkipped( $e->getMessage() );
+            $this->markTestSkipped( $e->getMessage() );
         }
 
        $this->cache = new Cache\Mongo($this->mongo, $this->options);

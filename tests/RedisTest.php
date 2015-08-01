@@ -46,7 +46,7 @@ class RedisTest extends GenericTestCase
             }
             $this->redis->ping();
         } catch (\Exception $e) {
-            self::markTestSkipped( $e->getMessage() );
+            $this->markTestSkipped( $e->getMessage() );
         }
 
        $this->cache = new Cache\Redis($this->redis, $this->options);

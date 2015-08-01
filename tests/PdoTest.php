@@ -88,7 +88,7 @@ class PdoTest extends GenericTestCase
             return $dbs[$DB];
         }
 
-        self::markTestSkipped("Unsupported DB ($DB) environment.");
+        $this->markTestSkipped("Unsupported DB ($DB) environment.");
     }
 
     public function setUp()
@@ -101,7 +101,7 @@ class PdoTest extends GenericTestCase
         try {
             $this->pdo = $dbh();
         } catch (\Exception $e) {
-            self::markTestSkipped( $e->getMessage() );
+            $this->markTestSkipped( $e->getMessage() );
         }
 
         $this->classname = 'Apix\\Cache\\Pdo\\' . $class;

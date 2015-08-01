@@ -61,7 +61,7 @@ class MemcachedIndexerTest extends GenericIndexerTestCase
                 );
             }
         } catch (\Exception $e) {
-            self::markTestSkipped( $e->getMessage() );
+            $this->markTestSkipped( $e->getMessage() );
         }
 
         return $m;

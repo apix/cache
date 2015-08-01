@@ -29,7 +29,7 @@ class ApcIndexerTest extends GenericIndexerTestCase
         $this->skipIfMissing('apc');
 
         if (!ini_get('apc.enable_cli')) {
-            self::markTestSkipped(
+            $this->markTestSkipped(
                 'apc.enable_cli MUST be enabled in order to run this unit test'
             );
         }
