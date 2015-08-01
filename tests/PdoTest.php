@@ -118,18 +118,18 @@ class PdoTest extends GenericTestCase
 
     public function testSaveIsUnique()
     {
-        self::assertTrue($this->cache->save('bar_1', 'foo'));
-        self::assertEquals('bar_1', $this->cache->load('foo'));
+        $this->assertTrue($this->cache->save('bar_1', 'foo'));
+        $this->assertEquals('bar_1', $this->cache->load('foo'));
 
-        self::assertTrue($this->cache->save('bar_2', 'foo'));
-        self::assertEquals('bar_2', $this->cache->load('foo'));
+        $this->assertTrue($this->cache->save('bar_2', 'foo'));
+        $this->assertEquals('bar_2', $this->cache->load('foo'));
 
-        // self::assertEquals(1, $this->cache->getAdapter()->rowCount() );
+        // $this->assertEquals(1, $this->cache->getAdapter()->rowCount() );
     }
 
     public function testFlushCacheOnly()
     {
-        self::assertTrue(
+        $this->assertTrue(
             $this->cache->save('data1', 'id1', array('tag1', 'tag2'))
             && $this->cache->save('data2', 'id2', array('tag2', 'tag3'))
             && $this->cache->save('data3', 'id3', array('tag3', 'tag4'))
@@ -137,15 +137,15 @@ class PdoTest extends GenericTestCase
         // $foo = array('foo' => 'bar');
         // $this->cache->getAdapter()->add($foo);
 
-        self::assertTrue($this->cache->flush());
+        $this->assertTrue($this->cache->flush());
 
-        // self::assertEquals(
+        // $this->assertEquals(
         //     $foo,
         //     $this->cache->getAdapter()->findOne(array('foo'=>'bar'))
         // );
 
-        self::assertNull($this->cache->load('id3'));
-        self::assertNull($this->cache->load('tag1', 'tag'));
+        $this->assertNull($this->cache->load('id3'));
+        $this->assertNull($this->cache->load('tag1', 'tag'));
     }
 
     /**
@@ -153,61 +153,61 @@ class PdoTest extends GenericTestCase
      */
     public function testFlushAll()
     {
-        self::assertTrue(
+        $this->assertTrue(
             $this->cache->save('data1', 'id1', array('tag1', 'tag2'))
             && $this->cache->save('data2', 'id2', array('tag2', 'tag3'))
             && $this->cache->save('data3', 'id3', array('tag3', 'tag4'))
         );
 
-        self::assertTrue($this->cache->flush(true));
+        $this->assertTrue($this->cache->flush(true));
 
-        self::assertNull($this->cache->load('id3'));
-        self::assertNull($this->cache->load('tag1', 'tag'));
+        $this->assertNull($this->cache->load('id3'));
+        $this->assertNull($this->cache->load('tag1', 'tag'));
     }
 
     public function testShortTtlDoesExpunge()
     {
-        self::assertTrue(
+        $this->assertTrue(
             $this->cache->save('ttl-1', 'ttlId', array('someTags!'), -1)
         );
 
-        self::assertNull( $this->cache->load('ttlId') );
+        $this->assertNull( $this->cache->load('ttlId') );
     }
 
     public function testTtlSetToNull()
     {
-        self::assertTrue(
+        $this->assertTrue(
             $this->cache->save('ttl-null', 'ttlId', array('someTags!'), null)
         );
 
-        self::assertEquals('ttl-null', $this->cache->load('ttlId') );
+        $this->assertEquals('ttl-null', $this->cache->load('ttlId') );
     }
 
     public function testPurge()
     {
-        self::assertTrue(
+        $this->assertTrue(
             $this->cache->save('120s', 'id1', null, 120)
             && $this->cache->save('600s', 'id2', null, 600)
         );
-        self::assertEquals('120s', $this->cache->load('id1'));
-        self::assertTrue($this->cache->purge(130));
-        self::assertFalse($this->cache->purge());
-        self::assertNull($this->cache->load('id1'));
+        $this->assertEquals('120s', $this->cache->load('id1'));
+        $this->assertTrue($this->cache->purge(130));
+        $this->assertFalse($this->cache->purge());
+        $this->assertNull($this->cache->load('id1'));
 
-        self::assertEquals('600s', $this->cache->load('id2'));
-        self::assertTrue($this->cache->purge(630));
-        self::assertNull($this->cache->load('id2'));
+        $this->assertEquals('600s', $this->cache->load('id2'));
+        $this->assertTrue($this->cache->purge(630));
+        $this->assertNull($this->cache->load('id2'));
     }
 
     public function testcreateIndexTableReturnsFalse()
     {
-        self::assertFalse( $this->cache->createIndexTable('not-defined') );
+        $this->assertFalse( $this->cache->createIndexTable('not-defined') );
     }
 
     public function testGetDriverName()
     {
         if ($this->classname != 'Apix\Cache\Pdo\Sql1999') {
-            self::assertSame(
+            $this->assertSame(
                 $this->classname,
                 'Apix\\Cache\\Pdo\\'
                 . Cache\AbstractPdo::getDriverName($this->pdo)

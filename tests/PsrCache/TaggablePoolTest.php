@@ -45,7 +45,7 @@ class TaggablePoolTest extends PoolTest
         $this->item = $this->pool->getItem('foo')->set('foo value');
         $this->pool->save($this->item);
 
-        self::assertTrue($this->item->isHit());
+        $this->assertTrue($this->item->isHit());
     }
 
     public function tearDown()
@@ -59,36 +59,36 @@ class TaggablePoolTest extends PoolTest
 
     public function testGetItemsByTagIsEmptyArrayByDefault()
     {
-        self::assertEquals(array(), $this->pool->getItemsByTag('non-existant'));
+        $this->assertEquals(array(), $this->pool->getItemsByTag('non-existant'));
 
-        self::assertSame($this->pool, $this->pool->save($this->item));
-        self::assertEquals(array(), $this->pool->getItemsByTag('non-existant'));
+        $this->assertSame($this->pool, $this->pool->save($this->item));
+        $this->assertEquals(array(), $this->pool->getItemsByTag('non-existant'));
     }
 
     public function testGetItemsByTag()
     {
         $tags = array('fooTag', 'barTag');
-        self::assertSame($this->item, $this->item->setTags($tags));
-        self::assertSame($this->pool, $this->pool->save($this->item));
+        $this->assertSame($this->item, $this->item->setTags($tags));
+        $this->assertSame($this->pool, $this->pool->save($this->item));
 
         $items = $this->pool->getItemsByTag('fooTag');
 
-        self::assertInstanceOf('Apix\Cache\PsrCache\TaggableItem', $items['foo']);
-        self::assertSame('foo', $items['foo']->getkey());
-        self::assertSame('foo value', $items['foo']->get());
+        $this->assertInstanceOf('Apix\Cache\PsrCache\TaggableItem', $items['foo']);
+        $this->assertSame('foo', $items['foo']->getkey());
+        $this->assertSame('foo value', $items['foo']->get());
 
-        self::assertSame($tags, $items['foo']->getTags());
+        $this->assertSame($tags, $items['foo']->getTags());
     }
 
     public function testClearByTags()
     {
-        self::assertFalse($this->pool->clearByTags( array('non-existant') ));
+        $this->assertFalse($this->pool->clearByTags( array('non-existant') ));
 
         $tags = array('fooTag', 'barTag');
-        self::assertSame($this->item, $this->item->setTags($tags));
-        self::assertSame($this->pool, $this->pool->save($this->item));
+        $this->assertSame($this->item, $this->item->setTags($tags));
+        $this->assertSame($this->pool, $this->pool->save($this->item));
 
-        self::assertTrue($this->pool->clearByTags( array('fooTag') ));
+        $this->assertTrue($this->pool->clearByTags( array('fooTag') ));
     }
 
 }

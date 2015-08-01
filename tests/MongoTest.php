@@ -49,12 +49,12 @@ class MongoTest extends GenericTestCase
 
     public function testSaveIsUnique()
     {
-        self::assertTrue($this->cache->save('bar1', 'foo'));
-        self::assertTrue($this->cache->save('bar2', 'foo'));
+        $this->assertTrue($this->cache->save('bar1', 'foo'));
+        $this->assertTrue($this->cache->save('bar2', 'foo'));
 
-        self::assertEquals('bar2', $this->cache->loadKey('foo'));
+        $this->assertEquals('bar2', $this->cache->loadKey('foo'));
 
-        self::assertEquals(1, $this->cache->count('foo') );
+        $this->assertEquals(1, $this->cache->count('foo') );
     }
 
     public function testFlushCacheOnly()
@@ -66,14 +66,14 @@ class MongoTest extends GenericTestCase
         $foo = array('foo' => 'bar');
         $this->cache->collection->insert($foo);
 
-        self::assertTrue($this->cache->flush());
+        $this->assertTrue($this->cache->flush());
 
-        self::assertEquals(
+        $this->assertEquals(
             $foo, $this->cache->collection->findOne(array('foo'=>'bar'))
         );
 
-        self::assertNull($this->cache->loadKey('id3'));
-        self::assertNull($this->cache->loadTag('tag1'));
+        $this->assertNull($this->cache->loadKey('id3'));
+        $this->assertNull($this->cache->loadTag('tag1'));
     }
 
     public function testFlushAll()
@@ -84,16 +84,16 @@ class MongoTest extends GenericTestCase
 
         $this->cache->collection->insert(array('key' => 'foobar'));
 
-        self::assertTrue($this->cache->flush(true));
-        self::assertNull($this->cache->collection->findOne(array('key')));
+        $this->assertTrue($this->cache->flush(true));
+        $this->assertNull($this->cache->collection->findOne(array('key')));
 
-        self::assertNull($this->cache->loadKey('id3'));
-        self::assertNull($this->cache->loadTag('tag1'));
+        $this->assertNull($this->cache->loadKey('id3'));
+        $this->assertNull($this->cache->loadTag('tag1'));
     }
 
     public function testShortTtlDoesExpunge()
     {
-        self::assertTrue(
+        $this->assertTrue(
             $this->cache->save('ttl-1', 'ttlId', array('someTags!'), -1)
         );
 
@@ -102,7 +102,7 @@ class MongoTest extends GenericTestCase
         //     'reIndex' => 'cache'
         // ));
 
-        self::assertNull( $this->cache->loadKey('ttlId') );
+        $this->assertNull( $this->cache->loadKey('ttlId') );
     }
 
 }

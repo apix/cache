@@ -40,7 +40,7 @@ class AbstractCacheTest extends TestCase
 
     public function testGetOption()
     {
-        self::assertSame(
+        $this->assertSame(
             $this->options['prefix_key'],
             $this->cache->getOption('prefix_key')
         );
@@ -58,6 +58,6 @@ class AbstractCacheTest extends TestCase
     {
         $this->cache->setOption('prefix_key', 'foo');
 
-        self::assertSame('foo', $this->cache->getOption('prefix_key'));
+        $this->assertSame('foo', $this->cache->getOption('prefix_key'));
     }
 }

@@ -25,82 +25,82 @@ class GenericTestCase extends TestCase
 
     public function testLoadKeyReturnsNullWhenInexistant()
     {
-        self::assertNull($this->cache->loadKey('id'));
+        $this->assertNull($this->cache->loadKey('id'));
     }
 
     public function testLoadTagReturnsNullWhenInexistant()
     {
-        self::assertNull($this->cache->loadTag('id'));
+        $this->assertNull($this->cache->loadTag('id'));
     }
 
     public function testSaveAndLoadWithString()
     {
-        self::assertTrue($this->cache->save('data', 'id'));
-        self::assertEquals('data', $this->cache->loadKey('id'));
-        self::assertEquals('data', $this->cache->load('id'));
+        $this->assertTrue($this->cache->save('data', 'id'));
+        $this->assertEquals('data', $this->cache->loadKey('id'));
+        $this->assertEquals('data', $this->cache->load('id'));
     }
 
     public function testSaveAndLoadWithArray()
     {
         $data = array('foo' => 'bar');
-        self::assertTrue($this->cache->save($data, 'id'));
-        self::assertEquals($data, $this->cache->loadKey('id'));
-        self::assertEquals($data, $this->cache->load('id'));
+        $this->assertTrue($this->cache->save($data, 'id'));
+        $this->assertEquals($data, $this->cache->loadKey('id'));
+        $this->assertEquals($data, $this->cache->load('id'));
     }
 
     public function testSaveAndLoadWithObject()
     {
         $data = new \stdClass();
-        self::assertTrue($this->cache->save($data, 'id'));
-        self::assertEquals($data, $this->cache->loadKey('id'));
-        self::assertEquals($data, $this->cache->load('id'));
+        $this->assertTrue($this->cache->save($data, 'id'));
+        $this->assertEquals($data, $this->cache->loadKey('id'));
+        $this->assertEquals($data, $this->cache->load('id'));
     }
 
     public function testDeleteInexistantReturnsFalse()
     {
-        self::assertFalse($this->cache->delete('Inexistant'));
+        $this->assertFalse($this->cache->delete('Inexistant'));
     }
 
     public function testDelete()
     {
-        self::assertTrue(
+        $this->assertTrue(
             $this->cache->save('foo value', 'foo')
             && $this->cache->save('bar value', 'bar')
         );
 
-        self::assertTrue($this->cache->delete('foo'));
-        self::assertFalse($this->cache->delete('foo'));
+        $this->assertTrue($this->cache->delete('foo'));
+        $this->assertFalse($this->cache->delete('foo'));
 
-        self::assertNull($this->cache->loadKey('foo'));
+        $this->assertNull($this->cache->loadKey('foo'));
     }
 
     public function testTllFromSave()
     {
-        self::assertFalse($this->cache->getTtl('non-existant'));
+        $this->assertFalse($this->cache->getTtl('non-existant'));
 
-        self::assertTrue($this->cache->save('data', 'id'));
-        self::assertEquals(0, $this->cache->getTtl('id'),
+        $this->assertTrue($this->cache->save('data', 'id'));
+        $this->assertEquals(0, $this->cache->getTtl('id'),
             "Expiration should be set to 0 (for ever) by default."
         );
 
-        self::assertTrue($this->cache->save('data', 'id', null, 3600));
-        self::assertEquals(3600, $this->cache->getTtl('id'), null, 5);
-        // self::assertLessThanOrEqual(3600, $this->cache->getTtl('id'));
+        $this->assertTrue($this->cache->save('data', 'id', null, 3600));
+        $this->assertEquals(3600, $this->cache->getTtl('id'), null, 5);
+        // $this->assertLessThanOrEqual(3600, $this->cache->getTtl('id'));
     }
 
     public function testTllFromLoad()
     {
-        self::assertFalse($this->cache->getTtl('non-existant'));
+        $this->assertFalse($this->cache->getTtl('non-existant'));
 
-        self::assertNull($this->cache->load('id'));
-        self::assertEquals(0, $this->cache->getTtl('id'),
+        $this->assertNull($this->cache->load('id'));
+        $this->assertEquals(0, $this->cache->getTtl('id'),
             "Expiration should be set to 0 (for ever) by default."
         );
 
-        self::assertTrue($this->cache->save('data', 'id', null, 3600));
-        self::assertEquals('data', $this->cache->load('id'));
-        self::assertEquals(3600, $this->cache->getTtl('id'), null, 5);
-        // self::assertLessThanOrEqual(3600, $this->cache->getTtl('id'));
+        $this->assertTrue($this->cache->save('data', 'id', null, 3600));
+        $this->assertEquals('data', $this->cache->load('id'));
+        $this->assertEquals(3600, $this->cache->getTtl('id'), null, 5);
+        // $this->assertLessThanOrEqual(3600, $this->cache->getTtl('id'));
     }
 
     ////
@@ -111,10 +111,10 @@ class GenericTestCase extends TestCase
     {
         $this->cache->setOptions(array('tag_enable' => false));
 
-        self::assertTrue(
+        $this->assertTrue(
             $this->cache->save('data', 'id', array('tag1', 'tag2'))
         );
-        self::assertNull($this->cache->loadTag('tag1'));
+        $this->assertNull($this->cache->loadTag('tag1'));
     }
 
     /**
@@ -122,71 +122,71 @@ class GenericTestCase extends TestCase
      */
     public function testSaveWithJustOneSingularTag()
     {
-        self::assertTrue($this->cache->save('data', 'id', array('tag')));
+        $this->assertTrue($this->cache->save('data', 'id', array('tag')));
         $ids = array($this->cache->mapKey('id'));
 
-        self::assertEquals($ids, $this->cache->loadTag('tag'));
-        self::assertEquals($ids, $this->cache->load('tag', 'tag'));
+        $this->assertEquals($ids, $this->cache->loadTag('tag'));
+        $this->assertEquals($ids, $this->cache->load('tag', 'tag'));
     }
 
     public function testSaveManyTags()
     {
-        self::assertTrue(
+        $this->assertTrue(
             $this->cache->save('data', 'id', array('tag1', 'tag2'))
         );
         $ids = array($this->cache->mapKey('id'));
 
-        self::assertEquals($ids, $this->cache->loadTag('tag2'));
-        self::assertEquals($ids, $this->cache->load('tag2', 'tag'));
+        $this->assertEquals($ids, $this->cache->loadTag('tag2'));
+        $this->assertEquals($ids, $this->cache->load('tag2', 'tag'));
     }
 
     public function testSaveWithOverlappingTags()
     {
-        self::assertTrue(
+        $this->assertTrue(
             $this->cache->save('data1', 'id1', array('tag1', 'tag2'))
             && $this->cache->save('data2', 'id2', array('tag2', 'tag3'))
         );
 
         $ids = $this->cache->loadTag('tag2');
-        self::assertTrue(count($ids) == 2);
-        self::assertContains($this->cache->mapKey('id1'), $ids);
-        self::assertContains($this->cache->mapKey('id2'), $ids);
+        $this->assertTrue(count($ids) == 2);
+        $this->assertContains($this->cache->mapKey('id1'), $ids);
+        $this->assertContains($this->cache->mapKey('id2'), $ids);
     }
 
     public function testClean()
     {
-        self::assertTrue(
+        $this->assertTrue(
             $this->cache->save('data1', 'id1', array('tag1', 'tag2'))
             && $this->cache->save('data2', 'id2', array('tag2', 'tag3', 'tag4'))
             && $this->cache->save('data3', 'id3', array('tag3', 'tag4'))
         );
 
-        self::assertTrue($this->cache->clean(array('tag4')));
-        self::assertFalse($this->cache->clean(array('tag4')));
-        self::assertFalse($this->cache->clean(array('non-existant')));
+        $this->assertTrue($this->cache->clean(array('tag4')));
+        $this->assertFalse($this->cache->clean(array('tag4')));
+        $this->assertFalse($this->cache->clean(array('non-existant')));
 
-        self::assertNull($this->cache->loadKey('id2'));
-        self::assertNull($this->cache->loadKey('id3'));
-        self::assertNull($this->cache->loadTag('tag4'));
-        self::assertEquals('data1', $this->cache->loadKey('id1'));
+        $this->assertNull($this->cache->loadKey('id2'));
+        $this->assertNull($this->cache->loadKey('id3'));
+        $this->assertNull($this->cache->loadTag('tag4'));
+        $this->assertEquals('data1', $this->cache->loadKey('id1'));
     }
 
     public function testDeleteAlsoRemoveTags()
     {
-        self::assertTrue(
+        $this->assertTrue(
             $this->cache->save('foo value', 'foo', array('foo_tag', 'all_tag'))
             && $this->cache->save('bar value', 'bar', array('bar_tag', 'all_tag'))
         );
 
-        self::assertContains(
+        $this->assertContains(
             $this->cache->mapKey('foo'), $this->cache->loadTag('foo_tag')
         );
-        self::assertTrue($this->cache->delete('foo'));
-        self::assertNull($this->cache->loadKey('foo'));
+        $this->assertTrue($this->cache->delete('foo'));
+        $this->assertNull($this->cache->loadKey('foo'));
 
-        self::assertNull($this->cache->loadTag('foo_tag'));
+        $this->assertNull($this->cache->loadTag('foo_tag'));
 
-        self::assertContains(
+        $this->assertContains(
             $this->cache->mapKey('bar'), $this->cache->loadTag('all_tag')
         );
     }

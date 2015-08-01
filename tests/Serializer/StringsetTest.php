@@ -50,7 +50,7 @@ class StringsetTest extends TestCase
      */
     public function testSerialize($arr, $str)
     {
-        self::assertEquals( $str, $this->formatter->serialize($arr) );
+        $this->assertEquals( $str, $this->formatter->serialize($arr) );
     }
 
     /**
@@ -71,8 +71,8 @@ class StringsetTest extends TestCase
      */
     public function testUnserializer($arr, $str, $dirt)
     {
-        self::assertEquals($arr, $this->formatter->unserialize($str));
-        self::assertEquals($dirt, $this->formatter->getDirtiness());
+        $this->assertEquals($arr, $this->formatter->unserialize($str));
+        $this->assertEquals($dirt, $this->formatter->getDirtiness());
     }
 
     /**
@@ -92,7 +92,7 @@ class StringsetTest extends TestCase
      */
     public function testIsSerialized($arr, $str)
     {
-        self::assertFalse($this->formatter->isSerialized($arr));
-        self::assertTrue($this->formatter->isSerialized($str));
+        $this->assertFalse($this->formatter->isSerialized($arr));
+        $this->assertTrue($this->formatter->isSerialized($str));
     }
 }

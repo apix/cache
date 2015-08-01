@@ -48,42 +48,42 @@ class RuntimeTest extends GenericTestCase
         );
 
         $this->cache = new Cache\Runtime($pre_cached_items, $options);
-        self::assertSame('foo value', $this->cache->loadKey('foo'));
-        self::assertSame(array('foo'), $this->cache->loadTag('tag'));
+        $this->assertSame('foo value', $this->cache->loadKey('foo'));
+        $this->assertSame(array('foo'), $this->cache->loadTag('tag'));
     }
 
     // AbstratcCache
 
     public function testGetOption()
     {
-        self::assertSame($this->options['prefix_key'], $this->cache->getOption('prefix_key') );
+        $this->assertSame($this->options['prefix_key'], $this->cache->getOption('prefix_key') );
     }
 
     public function testRemovePrefix()
     {
-        self::assertSame(
+        $this->assertSame(
             '-str', $this->cache->removePrefix('prefix-str', 'prefix')
         );
     }
 
     public function testRemovePrefixKey()
     {
-        self::assertSame(
+        $this->assertSame(
             'foo',
             $this->cache->removePrefixKey($this->options['prefix_key'] . 'foo')
         );
-        self::assertSame(
+        $this->assertSame(
             'not-prefixed-key',
             $this->cache->removePrefixKey('not-prefixed-key')
         );
     }
     public function testRemovePrefixTag()
     {
-        self::assertSame(
+        $this->assertSame(
             'foo',
             $this->cache->removePrefixTag($this->options['prefix_tag'] . 'foo')
         );
-        self::assertSame(
+        $this->assertSame(
             'not-prefixed-key',
             $this->cache->removePrefixTag('not-prefixed-key')
         );

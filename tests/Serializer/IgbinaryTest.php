@@ -33,7 +33,7 @@ class IgbinaryTest extends TestCase
     public function testSerialize($var)
     {
         $formatter = new Igbinary();
-        self::assertEquals(
+        $this->assertEquals(
             igbinary_serialize($var), $formatter->serialize($var)
         );
     }
@@ -44,7 +44,7 @@ class IgbinaryTest extends TestCase
     public function testUnserialize($var)
     {
         $formatter = new IgBinary();
-        self::assertEquals(
+        $this->assertEquals(
             $var, $formatter->unserialize(igbinary_serialize($var))
         );
     }
@@ -55,9 +55,9 @@ class IgbinaryTest extends TestCase
     public function testIsSerialized($var)
     {
         $formatter = new Igbinary();
-        self::assertFalse($formatter->isSerialized($var));
+        $this->assertFalse($formatter->isSerialized($var));
 
-        self::assertTrue(
+        $this->assertTrue(
             $formatter->isSerialized(
                 $formatter->serialize($var)
             )

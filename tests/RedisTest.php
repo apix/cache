@@ -63,47 +63,47 @@ class RedisTest extends GenericTestCase
 
     public function testFlushSelected()
     {
-        self::assertTrue(
+        $this->assertTrue(
             $this->cache->save('data1', 'id1', array('tag1', 'tag2'))
             && $this->cache->save('data2', 'id2', array('tag2', 'tag3'))
             && $this->cache->save('data3', 'id3', array('tag3', 'tag4'))
         );
 
         $this->redis->set('foo', 'bar');
-        self::assertTrue($this->cache->flush());
-        self::assertFalse($this->cache->flush());
-        self::assertTrue($this->redis->exists('foo'));
+        $this->assertTrue($this->cache->flush());
+        $this->assertFalse($this->cache->flush());
+        $this->assertTrue($this->redis->exists('foo'));
 
-        self::assertNull($this->cache->loadKey('id3'));
-        self::assertNull($this->cache->loadTag('tag1'));
+        $this->assertNull($this->cache->loadKey('id3'));
+        $this->assertNull($this->cache->loadTag('tag1'));
     }
 
     public function testFlushAll()
     {
-        self::assertTrue(
+        $this->assertTrue(
             $this->cache->save('data1', 'id1', array('tag1', 'tag2'))
             && $this->cache->save('data2', 'id2', array('tag2', 'tag3'))
             && $this->cache->save('data3', 'id3', array('tag3', 'tag4'))
         );
 
         $this->redis->set('foo', 'bar');
-        self::assertTrue($this->cache->flush(true)); // always true!
-        self::assertFalse($this->redis->exists('foo'));
+        $this->assertTrue($this->cache->flush(true)); // always true!
+        $this->assertFalse($this->redis->exists('foo'));
 
-        self::assertNull($this->cache->loadKey('id3'));
-        self::assertNull($this->cache->loadTag('tag1'));
+        $this->assertNull($this->cache->loadKey('id3'));
+        $this->assertNull($this->cache->loadTag('tag1'));
     }
 
     public function testShortTtlDoesExpunge()
     {
         $this->cache->save('ttl-1', 'ttlId', null, -1);
-        self::assertNull( $this->cache->load('ttlId'));
+        $this->assertNull( $this->cache->load('ttlId'));
     }
 
     public function testSetSerializerToPhp()
     {
         $this->cache->setSerializer('php');
-        self::assertSame(
+        $this->assertSame(
             \Redis::SERIALIZER_PHP, $this->cache->getSerializer()
         );
     }
@@ -112,7 +112,7 @@ class RedisTest extends GenericTestCase
     {
         if (defined('Redis::SERIALIZER_IGBINARY')) {
             $this->cache->setSerializer('igBinary');
-            self::assertSame(
+            $this->assertSame(
                 \Redis::SERIALIZER_IGBINARY, $this->cache->getSerializer()
             );
         }
@@ -121,7 +121,7 @@ class RedisTest extends GenericTestCase
     public function testSetSerializerToNull()
     {
         $this->cache->setSerializer(null);
-        self::assertSame(
+        $this->assertSame(
             \Redis::SERIALIZER_NONE, $this->cache->getSerializer()
         );
     }
@@ -129,7 +129,7 @@ class RedisTest extends GenericTestCase
     public function testSetSerializerToJson()
     {
         $this->cache->setSerializer('json');
-        self::assertInstanceOf(
+        $this->assertInstanceOf(
             'Apix\Cache\Serializer\Json', $this->cache->getSerializer()
         );
     }

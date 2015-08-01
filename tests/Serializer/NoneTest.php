@@ -28,7 +28,7 @@ class NoneTest extends TestCase
     public function testSerialize($var)
     {
         $formatter = new None();
-        self::assertEquals(
+        $this->assertEquals(
             $var, $formatter->serialize($var)
         );
     }
@@ -39,7 +39,7 @@ class NoneTest extends TestCase
     public function testUnserialize($var)
     {
         $formatter = new None();
-        self::assertEquals(
+        $this->assertEquals(
             $var, $formatter->unserialize($var)
         );
     }
@@ -50,7 +50,7 @@ class NoneTest extends TestCase
     public function testIsSerialized($var)
     {
         $formatter = new None();
-        self::assertFalse($formatter->isSerialized($var));
+        $this->assertFalse($formatter->isSerialized($var));
     }
 
 }

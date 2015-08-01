@@ -28,7 +28,7 @@ class PhpTest extends TestCase
     public function testSerialize($var)
     {
         $formatter = new Php();
-        self::assertEquals(
+        $this->assertEquals(
             serialize($var), $formatter->serialize($var)
         );
     }
@@ -39,7 +39,7 @@ class PhpTest extends TestCase
     public function testUnserialize($var)
     {
         $formatter = new Php();
-        self::assertEquals(
+        $this->assertEquals(
             $var, $formatter->unserialize(serialize($var))
         );
     }
@@ -50,9 +50,9 @@ class PhpTest extends TestCase
     public function testIsSerialized($var)
     {
         $formatter = new Php();
-        self::assertFalse($formatter->isSerialized($var));
+        $this->assertFalse($formatter->isSerialized($var));
 
-        self::assertTrue(
+        $this->assertTrue(
             $formatter->isSerialized(
                 $formatter->serialize($var)
             )

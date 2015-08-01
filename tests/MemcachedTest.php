@@ -79,21 +79,21 @@ class MemcachedTest extends GenericTestCase
 
     public function _commonMemcachedData()
     {
-        self::assertTrue(
+        $this->assertTrue(
             $this->cache->save('data1', 'id1', array('tag1', 'tag2'))
             && $this->cache->save('data2', 'id2', array('tag2', 'tag3', 'tag4'))
             && $this->cache->save('data3', 'id3', array('tag3', 'tag4'))
         );
-        self::assertSame('data3', $this->cache->loadKey('id3'));
+        $this->assertSame('data3', $this->cache->loadKey('id3'));
     }
 
     public function testSaveIsUniqueAndOverwrite()
     {
-        self::assertTrue(
+        $this->assertTrue(
             $this->cache->save('bar1', 'foo')
             && $this->cache->save('bar2', 'foo')
         );
-        self::assertEquals('bar2', $this->cache->loadKey('foo'));
+        $this->assertEquals('bar2', $this->cache->loadKey('foo'));
     }
 
     public function testFlushNamespace()
@@ -103,12 +103,12 @@ class MemcachedTest extends GenericTestCase
         $otherMemcached = $this->getMemcached();
         $otherMemcached->add('foo', 'bar');
 
-        self::assertTrue($this->cache->flush(), "Flush the namespace");
+        $this->assertTrue($this->cache->flush(), "Flush the namespace");
 
-        self::assertEquals('bar', $otherMemcached->get('foo'));
+        $this->assertEquals('bar', $otherMemcached->get('foo'));
 
-        self::assertNull($this->cache->loadKey('id3'));
-        self::assertNull($this->cache->loadTag('tag1'));
+        $this->assertNull($this->cache->loadKey('id3'));
+        $this->assertNull($this->cache->loadTag('tag1'));
     }
 
     public function testFlushIncrementsTheNamspaceIndex()
@@ -116,9 +116,9 @@ class MemcachedTest extends GenericTestCase
         $this->_commonMemcachedData();
         $ns = $this->cache->getOption('prefix_nsp');
 
-        self::assertEquals($ns.'1_', $this->cache->getNamespace());
-        self::assertTrue($this->cache->flush(), "Flush the namespace");
-        self::assertEquals($ns.'2_', $this->cache->getNamespace());
+        $this->assertEquals($ns.'1_', $this->cache->getNamespace());
+        $this->assertTrue($this->cache->flush(), "Flush the namespace");
+        $this->assertEquals($ns.'2_', $this->cache->getNamespace());
     }
 
     public function testFlushAll()
@@ -127,25 +127,25 @@ class MemcachedTest extends GenericTestCase
 
         $this->getMemcached()->add('foo', 'bar');
 
-        self::assertTrue($this->cache->flush(true));
-        self::assertNull($this->cache->get('foo'));
-        self::assertNull($this->cache->loadKey('id3'));
-        self::assertNull($this->cache->loadTag('tag1'));
+        $this->assertTrue($this->cache->flush(true));
+        $this->assertNull($this->cache->get('foo'));
+        $this->assertNull($this->cache->loadKey('id3'));
+        $this->assertNull($this->cache->loadTag('tag1'));
     }
 
     public function testDeleteWithTagDisabled()
     {
         $this->cache->setOptions(array('tag_enable' => false));
 
-        self::assertTrue(
+        $this->assertTrue(
             $this->cache->save('data', 'id', array('tag1', 'tag2'))
         );
 
-        self::assertTrue($this->cache->delete('id'));
-        self::assertNull($this->cache->loadTag('tag1'));
+        $this->assertTrue($this->cache->delete('id'));
+        $this->assertNull($this->cache->loadTag('tag1'));
 
         $idxKey = $this->cache->mapIdx('id');
-        self::assertNull($this->cache->getIndex($idxKey)->load());
+        $this->assertNull($this->cache->getIndex($idxKey)->load());
     }
 
     /**
@@ -154,45 +154,45 @@ class MemcachedTest extends GenericTestCase
     public function testDelete()
     {
         $tags = array('tag1', 'tag2');
-        self::assertTrue($this->cache->save('data', 'id', $tags));
+        $this->assertTrue($this->cache->save('data', 'id', $tags));
 
-        self::assertSame(
+        $this->assertSame(
             array($this->cache->mapKey('id')), $this->cache->loadTag('tag1'),
             'tag1 isset'
         );
 
         // check the idx isset
         $indexer = $this->cache->getIndex($this->cache->mapIdx('id'));
-        self::assertSame( $tags, $indexer->load(), 'idx_id isset');
+        $this->assertSame( $tags, $indexer->load(), 'idx_id isset');
 
-        self::assertTrue($this->cache->delete('id'));
-        self::assertFalse($this->cache->delete('id'));
+        $this->assertTrue($this->cache->delete('id'));
+        $this->assertFalse($this->cache->delete('id'));
 
-        self::assertNull($this->cache->loadTag('tag1'), 'tag1 !isset');
-        self::assertNull($indexer->load(), 'idx_id !isset');
+        $this->assertNull($this->cache->loadTag('tag1'), 'tag1 !isset');
+        $this->assertNull($indexer->load(), 'idx_id !isset');
     }
 
     public function testIndexing()
     {
-        self::assertTrue(
+        $this->assertTrue(
             $this->cache->save('data1', 'id1', array('tag1', 'tag2', 'tag3'))
         );
         $idx = $this->cache->mapIdx('id1');
-        self::assertEquals(
+        $this->assertEquals(
             'tag1 tag2 tag3 ', $this->cache->get($idx)
         );
-        self::assertTrue(
+        $this->assertTrue(
             $this->cache->getIndex($idx)->remove(array('tag3'))
             // $this->cache->saveIndex($idx, array('tag3'), '-')
         );
-        self::assertEquals(
+        $this->assertEquals(
             'tag1 tag2 tag3 -tag3 ', $this->cache->get($idx)
         );
     }
 
     public function OFF_testShortTtlDoesExpunge()
     {
-        self::assertTrue(
+        $this->assertTrue(
             $this->cache->save('ttl-1', 'ttlId', array('someTags!'), -1)
         );
 
@@ -201,13 +201,13 @@ class MemcachedTest extends GenericTestCase
         //     'reIndex' => 'cache'
         // ));
 
-        self::assertNull( $this->cache->load('ttlId') );
+        $this->assertNull( $this->cache->load('ttlId') );
     }
 
     public function testSetSerializerToNull()
     {
         $this->cache->setSerializer(null);
-        self::assertSame(
+        $this->assertSame(
             \Memcached::SERIALIZER_PHP, $this->cache->getSerializer()
         );
     }
@@ -215,7 +215,7 @@ class MemcachedTest extends GenericTestCase
     public function testSetSerializerToPhp()
     {
         $this->cache->setSerializer('php');
-        self::assertSame(
+        $this->assertSame(
             \Memcached::SERIALIZER_PHP, $this->cache->getSerializer()
         );
     }
@@ -226,7 +226,7 @@ class MemcachedTest extends GenericTestCase
             && \Memcached::HAVE_JSON
         ) {
             $this->cache->setSerializer('json');
-            self::assertSame(
+            $this->assertSame(
                 \Memcached::SERIALIZER_JSON, $this->cache->getSerializer()
             );
         }
@@ -238,7 +238,7 @@ class MemcachedTest extends GenericTestCase
             && \Memcached::HAVE_IGBINARY
         ) {
             $this->cache->setSerializer('igBinary');
-            self::assertSame(
+            $this->assertSame(
                 \Memcached::SERIALIZER_IGBINARY, $this->cache->getSerializer()
             );
         }
@@ -250,11 +250,11 @@ class MemcachedTest extends GenericTestCase
 
         $this->cache = new Cache\Memcached($this->memcached, $this->options);
 
-        self::assertNull($this->cache->get('testInc'));
-        self::assertEquals(1, $this->cache->increment('testInc'));
-        self::assertEquals(1, $this->cache->get('testInc'));
-        self::assertEquals(2, $this->cache->increment('testInc'));
-        self::assertEquals(2, $this->cache->get('testInc'));
+        $this->assertNull($this->cache->get('testInc'));
+        $this->assertEquals(1, $this->cache->increment('testInc'));
+        $this->assertEquals(1, $this->cache->get('testInc'));
+        $this->assertEquals(2, $this->cache->increment('testInc'));
+        $this->assertEquals(2, $this->cache->get('testInc'));
     }
 
     // public function testIncrementWithBinaryProtocole()
@@ -265,10 +265,10 @@ class MemcachedTest extends GenericTestCase
     //     $opts = array('tag_enable' => false);
     //     $cache = new Memcached($m, $opts);
 
-    //     self::assertEquals(1, $cache->increment('testInc'));
-    //     self::assertEquals(1, $cache->get('testInc'));
+    //     $this->assertEquals(1, $cache->increment('testInc'));
+    //     $this->assertEquals(1, $cache->get('testInc'));
 
-    //     self::assertEquals(2, $cache->increment('testInc'));
-    //     self::assertEquals(2, $cache->get('testInc'));
+    //     $this->assertEquals(2, $cache->increment('testInc'));
+    //     $this->assertEquals(2, $cache->get('testInc'));
     // }
 }

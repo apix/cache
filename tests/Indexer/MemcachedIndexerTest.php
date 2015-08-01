@@ -88,17 +88,17 @@ class MemcachedIndexerTest extends GenericIndexerTestCase
     public function testLoadDoesPurge()
     {
         $keys = range(1, 101);
-        self::assertTrue($this->indexer->add('a'));
-        self::assertTrue($this->indexer->Remove($keys));
+        $this->assertTrue($this->indexer->add('a'));
+        $this->assertTrue($this->indexer->Remove($keys));
 
         $keyStr = implode($keys, ' -');
-        self::assertEquals(
+        $this->assertEquals(
             'a -' . $keyStr . ' ', $this->cache->get($this->indexKey)
         );
 
-        self::assertEquals(array('a'), $this->indexer->load() );
+        $this->assertEquals(array('a'), $this->indexer->load() );
 
-        self::assertEquals(
+        $this->assertEquals(
             'a ', $this->cache->get($this->indexKey)
         );
     }

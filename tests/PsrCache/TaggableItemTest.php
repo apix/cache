@@ -38,14 +38,14 @@ class TaggableItemTest extends ItemTest
 
     public function testGetItemTagsIsNullByDefault()
     {
-        self::assertNull($this->item->getTags());
+        $this->assertNull($this->item->getTags());
     }
 
     public function testSetItemTags()
     {
         $tags = array('fooTag', 'barTag');
-        self::assertSame($this->item, $this->item->setTags($tags));
-        self::assertSame($tags, $this->item->getTags());
+        $this->assertSame($this->item, $this->item->setTags($tags));
+        $this->assertSame($tags, $this->item->getTags());
     }
 
 }

@@ -28,7 +28,7 @@ class JsonTest extends TestCase
     public function testSerialize($var)
     {
         $formatter = new Json();
-        self::assertEquals(
+        $this->assertEquals(
             json_encode($var), $formatter->serialize($var)
         );
     }
@@ -40,7 +40,7 @@ class JsonTest extends TestCase
     {
         $formatter = new Json();
         if(is_array($var)) $var = (object) $var;
-        self::assertEquals(
+        $this->assertEquals(
             $var, $formatter->unserialize(json_encode($var))
         );
     }
@@ -51,9 +51,9 @@ class JsonTest extends TestCase
     public function testIsSerialized($var)
     {
         $formatter = new Json();
-        self::assertFalse($formatter->isSerialized($var));
+        $this->assertFalse($formatter->isSerialized($var));
 
-        self::assertTrue(
+        $this->assertTrue(
             $formatter->isSerialized(
                 $formatter->serialize($var)
             )

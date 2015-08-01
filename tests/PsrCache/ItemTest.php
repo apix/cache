@@ -41,30 +41,30 @@ class ItemTest extends TestCase
     public function testItemConstructor()
     {
         $item = new Item('foo', 'bar');
-        self::assertEquals('foo', $item->getKey());
-        self::assertNull($item->get());
+        $this->assertEquals('foo', $item->getKey());
+        $this->assertNull($item->get());
 
-        self::assertFalse($item->isHit());
-        self::assertFalse($item->exists());
+        $this->assertFalse($item->isHit());
+        $this->assertFalse($item->exists());
     }
 
     public function testItemConstructorHittingCache()
     {
         $item = new Item('foo', 'bar', null, true);
-        self::assertEquals('foo', $item->getKey());
-        self::assertEquals('bar', $item->get());
+        $this->assertEquals('foo', $item->getKey());
+        $this->assertEquals('bar', $item->get());
 
-        self::assertTrue($item->isHit());
-        self::assertTrue($item->exists());
+        $this->assertTrue($item->isHit());
+        $this->assertTrue($item->exists());
     }
 
     public function testSetAndisHit()
     {
-        self::assertSame($this->item, $this->item->set('new foo value'));
-        self::assertFalse($this->item->isHit());
+        $this->assertSame($this->item, $this->item->set('new foo value'));
+        $this->assertFalse($this->item->isHit());
 
-        self::assertSame($this->item, $this->item->setHit(true));
-        self::assertSame('new foo value', $this->item->get());
+        $this->assertSame($this->item, $this->item->setHit(true));
+        $this->assertSame('new foo value', $this->item->get());
     }
 
     /**
@@ -93,13 +93,13 @@ class ItemTest extends TestCase
      */
     public function testSetExpiration($from, $to)
     {
-        self::assertSame($this->item, $this->item->setExpiration($from));
+        $this->assertSame($this->item, $this->item->setExpiration($from));
         $date = new \DateTime($to);
 
         $expire = $this->item->getExpiration();
-        self::assertInstanceOf('DateTime', $expire);
+        $this->assertInstanceOf('DateTime', $expire);
 
-        self::assertEquals((int) $date->format('U'), $expire->format('U'), '', 10);
+        $this->assertEquals((int) $date->format('U'), $expire->format('U'), '', 10);
     }
 
     /**
@@ -109,13 +109,13 @@ class ItemTest extends TestCase
     {
         if ($sec !== null) {
             $this->item->setExpiration($from);
-            self::assertEquals($sec, $this->item->getTtlInSecond(), '', 10);
+            $this->assertEquals($sec, $this->item->getTtlInSecond(), '', 10);
         }
     }
 
     public function testItemIsRegenerating()
     {
-        self::assertFalse($this->item->isRegenerating());
+        $this->assertFalse($this->item->isRegenerating());
     }
 
 }
