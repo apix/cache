@@ -12,12 +12,6 @@ os:
   - linux
   - osx
 
-#services:
-#  - memcache     # will start memcache service
-#  - memcached    # will start memcached service
-#  - mongodb      # will start mongodb service
-#  - redis-server # will start the redis server
-
 matrix:
   allow_failures:
     - php: hhvm

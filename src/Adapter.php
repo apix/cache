@@ -19,6 +19,7 @@ namespace Apix\Cache;
  */
 interface Adapter
 {
+
     /**
      * Retrieves the cache content for the given key.
      *

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <phpunit
     backupGlobals="false"
     backupStaticAttributes="false"
@@ -18,3 +19,5 @@
     </testsuites>
 
 </phpunit>
+
+    <!-- vim: set tabstop=4 shiftwidth=4 expandtab: -->

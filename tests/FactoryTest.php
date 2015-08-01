@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * This file is part of the Apix Project.
@@ -20,22 +21,6 @@ use Apix\Cache;
  */
 class FactoryTest extends TestCase
 {
-    /*
-    protected $cache = null;
-
-    public function setUp()
-    {
-    }
-
-    public function tearDown()
-    {
-        if (null !== $this->cache) {
-            $this->cache->flush();
-            unset($this->cache);
-        }
-    }
-    /**/
-
     /**
      * @expectedException \Apix\Cache\PsrCache\InvalidArgumentException
      */

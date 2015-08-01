@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * This file is part of the Apix Project.
@@ -18,6 +19,7 @@ namespace Apix\Cache\Indexer;
  */
 abstract class AbstractIndexer implements Adapter
 {
+
     /**
      * Holds the name of the index.
      * @var string

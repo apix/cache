@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * This file is part of the Apix Project.
@@ -18,6 +19,9 @@ namespace Apix\Cache\tests;
  */
 class TestCase extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var array
+     */
     protected $options = array(
         'prefix_key' => 'unittest-apix-key:',
         'prefix_tag' => 'unittest-apix-tag:'
@@ -36,4 +40,5 @@ class TestCase extends \PHPUnit_Framework_TestCase
             );
         }
     }
+
 }

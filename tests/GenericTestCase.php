@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * This file is part of the Apix Project.
@@ -190,4 +191,5 @@ class GenericTestCase extends TestCase
             $this->cache->mapKey('bar'), $this->cache->loadTag('all_tag')
         );
     }
+
 }

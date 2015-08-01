@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * This file is part of the Apix Project.
@@ -21,7 +22,14 @@ use Apix\Cache,
  */
 class ApcIndexerTest extends GenericIndexerTestCase
 {
+    /**
+     * @var \Apix\Cache\Apc
+     */
     protected $cache;
+
+    /**
+     * @var \Apix\Cache\Indexer\ApcIndexer
+     */
     protected $indexer;
 
     public function setUp()

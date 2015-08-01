@@ -102,4 +102,5 @@ class MemcachedIndexerTest extends GenericIndexerTestCase
             'a ', $this->cache->get($this->indexKey)
         );
     }
+
 }
