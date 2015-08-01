@@ -20,7 +20,6 @@ os:
 
 matrix:
   allow_failures:
-    - php: 7.0
     - php: hhvm
 
 env:
@@ -35,21 +34,21 @@ env:
 
 before_script:
   # install memcached
-  - if [ '$DB' = 'memcached' ] && [ "`phpenv version-name`" != "hhvm" ]; then sudo pecl install memcache-2.0.1; /usr/bin/memcached -d; fi
-  - if [ "$DB" = "memcached" ] && [ "`phpenv version-name`" != "hhvm" ]; then echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
+  - if [ "`phpenv version-name`" != "hhvm" ] && [ '$DB' = 'memcached' ]; then sudo pecl install memcache-2.0.1; /usr/bin/memcached -d; fi
+  - if [ "`phpenv version-name`" != "hhvm" ] && [ "$DB" = "memcached" ]; then echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
 
   # install memcache
-  - if [ '$DB' = 'memcache' ] && [ "`phpenv version-name`" != "hhvm" ]; then sudo pecl install memcache-3.0.8; /usr/bin/memcache -d; fi
-  - if [ "$DB" = "memcache" ] && [ "`phpenv version-name`" != "hhvm" ]; then echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
+  - if [ "`phpenv version-name`" != "hhvm" ] && [ '$DB' = 'memcache' ]; then sudo pecl install memcache-3.0.8; /usr/bin/memcache -d; fi
+  - if [ "`phpenv version-name`" != "hhvm" ] && [ "$DB" = "memcache" ]; then echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
 
   # install APC/APCU
-  - if [ "$DB" = "apc" ] && [ "`phpenv version-name`" != "hhvm" ]; then echo "extension = apc.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
-  - if [ "$DB" = "apc" -a ! $(echo $TRAVIS_PHP_VERSION|awk -F. '{printf("%d%02d%02d\n",$1,$2,$3,$4);}') -ge 50500 ] && [ "`phpenv version-name`" != "hhvm" ]; then echo 'extension="apc.so"' >> `php --ini | grep 'Loaded Configuration' | sed -e 's|.*:\s*||'`; else printf "yes\n" | pecl install apcu-beta; fi
-  - if [ '$DB' = 'apc' ] && [ "`phpenv version-name`" != "hhvm" ]; then echo 'apc.enable_cli=1' >> `php --ini | grep 'Loaded Configuration' | sed -e 's|.*:\s*||'`; fi
+  - if [ "`phpenv version-name`" != "hhvm" ] && [ "$DB" = "apc" ]; then echo "extension = apc.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
+  - if [ "`phpenv version-name`" != "hhvm" ] && [ "$DB" = "apc" -a ! $(echo $TRAVIS_PHP_VERSION|awk -F. '{printf("%d%02d%02d\n",$1,$2,$3,$4);}') -ge 50500 ]; then echo 'extension="apc.so"' >> `php --ini | grep 'Loaded Configuration' | sed -e 's|.*:\s*||'`; else printf "yes\n" | pecl install apcu-beta; fi
+  - if [ "`phpenv version-name`" != "hhvm" ] && [ '$DB' = 'apc' ]; then echo 'apc.enable_cli=1' >> `php --ini | grep 'Loaded Configuration' | sed -e 's|.*:\s*||'`; fi
 
   # install Redis
-  - if [ "$DB" = "redis" ] && [ "`phpenv version-name`" != "hhvm" ]; then echo "extension=redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
-  - if [ '$DB' = 'redis' ] && [ "`phpenv version-name`" != "hhvm" ]; then git clone --branch=master --depth=1 git://github.com/nicolasff/phpredis.git phpredis; cd phpredis && phpize && ./configure && make && sudo make install && cd ..; rm -fr phpredis; fi
+  - if [ "`phpenv version-name`" != "hhvm" ] && [ "$DB" = "redis" ]; then echo "extension=redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
+  - if [ "`phpenv version-name`" != "hhvm" ] && [ '$DB' = 'redis' ]; then git clone --branch=master --depth=1 git://github.com/nicolasff/phpredis.git phpredis; cd phpredis && phpize && ./configure && make && sudo make install && cd ..; rm -fr phpredis; fi
 
   # install MySQL
   - if [ "$DB" = "mysql" ]; then mysql -e 'DROP DATABASE IF EXISTS apix_tests;'; fi
@@ -60,7 +59,7 @@ before_script:
   - if [ "$DB" = "pgsql" ]; then psql -c 'CREATE DATABASE apix_tests;' -U postgres; fi
 
   # install mongodb
-  - if [ '$DB' = 'mongodb' ]; then sudo pecl install mongo; sudo /etc/init.d/mongodb start; fi
+  - if [ "`phpenv version-name`" != "hhvm" ] && [ '$DB' = 'mongodb' ]; then sudo pecl install mongo; sudo /etc/init.d/mongodb start; fi
 
   # install required packages
   #- phpenv rehash
