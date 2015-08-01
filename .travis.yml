@@ -55,7 +55,7 @@ before_script:
 
   # install PGSQL
   - if [ "$DB" = "pgsql" ]; then psql -c 'DROP DATABASE IF EXISTS apix_tests;' -U postgres; fi
-  - if [ "$DB" = "pgsql" ]; then psql -c 'CREATE DATABASE apix_tests; -U postgres; fi
+  - if [ "$DB" = "pgsql" ]; then psql -c 'CREATE DATABASE apix_tests;' -U postgres; fi
 
   # install required packages
   #- phpenv rehash
