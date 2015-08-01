@@ -346,7 +346,7 @@ class Memcached extends AbstractCache
      * Increments the value of the given key.
      *
      * @param  string  $key The key to increment.
-     * @return Returns the new item's value on success or FALSE on failure.
+     * @return int|bool     Returns the new item's value on success or FALSE on failure.
      */
     public function increment($key)
     {
@@ -375,6 +375,7 @@ class Memcached extends AbstractCache
     public function getTtl($key)
     {
         $mKey = $this->mapKey($key);
+        $cas_token = null;
 
         if ( !isset($this->ttls[$mKey]) ) {
             $data = $this->adapter->get($mKey, null, $cas_token);

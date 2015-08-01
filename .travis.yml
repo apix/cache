@@ -12,11 +12,11 @@ os:
   - linux
   - osx
 
-services:
-  - memcache     # will start memcache service
-  - memcached    # will start memcached service
-  - mongodb      # will start mongodb service
-  - redis-server # will start the redis server
+#services:
+#  - memcache     # will start memcache service
+#  - memcached    # will start memcached service
+#  - mongodb      # will start mongodb service
+#  - redis-server # will start the redis server
 
 matrix:
   allow_failures:
@@ -35,19 +35,21 @@ env:
 
 before_script:
   # install memcached
-  - if [ "`phpenv version-name`" != "hhvm" ]; then echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
+  - if [ '$DB' = 'memcached' ] && [ "`phpenv version-name`" != "hhvm" ]; then sudo pecl install memcache-2.0.1; /usr/bin/memcached -d; fi
+  - if [ "$DB" = "memcached" ] && [ "`phpenv version-name`" != "hhvm" ]; then echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
 
   # install memcache
-  - if [ "`phpenv version-name`" != "hhvm" ]; then echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
+  - if [ '$DB' = 'memcache' ] && [ "`phpenv version-name`" != "hhvm" ]; then sudo pecl install memcache-3.0.8; /usr/bin/memcache -d; fi
+  - if [ "$DB" = "memcache" ] && [ "`phpenv version-name`" != "hhvm" ]; then echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
 
   # install APC/APCU
-  - if [ "`phpenv version-name`" == "5.3" ] || [ "`phpenv version-name`" == "5.4" ]; then echo "extension = apc.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
-  - if [ "`phpenv version-name`" == "5.5" ] || [ "`phpenv version-name`" == "5.6" ]; then printf "yes\n" | pecl install apcu-beta; fi
-  - if [ "$DB" = "apc" ] && [ "`phpenv version-name`" != "hhvm" ]; then echo "apc.enable_cli=1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
+  - if [ "$DB" = "apc" ] && [ "`phpenv version-name`" != "hhvm" ]; then echo "extension = apc.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
+  - if [ "$DB" = "apc" -a ! $(echo $TRAVIS_PHP_VERSION|awk -F. '{printf("%d%02d%02d\n",$1,$2,$3,$4);}') -ge 50500 ] && [ "`phpenv version-name`" != "hhvm" ]; then echo 'extension="apc.so"' >> `php --ini | grep 'Loaded Configuration' | sed -e 's|.*:\s*||'`; else printf "yes\n" | pecl install apcu-beta; fi
+  - if [ '$DB' = 'apc' ] && [ "`phpenv version-name`" != "hhvm" ]; then echo 'apc.enable_cli=1' >> `php --ini | grep 'Loaded Configuration' | sed -e 's|.*:\s*||'`; fi
 
   # install Redis
-  - if [ "`phpenv version-name`" != "hhvm" ]; then echo "extension=redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
-  - if [ "$DB" = "redis" ]; then git clone --branch=master --depth=1 git://github.com/nicolasff/phpredis.git phpredis; cd phpredis && phpize && ./configure && make && sudo make install && cd ..; rm -fr phpredis; fi
+  - if [ "$DB" = "redis" ] && [ "`phpenv version-name`" != "hhvm" ]; then echo "extension=redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
+  - if [ '$DB' = 'redis' ] && [ "`phpenv version-name`" != "hhvm" ]; then git clone --branch=master --depth=1 git://github.com/nicolasff/phpredis.git phpredis; cd phpredis && phpize && ./configure && make && sudo make install && cd ..; rm -fr phpredis; fi
 
   # install MySQL
   - if [ "$DB" = "mysql" ]; then mysql -e 'DROP DATABASE IF EXISTS apix_tests;'; fi
@@ -56,6 +58,9 @@ before_script:
   # install PGSQL
   - if [ "$DB" = "pgsql" ]; then psql -c 'DROP DATABASE IF EXISTS apix_tests;' -U postgres; fi
   - if [ "$DB" = "pgsql" ]; then psql -c 'CREATE DATABASE apix_tests;' -U postgres; fi
+
+  # install mongodb
+  - if [ '$DB' = 'mongodb' ]; then sudo pecl install mongo; sudo /etc/init.d/mongodb start; fi
 
   # install required packages
   #- phpenv rehash
