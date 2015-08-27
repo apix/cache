@@ -11,6 +11,10 @@ php:
   - hhvm
   - nightly
 
+services:
+  - memcached
+  - mongodb
+
 env:
   - DB=apc
   - DB=redis
