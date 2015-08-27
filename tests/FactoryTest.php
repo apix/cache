@@ -14,24 +14,15 @@ namespace Apix\Cache\tests;
 
 use Apix\Cache;
 
+/**
+ * Class FactoryTest
+ *
+ * @package Apix\Cache\tests
+ */
 class FactoryTest extends TestCase
 {
-    protected $cache = null;
-
-    public function setUp()
-    {
-    }
-
-    public function tearDown()
-    {
-        if (null !== $this->cache) {
-            $this->cache->flush();
-            unset($this->cache);
-        }
-    }
-
     /**
-     * @expectedException Apix\Cache\PsrCache\InvalidArgumentException
+     * @expectedException \Apix\Cache\PsrCache\InvalidArgumentException
      */
     public function testPoolWithUnsurportedObjectThrowsException()
     {
@@ -47,7 +38,7 @@ class FactoryTest extends TestCase
     }
 
     /**
-     * @expectedException Apix\Cache\PsrCache\InvalidArgumentException
+     * @expectedException \Apix\Cache\PsrCache\InvalidArgumentException
      */
     public function testPoolWithUnsurportedStringThrowsException()
     {

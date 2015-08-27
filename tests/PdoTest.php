@@ -23,13 +23,29 @@ use Apix\Cache;
  */
 class PdoTest extends GenericTestCase
 {
-    protected $cache, $pdo;
+    /**
+     * @var \Apix\Cache\AbstractPdo
+     */
+    protected $cache;
+
+    /**
+     * @var \PDO
+     */
+    protected $pdo;
 
     protected $options = array(
         'db_name'  => 'apix_tests',
         'db_table' => 'cache'
     );
 
+    /**
+     * @var string
+     */
+    protected $classname = '';
+
+    /**
+     * @return array|void
+     */
     public function pdoProvider()
     {
         $dbs = array(
@@ -134,7 +150,7 @@ class PdoTest extends GenericTestCase
     }
 
     /**
-     * @expectedException PDOException
+     * @expectedException \PDOException
      */
     public function testFlushAll()
     {

@@ -14,14 +14,26 @@ namespace Apix\Cache\tests\Serializer;
 
 use Apix\Cache\Serializer\Stringset;
 
+/**
+ * Class StringsetTest
+ *
+ * @package Apix\Cache\tests\Serializer
+ */
 class StringsetTest extends TestCase
 {
+    /**
+     * @var \Apix\Cache\Serializer\Stringset
+     */
+    protected $formatter = null;
 
     public function setUp()
     {
         $this->formatter = new Stringset();
     }
 
+    /**
+     * @return array
+     */
     public function serializerProvider()
     {
         return array(
@@ -41,6 +53,9 @@ class StringsetTest extends TestCase
         $this->assertEquals( $str, $this->formatter->serialize($arr) );
     }
 
+    /**
+     * @return array
+     */
     public function unserializerProvider()
     {
         return array(
@@ -60,6 +75,9 @@ class StringsetTest extends TestCase
         $this->assertEquals($dirt, $this->formatter->getDirtiness());
     }
 
+    /**
+     * @return array
+     */
     public function isSerializerProvider()
     {
         return array(

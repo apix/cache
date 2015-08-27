@@ -14,8 +14,16 @@ namespace Apix\Cache\tests\PsrCache;
 
 use Apix\Cache\PsrCache;
 
+/**
+ * Class TaggableItemTest
+ *
+ * @package Apix\Cache\tests\PsrCache
+ */
 class TaggableItemTest extends ItemTest
 {
+    /**
+     * @var \Apix\Cache\PsrCache\TaggableItem
+     */
     protected $item = null;
 
     public function setUp()

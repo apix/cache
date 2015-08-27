@@ -14,6 +14,11 @@ namespace Apix\Cache\tests\Serializer;
 
 use Apix\Cache\Serializer\None;
 
+/**
+ * Class NoneTest
+ *
+ * @package Apix\Cache\tests\Serializer
+ */
 class NoneTest extends TestCase
 {
 

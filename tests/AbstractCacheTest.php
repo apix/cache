@@ -14,8 +14,16 @@ namespace Apix\Cache\tests;
 
 use Apix\Cache;
 
+/**
+ * Class AbstractCacheTest
+ *
+ * @package Apix\Cache\tests
+ */
 class AbstractCacheTest extends TestCase
 {
+    /**
+     * @var \Apix\Cache\Runtime
+     */
     protected $cache = null;
 
     public function setUp()
@@ -40,7 +48,7 @@ class AbstractCacheTest extends TestCase
     }
 
     /**
-     * @expectedException Apix\Cache\PsrCache\InvalidArgumentException
+     * @expectedException \Apix\Cache\PsrCache\InvalidArgumentException
      */
     public function testGetOptionThrowAnInvalidArgumentException()
     {

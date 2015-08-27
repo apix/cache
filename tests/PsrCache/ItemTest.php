@@ -15,8 +15,16 @@ namespace Apix\Cache\tests\PsrCache;
 use Apix\Cache\tests\TestCase;
 use Apix\Cache\PsrCache\Item;
 
+/**
+ * Class ItemTest
+ *
+ * @package Apix\Cache\tests\PsrCache
+ */
 class ItemTest extends TestCase
 {
+    /**
+     * @var \Apix\Cache\PsrCache\Item
+     */
     protected $item = null;
 
     public function setUp()
@@ -61,13 +69,16 @@ class ItemTest extends TestCase
     }
 
     /**
-     * @expectedException Apix\Cache\PsrCache\InvalidArgumentException
+     * @expectedException \Apix\Cache\PsrCache\InvalidArgumentException
      */
     public function testSetExpirationThrowAnException()
     {
         $this->item->setExpiration('string');
     }
 
+    /**
+     * @return array
+     */
     public function dateProvider()
     {
         return array(

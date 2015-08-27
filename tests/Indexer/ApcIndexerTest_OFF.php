@@ -15,16 +15,29 @@ namespace Apix\Cache\tests\Indexer;
 use Apix\Cache,
     Apix\Cache\Indexer;
 
+/**
+ * Class ApcIndexerTest
+ *
+ * @package Apix\Cache\tests\Indexer
+ */
 class ApcIndexerTest extends GenericIndexerTestCase
 {
-    protected $cache, $indexer;
+    /**
+     * @var \Apix\Cache\Apc
+     */
+    protected $cache;
+
+    /**
+     * @var \Apix\Cache\Indexer\ApcIndexer
+     */
+    protected $indexer;
 
     public function setUp()
     {
         $this->skipIfMissing('apc');
 
         if (!ini_get('apc.enable_cli')) {
-            self::markTestSkipped(
+            $this->markTestSkipped(
                 'apc.enable_cli MUST be enabled in order to run this unit test'
             );
         }

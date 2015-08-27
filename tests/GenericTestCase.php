@@ -12,8 +12,17 @@
 
 namespace Apix\Cache\tests;
 
+/**
+ * Class GenericTestCase
+ *
+ * @package Apix\Cache\tests
+ */
 class GenericTestCase extends TestCase
 {
+    /**
+     * @var \Apix\Cache\AbstractCache
+     */
+    protected $cache = null;
 
     public function testLoadKeyReturnsNullWhenInexistant()
     {

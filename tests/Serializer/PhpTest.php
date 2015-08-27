@@ -14,6 +14,11 @@ namespace Apix\Cache\tests\Serializer;
 
 use Apix\Cache\Serializer\Php;
 
+/**
+ * Class PhpTest
+ *
+ * @package Apix\Cache\tests\Serializer
+ */
 class PhpTest extends TestCase
 {
 

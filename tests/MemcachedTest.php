@@ -14,13 +14,21 @@ namespace Apix\Cache\tests;
 
 use Apix\Cache;
 
+/**
+ * Class MemcachedTest
+ *
+ * @package Apix\Cache\tests
+ */
 class MemcachedTest extends GenericTestCase
 {
     const HOST = '127.0.0.1';
     const PORT = 11211;
     const AUTH = null;
 
-    protected $cache, $memcached;
+    /**
+     * @var \Memcached
+     */
+    protected $memcached;
 
     protected $options = array(
         'prefix_key' => 'key_',
@@ -29,8 +37,13 @@ class MemcachedTest extends GenericTestCase
         'serializer' => 'php'
     );
 
+    /**
+     * @return \Memcached|null
+     */
     public function getMemcached()
     {
+        $m = null;
+
         try {
             $m = new \Memcached();
             $m->addServer(self::HOST, self::PORT);
@@ -67,7 +80,7 @@ class MemcachedTest extends GenericTestCase
 
     public function _commonMemcachedData()
     {
-        return $this->assertTrue(
+        $this->assertTrue(
             $this->cache->save('data1', 'id1', array('tag1', 'tag2'))
             && $this->cache->save('data2', 'id2', array('tag2', 'tag3', 'tag4'))
             && $this->cache->save('data3', 'id3', array('tag3', 'tag4'))

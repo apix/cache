@@ -14,8 +14,21 @@ namespace Apix\Cache\tests\Indexer;
 
 use Apix\Cache\tests\TestCase;
 
+/**
+ * Class GenericIndexerTestCase
+ *
+ * @package Apix\Cache\tests\Indexer
+ */
 class GenericIndexerTestCase extends TestCase
 {
+    /**
+     * @var \Apix\Cache\Indexer\AbstractIndexer
+     */
+    protected $indexer;
+
+    /**
+     * @var string
+     */
     protected $indexKey = 'indexKey';
 
     public function testAddOneElement()

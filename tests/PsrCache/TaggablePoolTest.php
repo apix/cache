@@ -15,9 +15,27 @@ namespace Apix\Cache\tests\PsrCache;
 use Apix\Cache,
     Apix\Cache\PsrCache\TaggablePool;
 
+/**
+ * Class TaggablePoolTest
+ *
+ * @package Apix\Cache\tests\PsrCache
+ */
 class TaggablePoolTest extends PoolTest
 {
-    protected $cache = null, $pool = null, $item = null;
+    /**
+     * @var \Apix\Cache\Runtime
+     */
+    protected $cache = null;
+
+    /**
+     * @var \Apix\Cache\PsrCache\TaggablePool
+     */
+    protected $pool = null;
+
+    /**
+     * @var \Apix\Cache\PsrCache\TaggableItem
+     */
+    protected $item = null;
 
     public function setUp()
     {

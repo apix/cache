@@ -14,9 +14,16 @@ namespace Apix\Cache\tests\Serializer;
 
 use Apix\Cache\tests\TestCase as ApixTestCase;
 
+/**
+ * Class TestCase
+ *
+ * @package Apix\Cache\tests\Serializer
+ */
 class TestCase extends ApixTestCase
 {
-
+    /**
+     * @return array
+     */
     public function serializerProvider()
     {
         return array(

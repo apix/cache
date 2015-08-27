@@ -14,6 +14,11 @@ namespace Apix\Cache\tests\Serializer;
 
 use Apix\Cache\Serializer\Igbinary;
 
+/**
+ * Class IgbinaryTest
+ *
+ * @package Apix\Cache\tests\Serializer
+ */
 class IgbinaryTest extends TestCase
 {
 

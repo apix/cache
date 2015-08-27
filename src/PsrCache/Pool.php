@@ -16,24 +16,31 @@ use Apix\Cache\Adapter as CacheAdapter;
 use Psr\Cache\CacheItemInterface as ItemInterface;
 use Psr\Cache\CacheItemPoolInterface as ItemPoolInterface;
 
+/**
+ * Class Pool
+ *
+ * @package Apix\Cache\PsrCache
+ */
 class Pool implements ItemPoolInterface
 {
 
     /**
      *
-     * @var CacheAdapter
+     * @var \Apix\Cache\Adapter
      */
     protected $cache_adapter;
 
     /**
      * Deferred cache items to be saved later.
      *
-     * @var array   Collection of \Apix\PsrCache\Item.
+     * @var \Psr\Cache\CacheItemInterface[]   Collection of \Apix\PsrCache\Item.
      */
     protected $deferred = array();
 
     /**
      * Constructor.
+     *
+     * @param \Apix\Cache\Adapter $cache_adapter
      */
     public function __construct(CacheAdapter $cache_adapter)
     {

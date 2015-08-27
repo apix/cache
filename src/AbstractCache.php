@@ -87,6 +87,8 @@ abstract class AbstractCache implements Adapter
      *
      * @param   string $key
      * @param   mixed  $value
+     *
+     * @return mixed
      */
     public function setOption($key, $value)
     {

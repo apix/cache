@@ -14,13 +14,26 @@ namespace Apix\Cache\tests;
 
 use Apix\Cache;
 
+/**
+ * Class RedisTest
+ *
+ * @package Apix\Cache\tests
+ */
 class RedisTest extends GenericTestCase
 {
     const HOST = '127.0.0.1';
     const PORT = 6379;
     const AUTH = null;
 
-    protected $cache, $redis;
+    /**
+     * @var \Apix\Cache\Redis
+     */
+    protected $cache;
+
+    /**
+     * @var \Redis
+     */
+    protected $redis;
 
     public function setUp()
     {

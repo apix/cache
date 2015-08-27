@@ -17,9 +17,22 @@ use Apix\Cache\tests\TestCase;
 use Apix\Cache,
     Apix\Cache\PsrCache\Pool;
 
+/**
+ * Class PoolTest
+ *
+ * @package Apix\Cache\tests\PsrCache
+ */
 class PoolTest extends TestCase
 {
-    protected $pool = null, $item = null;
+    /**
+     * @var \Apix\Cache\PsrCache\Pool
+     */
+    protected $pool = null;
+
+    /**
+     * @var \Apix\Cache\PsrCache\Item
+     */
+    protected $item = null;
 
     public function setUp()
     {

@@ -12,30 +12,54 @@
 
 namespace Apix\Cache\tests\Indexer;
 
-use Apix\Cache,
-    Apix\Cache\Indexer;
+use Apix\Cache;
+use Apix\Cache\Indexer;
 
+/**
+ * Class MemcachedIndexerTest
+ *
+ * @package Apix\Cache\tests\Indexer
+ */
 class MemcachedIndexerTest extends GenericIndexerTestCase
 {
     const HOST = '127.0.0.1';
     const PORT = 11211;
     const AUTH = null;
 
-    protected $cache, $memcached, $indexer;
+    /**
+     * @var \Apix\Cache\Memcached
+     */
+    protected $cache;
 
+    /**
+     * @var \Memcached
+     */
+    protected $memcached;
+
+    /**
+     * @var \Apix\Cache\Indexer\MemcachedIndexer
+     */
+    protected $indexer;
+
+    /**
+     * @return \Memcached|null
+     */
     public function getMemcached()
     {
+        $m = null;
+
         try {
             $m = new \Memcached();
             $m->addServer(self::HOST, self::PORT);
 
             $stats = $m->getStats();
-            $host = self::HOST.':'.self::PORT;
-            if($stats[$host]['pid'] == -1)
+            $host  = self::HOST.':'.self::PORT;
+
+            if ($stats[$host]['pid'] == -1) {
                 throw new \Exception(
                     sprintf('Unable to reach a memcached server on %s', $host)
                 );
-
+            }
         } catch (\Exception $e) {
             $this->markTestSkipped( $e->getMessage() );
         }

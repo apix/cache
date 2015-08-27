@@ -14,6 +14,11 @@ namespace Apix\Cache\tests\Serializer;
 
 use Apix\Cache\Serializer\Json;
 
+/**
+ * Class JsonTest
+ *
+ * @package Apix\Cache\tests\Serializer
+ */
 class JsonTest extends TestCase
 {
 

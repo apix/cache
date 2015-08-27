@@ -45,7 +45,7 @@ abstract class AbstractIndexer implements Adapter
     /**
      * Returns the items index.
      *
-     * @return Returns an array of items or null failure.
+     * @return array Returns an array of items or null failure.
      */
     public function getItems()
     {

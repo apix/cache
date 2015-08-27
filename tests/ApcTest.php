@@ -21,6 +21,9 @@ use Apix\Cache;
  */
 class ApcTest extends GenericTestCase
 {
+    /**
+     * @var \Apix\Cache\Apc
+     */
     protected $cache = null;
 
     public function setUp()
@@ -28,7 +31,7 @@ class ApcTest extends GenericTestCase
         $this->skipIfMissing('apc');
 
         if (!ini_get('apc.enable_cli')) {
-            self::markTestSkipped(
+            $this->markTestSkipped(
                 'apc.enable_cli MUST be enabled in order to run this unit test'
             );
         }

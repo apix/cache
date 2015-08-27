@@ -44,15 +44,15 @@ class Factory
     /**
      * Factory pattern.
      *
-     * @param  mixed                                   $mix      Either a supported client object e.g. '\Redis';
+     * @param  mixed   $mix                                      Either a supported client object e.g. '\Redis';
      *                                                           or one that implements \Apix\Cache\Adapter;
      *                                                           or an adapter name (string) e.g. "APC", "Runtime";
      *                                                           or even a plain array() or \ArrayObject.
-     * @param  array                                   $options  An array of options
-     * @param  boolean                                 $taggable Wether to return a taggable pool.
-     * @return PsrCache\Pool|PsrCache\TaggablePool
-     * @throws PsrCache\InvalidArgumentException
-     * @throws Apix\Cache\Exception
+     * @param  array   $options                                  An array of options
+     * @param  boolean $taggable                                 Wether to return a taggable pool.
+     *
+     * @return \Apix\Cache\PsrCache\Pool|\Apix\Cache\PsrCache\TaggablePool
+     * @throws \Apix\Cache\Exception
      */
     public static function getPool($mix, array $options=array(), $taggable=false)
     {
@@ -64,8 +64,8 @@ class Factory
 
             case is_object($mix)
                  && in_array($name = get_class($mix), self::$clients):
-                
-                if ($name == 'PDO') {
+
+                if ($mix == 'PDO') {
                     $name = 'Pdo\\' . AbstractPdo::getDriverName($mix);
                 } else {
                     $name = isset(self::$adapters[$name])
