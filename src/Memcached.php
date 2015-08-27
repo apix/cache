@@ -27,6 +27,12 @@ class Memcached extends AbstractCache
 {
 
     /**
+     * Holds an injected adapter.
+     * @var \Memcached
+     */
+    protected $adapter = null;
+
+    /**
      * Holds the array of TTLs.
      * @var array
      */
@@ -126,9 +132,21 @@ class Memcached extends AbstractCache
             // $items[] = $this->mapTag($tag);
         }
 
-        $this->adapter->deleteMulti($items);
+        if (is_callable(array($this->adapter, 'deleteMulti'))) { // this is false on HHVM
+            $this->adapter->deleteMulti($items);
 
-        return (boolean) $this->adapter->getResultCode() != \Memcached::RES_FAILURE;
+            return (boolean) $this->adapter->getResultCode() != \Memcached::RES_FAILURE;
+        }
+
+        $success = true;
+
+        foreach ($items as $item) {
+            $this->adapter->delete($item);
+
+            $success = $success && (boolean) $this->adapter->getResultCode() != \Memcached::RES_FAILURE;
+        }
+
+        return $success;
     }
 
     /**
@@ -150,13 +168,27 @@ class Memcached extends AbstractCache
                 foreach ($tags as $tag) {
                     $this->getIndex($this->mapTag($tag))->remove($_key);
                 }
+
                 // delete that index key
                 $items[] = $idx_key;
             }
         }
-        $this->adapter->deleteMulti($items);
 
-        return (boolean) $this->adapter->getResultCode() != \Memcached::RES_FAILURE;
+        if (is_callable(array($this->adapter, 'deleteMulti'))) { // this is false on HHVM
+            $this->adapter->deleteMulti($items);
+
+            return (boolean) $this->adapter->getResultCode() != \Memcached::RES_FAILURE;
+        }
+
+        $success = true;
+
+        foreach ($items as $item) {
+            $this->adapter->delete($item);
+
+            $success = $success && (boolean) $this->adapter->getResultCode() != \Memcached::RES_FAILURE;
+        }
+
+        return $success;
     }
 
     /**
@@ -207,7 +239,7 @@ class Memcached extends AbstractCache
         }
 
         if (isset($opt)) {
-            $this->getAdapter()->setOption(\Memcached::OPT_SERIALIZER, $opt);
+            $this->adapter->setOption(\Memcached::OPT_SERIALIZER, $opt);
         }
     }
 
@@ -216,7 +248,7 @@ class Memcached extends AbstractCache
      */
     public function getSerializer()
     {
-        return $this->getAdapter()->getOption(\Memcached::OPT_SERIALIZER);
+        return $this->adapter->getOption(\Memcached::OPT_SERIALIZER);
     }
 
     /**
@@ -321,8 +353,8 @@ class Memcached extends AbstractCache
     /**
      * Increments the value of the given key.
      *
-     * @param  string  $key The key to increment.
-     * @return Returns the new item's value on success or FALSE on failure.
+     * @param  string   $key The key to increment.
+     * @return int|bool Returns the new item's value on success or FALSE on failure.
      */
     public function increment($key)
     {
