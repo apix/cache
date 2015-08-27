@@ -11,6 +11,12 @@ php:
   - hhvm
   - nightly
 
+services:
+  - memcache
+  - memcached
+  - mongodb
+
+
 os:
   - linux
   - osx
