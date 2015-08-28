@@ -7,6 +7,17 @@ services:
   - memcached
   - mongodb
 
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+  - 5.6
+  - hhvm
+  - hhvm-nightly
+  - 7.0
+  - nightly
+
+
 env:
   - DB=apc
   - DB=redis
@@ -23,7 +34,7 @@ install:
   - tests/bin/travis-init.sh
 
 script:
-  - vendor/bin/phpunit --verbose --coverage-text --coverage-clover build/logs/clover.xml
+  - vendor/bin/phpunit --colors --verbose --coverage-text --coverage-clover build/logs/clover.xml
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
@@ -40,15 +51,6 @@ notifications:
 
 matrix:
   fast_finish: true
-  include:
-    - php: 5.3
-    - php: 5.4
-    - php: 5.5
-    - php: 5.6
-    - php: hhvm
-    - php: hhvm-nightly
-    - php: 7.0
-    - php: nightly
   allow_failures:
     - php: hhvm
     - php: hhvm-nightly

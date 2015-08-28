@@ -8,6 +8,7 @@ if [ "${VERSION}" = 'hhvm' ]; then
     PHPINI=/etc/hhvm/php.ini
 else
     PHPINI=~/.phpenv/versions/$VERSION/etc/php.ini
+    echo "yes" | pecl install igbinary
 fi
 
 if [ "$DB" = "apc" ]; then
@@ -43,3 +44,5 @@ fi
 if [ "$DB" = "memcached" ]; then
     echo "extension = memcached.so" >> $PHPINI
 fi
+
+# igbinary
