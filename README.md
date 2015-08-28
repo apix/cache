@@ -6,7 +6,9 @@ APIx Cache is a generic and thin cache wrapper with a simple interface to variou
 
 * **PSR-Cache** (proposed) standard is provided thru a factory wrapper class.
 * Unit **tested** and compliant with PSR0, PSR1 and PSR2.
-* Continuously integrated with **PHP 5.3**, **5.4**, **5.5**, **5.6** and **7**; and against APC, Redis, MongoDB, Sqlite, MySQL, PgSQL and Memcached...
+* Continuously integrated
+  * with **PHP 5.3**, **5.4**, **5.5**, **5.6** and **7.0**,
+  * and against APC, Redis, MongoDB, Sqlite, MySQL, PgSQL and Memcached...
 * Available as a **[Composer](http://https://packagist.org/packages/apix/cache)** and as a **[PEAR](http://pear.ouarz.net)** package.
 
 ---
@@ -15,7 +17,7 @@ Cache backends
 --------------
 Currently, the following cache store are supplied:
 
-* **[APC](http://php.net/book.apc.php)** and **[APCu](http://pecl.php.net/package/APCu)** *with tagging support*,
+* **[APC](http://php.net/book.apc.php)** (and **[APCu](http://pecl.php.net/package/APCu)**) *with tagging support*,
 * **[Redis](http://redis.io)** using the [PhpRedis](https://github.com/nicolasff/phpredis) extension *with tagging support*,
 * **[MongoDB](http://www.mongodb.org/)** using the [mongo](http://php.net/book.mongo.php) native PHP extension *with tagging support*,
 * **[Memcached](http://memcached.org/)** using the [Memcached](http://php.net/book.memcached.php) extension *with indexing, tagging and namespacing support*,
