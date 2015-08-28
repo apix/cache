@@ -3,51 +3,61 @@ language: php
 sudo: false
 
 php:
-  # - 5.3
+  - 5.3
   # - 5.4
   # - 5.5
   # - 5.6
-  # - 7.0
   - hhvm
   - hhvm-nightly
   - nightly
+  - 7.0
 
 services:
+  - redis-server
   - memcached
   - mongodb
 
 env:
   - DB=apc
-  # - DB=redis
-  # - DB=mongodb
-  # - DB=sqlite
-  # - DB=mysql
-  # - DB=pgsql
-  # - DB=memcached
+  - DB=redis
+  - DB=mongodb
+  - DB=sqlite
+  - DB=mysql
+  - DB=pgsql
+  - DB=memcached
 
 install:
+  - travis_retry composer self-update
+  - travis_retry composer install --dev --no-interaction --prefer-dist
+  - mkdir -p build/logs
   - tests/bin/travis-init.sh
 
 before_script_off:
   - sh -c "if [[ '$TRAVIS_PHP_VERSION' != 'hhvm' ]]; then if [ '$DB' = 'apc' -a ! $(echo $TRAVIS_PHP_VERSION|awk -F. '{printf("%d%02d%02d\n",$1,$2,$3,$4);}') -ge 50500 ]; then echo 'extension="apc.so"' >> `php --ini | grep 'Loaded Configuration' | sed -e 's|.*:\s*||'`; else printf "yes\n" | pecl install apcu-beta; fi; fi"
   - sh -c "if [ '$DB' = 'apc' ]; then echo 'apc.enable_cli=1' >> `php --ini | grep 'Loaded Configuration' | sed -e 's|.*:\s*||'`; fi"
+  
   - sh -c "if [ '$DB' = 'redis' ]; then git clone --branch=master --depth=1 git://github.com/nicolasff/phpredis.git phpredis; cd phpredis && phpize && ./configure && make && sudo make install && cd ..; rm -fr phpredis; fi"
   - sh -c "if [ '$DB' = 'redis' ]; then echo 'extension=redis.so' >> `php --ini | grep 'Loaded Configuration' | sed -e 's|.*:\s*||'`; fi"
+  
+
   #- sh -c "if [ '$DB' = 'mongodb' ]; then echo 'extension=mongo.so' >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; /etc/init.d/mongodb start; fi"
   - sh -c "if [ '$DB' = 'mongodb' ]; then echo 'extension=mongo.so' >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi"
+  
+
   - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'CREATE DATABASE IF NOT EXISTS apix_tests;'; fi"
+  
   - sh -c "if [ '$DB' = 'pgsql' ]; then psql -c 'DROP DATABASE IF EXISTS apix_tests;' -U postgres; fi"
   - sh -c "if [ '$DB' = 'pgsql' ]; then psql -c 'CREATE DATABASE apix_tests;' -U postgres; fi"
   #- sh -c "if [ '$DB' = 'memcached' ]; then echo 'extension=memcached.so' >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; /usr/bin/memcached -d; fi"
   - sh -c "if [ '$DB' = 'memcached' ]; then echo 'extension=memcached.so' >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi"
-  - travis_retry composer self-update
-  - travis_retry composer install --dev --no-interaction --prefer-source
-  - mkdir -p build/logs
 
 script:
   - vendor/bin/phpunit --verbose --coverage-text --coverage-clover build/logs/clover.xml
   - bash -c 'if [[ "$TRAVIS_PHP_VERSION" != "nightly" ]] && [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]]; then wget https://scrutinizer-ci.com/ocular.phar; fi;'
   - bash -c 'if [[ "$TRAVIS_PHP_VERSION" != "nightly" ]] && [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]]; then php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml; fi;'
+
+after_script:
+  - php vendor/bin/coveralls -v
 
 notifications:
   irc: "irc.freenode.org#ouarz"
@@ -56,9 +66,6 @@ notifications:
       - dev-team@ouarz.net
     on_success: change
     on_failure: change
-
-after_script:
-  - php vendor/bin/coveralls -v
 
 matrix:
   fast_finish: true
