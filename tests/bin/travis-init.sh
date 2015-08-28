@@ -2,7 +2,7 @@
 set -e
 set -o pipefail
 
-PHP_INI_FILE=$(php -r 'echo php_ini_loaded_file();')
+PHP_INI_FILE=~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 # Install APC/APCu
 if [ "$DB" = "apc" ]; then
@@ -10,10 +10,9 @@ if [ "$DB" = "apc" ]; then
         echo "extension = apc.so" >> $PHP_INI_FILE
     else
         echo "yes" | pecl install apcu-beta
-        echo "extension = apcu.so" >> $PHP_INI_FILE
     fi
+    echo "apc.enable_cli = 1" >> $PHP_INI_FILE
 fi
-echo "apc.enable_cli = 1" >> $PHP_INI_FILE
 
 composer self-update
 composer install --dev --prefer-source --no-interaction 
