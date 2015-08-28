@@ -6,8 +6,7 @@ PHP_INI_FILE=$(php -r 'echo php_ini_loaded_file();')
 
 if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then
 
-    if [ "$DB" != "apc" ]; then
-
+    if [ "$DB" = "apc" ]; then
         if [ "$(expr "$TRAVIS_PHP_VERSION" "<" "5.5")" -eq 1 ]; then
             echo "install APC"
             echo "extension = apc.so" >> $PHP_INI_FILE
