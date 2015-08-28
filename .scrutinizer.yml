@@ -2,7 +2,7 @@
 tools:
     external_code_coverage:
         timeout: 600
-        runs: 7
+        runs: 17
 
 checks:
     php:
