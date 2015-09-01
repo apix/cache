@@ -1,15 +1,17 @@
-APIx Cache, caching for PHP 5.3+ [![Build Status](https://travis-ci.org/frqnck/apix-cache.png?branch=master)](https://travis-ci.org/frqnck/apix-cache)
+APIx Cache, cache-tagging for PHP [![Build Status](https://travis-ci.org/frqnck/apix-cache.png?branch=master)](https://travis-ci.org/frqnck/apix-cache)
 ================================
 [![Latest Stable Version](https://poser.pugx.org/apix/cache/v/stable.svg)](https://packagist.org/packages/apix/cache)  [![Build Status](https://scrutinizer-ci.com/g/frqnck/apix-cache/badges/build.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-cache/build-status/master)  [![Code Quality](https://scrutinizer-ci.com/g/frqnck/apix-cache/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-cache/?branch=master)  [![Code Coverage](https://scrutinizer-ci.com/g/frqnck/apix-cache/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-cache/?branch=master)  [![License](https://poser.pugx.org/apix/cache/license.svg)](https://packagist.org/packages/apix/cache)
 
 APIx Cache is a generic and thin cache wrapper with a simple interface to various different caching backends and emphasising cache **tagging** and **indexing**.
 
+> Cache-tagging allows to find/update all data items with one or more given tags. Providing, for instance, a batch delete of all obsolete entries matching a speficic tag such as a version string.
+
 * **PSR-Cache** (proposed) standard is provided thru a factory wrapper class.
 * Unit **tested** and compliant with PSR0, PSR1 and PSR2.
 * Continuously integrated
-  * with **PHP 5.3**, **5.4**, **5.5**, **5.6** and **7.0**,
+  * with ~~PHP 5.3~~, **5.4**, **5.5**, **5.6** and **7.0**,
   * and against APC, Redis, MongoDB, Sqlite, MySQL, PgSQL and Memcached...
-* Available as a **[Composer](http://https://packagist.org/packages/apix/cache)** and as a **[PEAR](http://pear.ouarz.net)** package.
+* Available as a **[Composer](https://packagist.org/packages/apix/cache)** ~~and as a [PEAR](http://pear.ouarz.net)~~ package.
 
 ---
 
@@ -165,39 +167,15 @@ Note if preflight is set to true (default), the required DB table(s), if missing
 Installation
 ------------------------
 
-* If you are creating a component that relies on Apix Cache locally:
+Install the current major version using Composer with (recommended)
+```
+$ composer require apix/cache:1.2.*
+```
 
-  * either update your **`composer.json`** file:
-
-    ```json
-    {
-      "require": {
-        "apix/cache": "1.2.*"
-      }
-    }
-    ```
-
-  * or update your **`package.xml`** file as follow:
-
-    ```xml
-    <dependencies>
-      <required>
-        <package>
-          <name>apix_cache</name>
-          <channel>pear.ouarz.net</channel>
-          <min>1.0.0</min>
-          <max>1.999.9999</max>
-        </package>
-      </required>
-    </dependencies>
-    ```
-* For a system-wide installation using PEAR:
-
-    ```
-    sudo pear channel-discover pear.ouarz.net
-    sudo pear install --alldeps ouarz/apix_cache
-    ```
-For more details see [pear.ouarz.net](http://pear.ouarz.net).
+Or install the latest stable version with
+```
+$ composer require apix/cache
+```
 
 License
 -------
