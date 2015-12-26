@@ -19,7 +19,8 @@ if [ "$DB" = "apc" ]; then
     if [ "${VERSION}" = "hhvm" ] || [ "$(expr "${VERSION}" "<" "5.5")" -eq 1 ]
     then
         echo "extension = apc.so" >> $PHPINI
-    elseif [ "$(expr "${VERSION}" "<" "7.0")" -eq 1 ]
+    elif [ "$(expr "${VERSION}" "<" "7.0")" -eq 1 ]
+    then
         echo "yes" | pecl install apcu-4.0
     else
         echo "yes" | pecl install apcu-5.1
