@@ -21,9 +21,9 @@ if [ "$DB" = "apc" ]; then
         echo "extension = apc.so" >> $PHPINI
     elif [ "$(expr "${VERSION}" "<" "7.0")" -eq 1 ]
     then
-        echo "yes" | pecl install apcu-4.0
+        echo "yes" | pecl install apcu-4.0.10
     else
-        echo "yes" | pecl install apcu-5.1
+        echo "yes" | pecl install apcu-5.1.2
     fi
     echo "apc.enable_cli = 1" >> $PHPINI
 fi
