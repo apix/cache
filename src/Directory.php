@@ -198,7 +198,7 @@ class Directory extends AbstractCache
         $basePath = $this->getBasePath('tag');
         $baseTags = scandir($basePath);
 
-        $tags = [];
+        $tags = array();
 
         foreach ($baseTags as $baseTag) {
             if (substr($baseTag, 0, 1) === '.') {
