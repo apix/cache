@@ -6,8 +6,8 @@ APIx Cache is a generic and thin cache wrapper with a simple interface to variou
 
 > Cache-tagging allows to find/update all data items with one or more given tags. Providing, for instance, a batch delete of all obsolete entries matching a speficic tag such as a version string.
 
-* **PSR-Cache** (proposed) standard is provided thru a factory wrapper class.
-* Unit **tested** and compliant with PSR0, PSR1 and PSR2.
+* **PSR-Cache** (PSR-6) standard is provided thru a factory wrapper class.
+* Unit **tested** and compliant with PSR-1, PSR-2, PSR-4 and PSR-6.
 * Continuously integrated
   * with **PHP** ~~5.3~~, **5.4**, **5.5**, **5.6** and **7.0**,
   * and against APC, Redis, MongoDB, Sqlite, MySQL, PgSQL and Memcached...
