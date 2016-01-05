@@ -27,7 +27,7 @@ Currently, the following cache store are supplied:
  * Fully tested with **[SQLite](http://www.sqlite.org)**, **[PostgreSQL](http://www.postgresql.org)** and **[MySQL](http://www.mysql.com)**.
  * Assumed to work but not tested [4D](http://www.4d.com/), [Cubrid](http://www.cubrid.org), [MS SQL Server](http://www.microsoft.com/sqlserver/), [Sybase](http://www.sybase.com), [Firebird](http://www.firebirdsql.org), ODBC, [Interbase](http://www.embarcadero.com/products/interbase), [IBM DB2](www.ibm.com/software/data/db2/), [IDS](http://www-01.ibm.com/software/data/informix/) and [Oracle](http://www.oracle.com/database/).
 * Runtime (in-memory array storage).
-* Filesystem (directories based, and files based) *with tagging support*.
+* **[Filesystem](#filesystem-specific)** (directories based, and files based) *with tagging support*.
 
 Feel free to comment, send pull requests and patches...
 

@@ -1,9 +1,14 @@
 # APIx Cache changelog
 
-#### Version 1.2.2 (1-Sept-2015)
+#### Version 1.2.3 (5-Jan-2016)
+- Fix APCu versions (contrib by @mimmi20)
+- Added `Files` and `Directory` backends (contrib by @MacFJA)
+- Updated `README.md`.
+
+#### Version 1.2.2 (1-Sep-2015)
 - Added a `CHANGELOG.md` file.
 - Updated PHPUnit to 4.8 version.
-- Dropped PHP  5.3 support.
+- Dropped PHP 5.3 support.
 - Dropped PEAR support.
 - Refactored `.travis.yml` tests.
 - Made Travis faster (using Docker containers and skipping allowable failures).
