@@ -176,7 +176,8 @@ Once these tables exist, set `preflight` to `false` in order to avoid some addit
 ### Filesystem specific
 ```php
   // additional (default) options
-  $options['directory'] = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'apix-cache';
+  $options['directory'] = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'apix-cache'; // Directory where cache is created
+  $options['locking'] = true;                                                      // File locking (recommended)
   
   $files_cache = new Cache\Files($options);
   // or

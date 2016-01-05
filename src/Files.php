@@ -20,7 +20,8 @@ class Files extends AbstractCache
     public function __construct(array $options=null)
     {
         $options += array(
-            'directory' => sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'apix-cache'
+            'directory' => sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'apix-cache',
+            'locking' => true
         );
         parent::__construct(null, $options);
         if (!file_exists($this->getOption('directory')) || !is_dir($this->getOption('directory'))) {
@@ -43,7 +44,8 @@ class Files extends AbstractCache
             return null;
         }
 
-        $data = file_get_contents($path);
+        $data = $this->readFile($path);
+
         if ('' === $data) {
             unlink($path);
             return null;
@@ -79,9 +81,8 @@ class Files extends AbstractCache
                 continue;
             }
             $path = $this->getOption('directory') . DIRECTORY_SEPARATOR . $file;
-            $handle = fopen($path, 'r');
-            $fileTags = explode(' ', rtrim(fgets($handle), PHP_EOL));
-            fclose($handle);
+            $fileTags = explode(' ', $this->readFile($path, 1));
+
             if (in_array($encoded, $fileTags, true)) {
                 $found[] = base64_decode($file);
             }
@@ -91,6 +92,38 @@ class Files extends AbstractCache
             return null;
         }
         return $found;
+    }
+
+    /**
+     * Get the file data.
+     * If enable, lock file to preserve atomicity
+     *
+     * @param string $path The file path
+     * @param int $line The line to read. If -1 read the whole file
+     * @return string
+     */
+    protected function readFile($path, $line = -1)
+    {
+        $handle = fopen($path, 'r');
+        if ($this->getOption('locking')) {
+            flock($handle, LOCK_SH);
+        }
+
+        if (-1 === $line) {
+            $data = stream_get_contents($handle);
+        } else {
+            for ($read = 1; $read < $line; $read++) {
+                fgets($handle);
+            }
+            $data = rtrim(fgets($handle), PHP_EOL);
+        }
+
+        if ($this->getOption('locking')) {
+            flock($handle, LOCK_UN);
+        }
+        fclose($handle);
+
+        return $data;
     }
 
     /**
@@ -118,7 +151,11 @@ class Files extends AbstractCache
         }
 
         $path = $this->getOption('directory') . DIRECTORY_SEPARATOR . base64_encode($key);
-        file_put_contents($path, $tag . PHP_EOL . $expire . PHP_EOL . serialize($data));
+        file_put_contents(
+            $path,
+            $tag . PHP_EOL . $expire . PHP_EOL . serialize($data),
+            $this->getOption('locking') ? LOCK_EX : null
+        );
         return true;
     }
 
@@ -203,10 +240,7 @@ class Files extends AbstractCache
             return false;
         }
 
-        $handle = fopen($path, 'r');
-        fgets($handle);
-        $expire = fgets($handle);
-        fclose($handle);
+        $expire = $this->readFile($path, 2);
 
         if (0 === (int) $expire) {
             return 0;
