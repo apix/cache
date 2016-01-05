@@ -77,6 +77,14 @@ class Pool implements ItemPoolInterface
     /**
      * {@inheritdoc}
      */
+    public function hasItem($key)
+    {
+        return $this->getItem($key)->isHit();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function clear()
     {
         return $this->cache_adapter->flush(true);
@@ -92,6 +100,14 @@ class Pool implements ItemPoolInterface
         }
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteItem($key)
+    {
+        return $this->deleteItems(array($key));
     }
 
     /**

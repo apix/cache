@@ -176,4 +176,36 @@ class Item implements ItemInterface
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function expiresAt($expiration)
+    {
+        return $this->setExpiration($expiration);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function expiresAfter($time)
+    {
+        if ($time instanceof \DateInterval) {
+            $this->expiration = new \DateTime();
+            $this->expiration->add($time);
+
+        } elseif (is_numeric($time)) {
+            $this->expiration = new \DateTime('now +' . $time . ' seconds');
+
+        } elseif (null === $time) {
+            // stored permanently or for as long as the default value.
+            $this->expiration = new \DateTime(self::DEFAULT_EXPIRATION);
+        } else {
+            throw new InvalidArgumentException(
+                'Integer or \DateInterval object expected.'
+            );
+        }
+
+        return $this;
+    }
+
 }

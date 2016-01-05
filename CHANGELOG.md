@@ -1,5 +1,11 @@
 # APIx Cache changelog
 
+#### Version 1.2.4 (X-Jan-2016)
+- Updated PSR-Cache (Draft) to PSR-Cache (Accepted).
+- Updated `.gitignore`.
+- Updated `composer.json`.
+- Updated `README.md`.
+
 #### Version 1.2.3 (5-Jan-2016)
 - Fix APCu versions (contrib by @mimmi20)
 - Added `Files` and `Directory` backends (contrib by @MacFJA)
