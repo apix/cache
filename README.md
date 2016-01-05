@@ -145,9 +145,9 @@ Advanced usage (APIx native)
   $memcached  = new \Memcached;     // a Memcached instance
   $shared_cache = new Cache\Memcached($memcached, $options);
 ```
-### Options for to the PDO backends
+### PDO backends specific
 
-Note if preflight is set to true (default), the required DB table(s), if missing, will be created on-the-fly. Set preflight to false in order to avoid the expensive checks... 
+Note if preflight is set to true (default), the required DB table(s), if missing, will be created on-the-fly. Set preflight to false in order to avoid the extra checks... 
 
 ```php
   // additional (default) options, specific to PDO
@@ -156,13 +156,21 @@ Note if preflight is set to true (default), the required DB table(s), if missing
   $options['preflight']  = true;          // wether to preflight the DB
   $options['timestamp']  = 'Y-m-d H:i:s'; // the timestamp DB format
 
-  // start SQLITE
+  // with SQLITE
   $db = new \PDO('sqlite:/tmp/apix_tests.sqlite3');
   $relational_cache = new Cache\Pdo\Sqlite($db, $options);
 
-  // start PGSQL
-  $pgsql = new \PDO('pgsql:dbname=apix_tests;host=127.0.0.1', 'postgres');
+  // with MYSQL, MariaDB, Percona, ...
+  $mysql = new \PDO('mysql:host=xxx;port=xxx;dbname=xxx', 'user', 'pass');
+  $mysql_cache = new Cache\Pdo\Mysql($mysql, $options);
+
+  // with PGSQL
+  $pgsql = new \PDO('pgsql:dbname=xxx;host=xxx', 'xxx', 'xxx');
   $postgres_cache = new Cache\Pdo\Pgsql($pgsql, $options);
+
+  // with a SQL:1999 compliant DB e.g. Oracle
+  $dbh = new \PDO('oci:dbname=xxx', 'xxx', 'xxx');
+  $sql1999_cache = new Cache\Pdo\Sql1999($dbh, $options);
 ```
 
 ### Filesystem specific
