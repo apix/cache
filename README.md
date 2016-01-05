@@ -147,8 +147,6 @@ Advanced usage (APIx native)
 ```
 ### PDO backends specific
 
-Note if preflight is set to true (default), the required DB table(s), if missing, will be created on-the-fly. Set preflight to false in order to avoid the extra checks... 
-
 ```php
   // additional (default) options, specific to PDO
   $options['db_table']   = 'cache';       // table to hold the cache
@@ -172,6 +170,8 @@ Note if preflight is set to true (default), the required DB table(s), if missing
   $dbh = new \PDO('oci:dbname=xxx', 'xxx', 'xxx');
   $sql1999_cache = new Cache\Pdo\Sql1999($dbh, $options);
 ```
+
+Note if `preflight` is set to `true` (default), the required tables, if missing, will be created on-the-fly. Set `preflight` to `false` in order to avoid some additional checks... 
 
 ### Filesystem specific
 ```php
