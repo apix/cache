@@ -53,22 +53,19 @@ class PoolTest extends TestCase
 
     public function testBasicSetAndGetOperations()
     {
+        // Create the 'bar' item.
         $item = $this->pool->getItem('bar');
+  
+        // Set a the 'bar' item value.
         $item->set('bar value');
         $this->assertNull($item->get());
-
         $this->pool->save($item);
         $this->assertEquals('bar value', $item->get());
 
-        $this->assertEquals($item, $this->pool->getItem('bar'), "mm");
-
-        // Update an existing item.
+        // Update the 'bar' item value.
         $item->set('new bar value');
         $this->assertNull($item->get());
-
         $this->pool->save($item);
-        // array_map(array($this->pool, 'save'), array($item));
-
         $this->assertEquals('new bar value', $item->get());
     }
 
