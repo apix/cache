@@ -2,7 +2,7 @@
     "name": "apix/cache",
     "description": "A thin cache wrapper with a generic interface to various caching backends emphasising cache taggging and indexing.",
     "type": "library",
-    "keywords": ["apc", "APCu", "redis", "mongodb", "mongo", "igbinary", "cache", "apix", "serializer", "json", "pdo", "sqlite", "mysql", "postgres", "pgsql", "memcached", "memcache", "psrCache", "psr-cache"],
+    "keywords": ["apc", "APCu", "redis", "mongodb", "mongo", "igbinary", "cache", "apix", "serializer", "json", "pdo", "sqlite", "mysql", "postgres", "pgsql", "memcached", "memcache", "psrCache", "psr-cache", "Filesystem"],
     "homepage": "https://github.com/frqnck/apix-cache",
     "license": "BSD-3-Clause",
     "authors": [
@@ -23,13 +23,13 @@
     },
     "require-dev": {
         "phpunit/phpunit": "~3.7.0",
-        "satooshi/php-coveralls": "dev-master"
+        "satooshi/php-coveralls": "~0.7.1"
     },
     "suggest": {
-        "ext-apc": "Allows to cache into APC data store (up to PHP 5.4).",
-        "ext-apcu": "Allows to use APCu userland caching (any PHP version).",
-        "ext-redis": "So you can cache into Redis server(s).",
-        "ext-mongo": "Allows to cache into MongoDB instance(s).",
+        "ext-apc": "Allows to cache into APC data store ~ up to PHP 5.4.",
+        "ext-apcu": "Allows to use APCu userland caching ~ any PHP version.",
+        "ext-redis": "So you can cache into Redis servers.",
+        "ext-mongo": "Allows to cache into MongoDB instances.",
         "ext-memcached": "Allows to use Memcached distributed memory caching system",
         "ext-pdo": "Allows to cache into PDO supported DBs.",
         "ext-pdo_sqlite": "Allows to cache into SQLite.",
