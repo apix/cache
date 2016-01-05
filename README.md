@@ -145,33 +145,33 @@ Advanced usage (APIx native)
   $memcached  = new \Memcached;     // a Memcached instance
   $shared_cache = new Cache\Memcached($memcached, $options);
 ```
-### PDO backends specific
-
+### PDO specific
 ```php
-  // additional (default) options, specific to PDO
+  // additional (default) options, specific to the PDO backends
   $options['db_table']   = 'cache';       // table to hold the cache
   $options['serializer'] = 'php';         // null, php, igbinary, json
   $options['preflight']  = true;          // wether to preflight the DB
   $options['timestamp']  = 'Y-m-d H:i:s'; // the timestamp DB format
 
   // with SQLITE
-  $db = new \PDO('sqlite:/tmp/apix_tests.sqlite3');
-  $relational_cache = new Cache\Pdo\Sqlite($db, $options);
+  $dbh = new \PDO('sqlite:/tmp/apix_tests.sqlite3');
+  $relational_cache = new Cache\Pdo\Sqlite($dbh, $options);
 
   // with MYSQL, MariaDB, Percona, ...
-  $mysql = new \PDO('mysql:host=xxx;port=xxx;dbname=xxx', 'user', 'pass');
-  $mysql_cache = new Cache\Pdo\Mysql($mysql, $options);
+  $dbh = new \PDO('mysql:host=xxx;port=xxx;dbname=xxx', 'user', 'pass');
+  $mysql_cache = new Cache\Pdo\Mysql($dbh, $options);
 
   // with PGSQL
-  $pgsql = new \PDO('pgsql:dbname=xxx;host=xxx', 'xxx', 'xxx');
-  $postgres_cache = new Cache\Pdo\Pgsql($pgsql, $options);
+  $dbh = new \PDO('pgsql:dbname=xxx;host=xxx', 'xxx', 'xxx');
+  $postgres_cache = new Cache\Pdo\Pgsql($dbh, $options);
 
-  // with a SQL:1999 compliant DB e.g. Oracle
+  // with a SQL:1999 compliant DB, e.g. Oracle
   $dbh = new \PDO('oci:dbname=xxx', 'xxx', 'xxx');
   $sql1999_cache = new Cache\Pdo\Sql1999($dbh, $options);
 ```
 
-Note if `preflight` is set to `true` (default), the required tables, if missing, will be created on-the-fly. Set `preflight` to `false` in order to avoid some additional checks... 
+Note if `preflight` is set to `true` (the default), the required tables, if missing, will be created on-the-fly.
+Once these tables exist, set `preflight` to `false` in order to avoid some additional checks... 
 
 ### Filesystem specific
 ```php
