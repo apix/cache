@@ -24,8 +24,8 @@ Currently, the following cache store are supplied:
 * **[MongoDB](http://www.mongodb.org/)** using the [mongo](http://php.net/book.mongo.php) native PHP extension *with tagging support*,
 * **[Memcached](http://memcached.org/)** using the [Memcached](http://php.net/book.memcached.php) extension *with indexing, tagging and namespacing support*,
 * and relational databases usign **[PDO](http://php.net/book.pdo.php)** *with tagging support*:
- * Dedicated and fully tested drivers for **[SQLite](http://www.sqlite.org)**, **[PostgreSQL](http://www.postgresql.org)** and **[MySQL](http://www.mysql.com)**.
- * A generic Sql1999 driver (assumed to work but not tested) for [4D](http://www.4d.com/), [Cubrid](http://www.cubrid.org), [MS SQL Server](http://www.microsoft.com/sqlserver/), [Sybase](http://www.sybase.com), [Firebird](http://www.firebirdsql.org), ODBC, [Interbase](http://www.embarcadero.com/products/interbase), [IBM DB2](www.ibm.com/software/data/db2/), [IDS](http://www-01.ibm.com/software/data/informix/) and [Oracle](http://www.oracle.com/database/).
+ * Dedicated drivers (fully tested) for **[SQLite](http://www.sqlite.org)**, **[PostgreSQL](http://www.postgresql.org)** and **[MySQL](http://www.mysql.com)** (including MariaDB and Percona).
+ * A generic Sql1999 driver (assumed to work but not fully tested) for [4D](http://www.4d.com/), [Cubrid](http://www.cubrid.org), [MS SQL Server](http://www.microsoft.com/sqlserver/), [Sybase](http://www.sybase.com), [Firebird](http://www.firebirdsql.org), ODBC, [Interbase](http://www.embarcadero.com/products/interbase), [IBM DB2](www.ibm.com/software/data/db2/), [IDS](http://www-01.ibm.com/software/data/informix/) and [Oracle](http://www.oracle.com/database/)...
 * Runtime (in-memory array storage).
 * **[Filesystem](#filesystem-specific)** (directories based, and files based) *with tagging support*.
 
@@ -157,7 +157,7 @@ Advanced usage (APIx native)
   $dbh = new \PDO('sqlite:/tmp/apix_tests.sqlite3');
   $relational_cache = new Cache\Pdo\Sqlite($dbh, $options);
 
-  // with MYSQL, MariaDB, Percona, ...
+  // with MYSQL, MariaDB and Percona
   $dbh = new \PDO('mysql:host=xxx;port=xxx;dbname=xxx', 'user', 'pass');
   $mysql_cache = new Cache\Pdo\Mysql($dbh, $options);
 
