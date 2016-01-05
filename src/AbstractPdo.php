@@ -248,16 +248,20 @@ abstract class AbstractPdo extends AbstractCache
     }
 
     /**
-     * Returns the driver name for this .
+     * Returns the current driver's name.
      *
      * @param \PDO  $pdo     An instance of a PDO class.
+     * @return string        Either 'Mysql', 'Pgsql', 'Sqlite' or 'Sql1999'.
      */
     public static function getDriverName(\PDO $pdo)
     {
         $name = $pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
         if (!in_array($name, array('sqlite', 'mysql', 'pgsql'))) {
+        // @codeCoverageIgnoreStart
+            // sql1999 specific tests are run on Sqlite.
             $name = 'sql1999';
         }
+        // @codeCoverageIgnoreEnd
 
         return ucfirst($name);
     }
