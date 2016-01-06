@@ -52,7 +52,7 @@ matrix:
   fast_finish: true
   # xdebug is not installed on HHVM and PHP 7, so skip code coverage (coverage=no).
   include:
-    - php 7
+    - php: 7
       env: coverage=no
   allow_failures:
     # memcached does not working properly on PHP 5.3
