@@ -1,14 +1,17 @@
 # APIx Cache changelog
 
-#### Version 1.2.4 (X-Jan-2016)
-- Updated PSR-Cache (Draft) to PSR-Cache (Accepted).
-- Updated `.gitignore`.
+#### Version 1.2.4 (6-Jan-2016)
+- Updated PSR-Cache (Draft) to PSR-6 (Accepted).
+- Marked as deprecated: `PsrCache::setExpiration`, `PsrCache::isRegenerating`, `PsrCache::exists`.
+- Added additional unit tests to cover PSR-6.
 - Updated `composer.json`.
 - Updated `README.md`.
+- Updated `.gitignore`.
+- Added file locking option to the filesystem backends (contrib by @MacFJA).
 
 #### Version 1.2.3 (5-Jan-2016)
-- Fix APCu versions (contrib by @mimmi20)
-- Added `Files` and `Directory` backends (contrib by @MacFJA)
+- Fix APCu versions (contrib by @mimmi20).
+- Added `Files` and `Directory` backends (contrib by @MacFJA).
 - Updated `README.md`.
 
 #### Version 1.2.2 (1-Sep-2015)
@@ -44,7 +47,7 @@
 - Added JSON support to Redis.
 
 #### Version 1.0.5 (23-Jan-2013)
-- Added loadKey(), loadTag() and removed load().
+- Added `loadKey()`, `loadTag()` and removed `load()`.
 
 #### Version 1.0.4 (22-Jan-2013)
 - Added dedicated SQL1999 class.

@@ -60,52 +60,88 @@ class ItemTest extends TestCase
         $this->assertSame('new foo value', $this->item->get());
     }
 
-    /**
-     * @expectedException Apix\Cache\PsrCache\InvalidArgumentException
-     */
-    public function testSetExpirationThrowAnException()
-    {
-        $this->item->setExpiration('string');
-    }
-
-    public function dateProvider()
+    public function expiresAtProvider()
     {
         return array(
-            'FromDateTime' => array(new \DateTime('1 day'), '1 day', 86400),
-            'FromZeroToNow' => array(0, null, 0), // or 'now' (same)
-            'FromInteger' => array(999, '+999 seconds', 999),
-            'FromNull' => array(null, Item::DEFAULT_EXPIRATION, null),
+            'DateTime' => array(new \DateTime('1 day'), '1 day', 86400),
+            'Zero to Now' => array(0, null, 0), // or 'now' (same)
+            'Integer' => array(999, '+999 seconds', 999),
+            'Null' => array(null, Item::DEFAULT_EXPIRATION, null),
         );
     }
 
     /**
-     * @dataProvider dateProvider
+     * @dataProvider expiresAtProvider
      */
-    public function testSetExpiration($from, $to)
+    public function testExpiresAt($from, $to)
     {
-        $this->assertSame($this->item, $this->item->setExpiration($from));
+        $this->assertSame($this->item, $this->item->expiresAt($from));
         $date = new \DateTime($to);
 
         $expire = $this->item->getExpiration();
         $this->assertInstanceOf('DateTime', $expire);
 
-        $this->assertEquals((int) $date->format('U'), $expire->format('U'), '', 10);
+        $this->assertEquals(
+            (int) $date->format('U'), $expire->format('U'), '', 10
+        );
     }
 
     /**
-     * @dataProvider dateProvider
+     * @dataProvider expiresAtProvider
      */
     public function testGetTtlInSecond($from, $to, $sec)
     {
         if ($sec !== null) {
-            $this->item->setExpiration($from);
+            $this->item->expiresAt($from);
             $this->assertEquals($sec, $this->item->getTtlInSecond(), '', 10);
         }
+    }
+
+    public function expiresAfterProvider()
+    {
+        return array(
+            'DateInterval' => array(new \DateInterval('P1Y'), 'now+1year'),
+            'Zero to Now' => array(0, null), // or 'now' (same)
+            'Integer' => array(999, '+999 seconds'),
+            'Null' => array(null, Item::DEFAULT_EXPIRATION),
+        );
+    }
+
+    /**
+     * @dataProvider expiresAfterProvider
+     */
+    public function testExpiresAfter($from, $to)
+    {
+        $this->assertSame($this->item, $this->item->expiresAfter($from));
+        $date = new \DateTime($to);
+
+        $expire = $this->item->getExpiration();
+        $this->assertInstanceOf('DateTime', $expire);
+
+        $this->assertEquals(
+            (int) $date->format('U'), $expire->format('U'), '', 10
+        );
     }
 
     public function testItemIsRegenerating()
     {
         $this->assertFalse($this->item->isRegenerating());
+    }
+
+    /**
+     * @expectedException Apix\Cache\PsrCache\InvalidArgumentException
+     */
+    public function testExpiresAtThrowAnException()
+    {
+        $this->item->expiresAt('string');
+    }
+
+    /**
+     * @expectedException Apix\Cache\PsrCache\InvalidArgumentException
+     */
+    public function testExpiresAfterThrowAnException()
+    {
+        $this->item->expiresAfter('string');
     }
 
 }

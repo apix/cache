@@ -46,7 +46,7 @@ Factory usage (PSR-Cache wrapper)
   
   $item = $pool->getItem('wibble_id');
   
-  if (!$item->exists()) {
+  if ( !$item->isHit() ) {
     $data = compute_expensive_stuff();
     $item->set($data);
     $pool->save($item);

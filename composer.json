@@ -1,8 +1,8 @@
 {
     "name": "apix/cache",
-    "description": "A thin cache wrapper with a generic interface to various caching backends emphasising cache taggging and indexing.",
+    "description": "A thin PSR-6 cache wrapper with a generic interface to various caching backends emphasising cache taggging and indexing.",
     "type": "library",
-    "keywords": ["apc", "APCu", "redis", "mongodb", "mongo", "igbinary", "cache", "apix", "serializer", "json", "pdo", "sqlite", "mysql", "postgres", "pgsql", "memcached", "memcache", "psrCache", "psr-cache", "Filesystem"],
+    "keywords": ["apc", "APCu", "redis", "mongodb", "mongo", "igbinary", "serializer", "json", "pdo", "sqlite", "mysql", "postgres", "pgsql", "memcached", "memcache", "psrCache", "psr-6", "psr-cache", "Filesystem", "session", "cache", "caching"],
     "homepage": "https://github.com/frqnck/apix-cache",
     "license": "BSD-3-Clause",
     "authors": [
@@ -19,11 +19,11 @@
         "irc": "irc://irc.freenode.org/ouarz"
     },
     "require": {
-        "php": "^5.3.2 || ^7.0",
+        "php": "^5.3.2|^7.0",
         "psr/cache": "1.0.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^3.7.0 || ^5.0.5",
+        "phpunit/phpunit": "^3.7.0|^5.0.5",
         "satooshi/php-coveralls": "~0.7.1"
     },
     "suggest": {

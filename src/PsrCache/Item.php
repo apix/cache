@@ -68,7 +68,7 @@ class Item implements ItemInterface
         $this->key = $key;
         $this->value = $value;
         $this->hit = $hit;
-        $this->setExpiration($ttl);
+        $this->expiresAt($ttl);
     }
 
     /**
@@ -107,41 +107,35 @@ class Item implements ItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @deprecated
+     * @codeCoverageIgnore
      */
     public function exists()
     {
-        // TODO: review!
         return $this->hit;
     }
 
     /**
-     * {@inheritdoc}
+     * @deprecated
+     * @codeCoverageIgnore
      */
     public function isRegenerating()
     {
-        return false; // TODO
+        return false;
     }
 
     /**
-     * {@inheritdoc}
+     * @deprecated
+     * @see Item::expiresAt()
+     * @codeCoverageIgnore
      */
     public function setExpiration($ttl = null)
     {
-        if ($ttl instanceof \DateTime) {
-            $this->expiration = $ttl;
-        } elseif (is_numeric($ttl)) {
-            $this->expiration = new \DateTime('now +' . $ttl . ' seconds');
-        } elseif (is_null($ttl)) {
-             // stored permanently or for as long as the default value.
-            $this->expiration = new \DateTime(self::DEFAULT_EXPIRATION);
-        } else {
-            throw new InvalidArgumentException(
-                'Integer or \DateTime object expected.'
-            );
+        if (is_int($expiration)) {
+            $ttl = new \DateTime('now +' . $ttl . ' seconds');
         }
 
-        return $this;
+        return $this->expiresAt($ttl);
     }
 
     /**
@@ -179,9 +173,27 @@ class Item implements ItemInterface
     /**
      * {@inheritdoc}
      */
-    public function expiresAt($expiration)
+    public function expiresAt($expiration = null)
     {
-        return $this->setExpiration($expiration);
+        if ($expiration instanceof \DateTime) {
+            $this->expiration = $expiration;
+ 
+        } elseif (is_int($expiration)) {
+            $this->expiration = new \DateTime(
+                'now +' . $expiration . ' seconds'
+            );
+
+        } elseif (null === $expiration) {
+            $this->expiration = new \DateTime(self::DEFAULT_EXPIRATION);
+        
+        } else {
+
+            throw new InvalidArgumentException(
+                'Integer or \DateTime object expected.'
+            );
+        }
+
+        return $this;
     }
 
     /**
@@ -193,13 +205,14 @@ class Item implements ItemInterface
             $this->expiration = new \DateTime();
             $this->expiration->add($time);
 
-        } elseif (is_numeric($time)) {
+        } elseif (is_int($time)) {
             $this->expiration = new \DateTime('now +' . $time . ' seconds');
 
         } elseif (null === $time) {
-            // stored permanently or for as long as the default value.
             $this->expiration = new \DateTime(self::DEFAULT_EXPIRATION);
+        
         } else {
+
             throw new InvalidArgumentException(
                 'Integer or \DateInterval object expected.'
             );

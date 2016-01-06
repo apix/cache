@@ -97,7 +97,6 @@ class PoolTest extends TestCase
         $item = $this->pool->getItem('foo');
 
         $this->assertFalse($item->isHit());
-        $this->assertFalse($item->exists());
     }
 
     public function testDeleteItems()
@@ -106,9 +105,14 @@ class PoolTest extends TestCase
             $this->pool->deleteItems(array('foo', 'non-existant'))
         );
 
-        $item = $this->pool->getItem('foo');
-        $this->assertFalse($item->isHit());
-        $this->assertFalse($item->exists());
+        $this->assertFalse( $this->pool->hasItem('foo') );
+    }
+
+    public function testDeleteItem()
+    {
+        $this->assertSame( $this->pool, $this->pool->deleteItem('foo') );
+
+        $this->assertFalse( $this->pool->hasItem('foo') );
     }
 
     public function testSaveDeferredAndCommit()
