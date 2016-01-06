@@ -40,6 +40,7 @@ if [ "$DB" = "mongodb" ]; then
 fi
 
 if [ "$DB" = "mysql" ]; then
+    mysql -e 'DROP DATABASE IF EXISTS apix_tests;'
     mysql -e 'CREATE DATABASE IF NOT EXISTS apix_tests;'
 fi
 
@@ -50,6 +51,10 @@ fi
 
 if [ "$DB" = "memcached" ]; then
     echo "extension = memcached.so" >> $PHPINI
+fi
+
+if [ "$DB" = "memcache" ]; then
+    echo "extension = memcache.so" >> $PHPINI
 fi
 
 # igbinary
