@@ -51,7 +51,9 @@ notifications:
 matrix:
   fast_finish: true
   allow_failures:
+    # memcached does not working properly on PHP 5.3
     - php: 5.3
+      env: DB=memcached
     - php: hhvm
     - php: hhvm-nightly
     - php: nightly
