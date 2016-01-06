@@ -15,7 +15,8 @@ php:
   - 7.0
   - nightly
   - hhvm
-  - hhvm-nightly
+  # fails with the message "HHVM nightly is no longer supported on Ubuntu Precise"
+  #- hhvm-nightly
 
 env:
   - DB=apc
@@ -70,8 +71,6 @@ matrix:
     - php: hhvm
     - php: hhvm
       env: DB=pgsql     # pgsql client currently unsupported by HHVM, requires 3rd party dependency.
-    - php: hhvm-nightly
-    - php: nightly
 
 cache:
   directories:
