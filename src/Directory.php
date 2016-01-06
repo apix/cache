@@ -20,7 +20,8 @@ class Directory extends AbstractCache
     public function __construct(array $options=null)
     {
         $options += array(
-            'directory' => sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'apix-cache'
+            'directory' => sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'apix-cache',
+            'locking' => true
         );
         parent::__construct(null, $options);
         $this->initDirectories();
@@ -58,6 +59,28 @@ class Directory extends AbstractCache
         $this->buildPath($path);
 
         return $path;
+    }
+
+    /**
+     * Get the file data.
+     * If enable, lock file to preserve atomicity
+     *
+     * @param string $path The file path
+     * @return string
+     */
+    protected function readFile($path)
+    {
+        $handle = fopen($path, 'rb');
+        if ($this->getOption('locking')) {
+            flock($handle, LOCK_SH);
+        }
+        $data = stream_get_contents($handle);
+        if ($this->getOption('locking')) {
+            flock($handle, LOCK_UN);
+        }
+        fclose($handle);
+
+        return $data;
     }
 
     /**
@@ -104,7 +127,7 @@ class Directory extends AbstractCache
             return false;
         }
 
-        $expires = json_decode(file_get_contents($path), true);
+        $expires = json_decode($this->readFile($path), true);
 
         if (!array_key_exists(base64_encode($key), $expires)) {
             return false;
@@ -154,7 +177,7 @@ class Directory extends AbstractCache
 
         $path = $this->getTagPath($this->mapTag($name));
         $this->buildPath(dirname($path));
-        file_put_contents($path, implode(PHP_EOL, $ids));
+        file_put_contents($path, implode(PHP_EOL, $ids), $this->getOption('locking') ? LOCK_EX : null);
     }
 
     /**
@@ -172,7 +195,7 @@ class Directory extends AbstractCache
 
         $expires = array();
         if (file_exists($path) && is_file($path)) {
-            $expires = json_decode(file_get_contents($path), true);
+            $expires = json_decode($this->readFile($path), true);
         }
 
         if ($ttl === false) {
@@ -185,7 +208,7 @@ class Directory extends AbstractCache
             $expires[$baseKey] = time() + $ttl;
         }
 
-        file_put_contents($path, json_encode($expires));
+        file_put_contents($path, json_encode($expires), $this->getOption('locking') ? LOCK_EX : null);
     }
 
     /**
@@ -226,7 +249,7 @@ class Directory extends AbstractCache
             return null;
         }
 
-        return unserialize(file_get_contents($path));
+        return unserialize($this->readFile($path));
     }
 
     /**
@@ -275,7 +298,7 @@ class Directory extends AbstractCache
 
         $path = $this->getKeyPath($key);
         $this->buildPath(dirname($path));
-        file_put_contents($path, serialize($data));
+        file_put_contents($path, serialize($data), $this->getOption('locking') ? LOCK_EX : null);
 
         if (null !== $tags) {
             foreach ($tags as $tag) {
