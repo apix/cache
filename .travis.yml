@@ -33,11 +33,11 @@ install:
   - tests/bin/travis-init.sh
 
 script:
-  - vendor/bin/phpunit --colors --verbose --coverage-text --coverage-clover build/logs/clover.xml
+  - if [ "$coverage" != "no" ]; then vendor/bin/phpunit --colors --verbose --coverage-text --coverage-clover build/logs/clover.xml; fi
+  - if [ "$coverage" == "no" ]; then vendor/bin/phpunit --colors --verbose; fi
 
 after_script:
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml
+  - if [ "$coverage" != "no" ]; then wget https://scrutinizer-ci.com/ocular.phar; php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml; fi
   - php vendor/bin/coveralls -v
 
 notifications:
@@ -50,10 +50,17 @@ notifications:
 
 matrix:
   fast_finish: true
+  # xdebug is not installed on HHVM and PHP 7, so skip code coverage (coverage=no).
+  include:
+    - php 7
+      env: coverage=no
   allow_failures:
     # memcached does not working properly on PHP 5.3
     - php: 5.3
       env: DB=memcached
     - php: hhvm
+      env: coverage=no
     - php: hhvm-nightly
+      env: coverage=no
     - php: nightly
+      env: coverage=no
