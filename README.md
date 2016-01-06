@@ -64,7 +64,7 @@ Basic usage (APIx native)
   $cache = new Cache\Apc;
 
   // try to retrieve 'wibble_id' from the cache
-  if (!$data = $cache->load('wibble_id')) {
+  if ( !$data = $cache->load('wibble_id') ) {
     
     // otherwise, get some data from the origin
     // example of arbitrary mixed data
