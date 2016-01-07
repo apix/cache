@@ -121,7 +121,7 @@ Advanced usage (APIx native)
   $redis_client = new \Redis;        // instantiate phpredis*
   $distributed_cache = new Cache\Redis($redis_client, $options);
 ```
-\* see [phpredis](https://github.com/nicolasff/phpredis) for instantiation usage.
+\* see [PhpRedis](https://github.com/nicolasff/phpredis) for instantiation usage.
 
 ### MongoDB specific 
 ```php
@@ -133,7 +133,7 @@ Advanced usage (APIx native)
   $mongo  = new \MongoClient;             // MongoDB native driver** instance
   $cache = new Cache\Mongo($mongo, $options);
 ```
-\*\* see [MongoDB](http://php.net/manual/en/book.mongo.php) for more instantiation details.
+\*\* see [MongoDB](http://php.net/manual/en/book.mongo.php) for instantiation usage.
 
 ### Memcached specific
 ```php
@@ -144,9 +144,10 @@ Advanced usage (APIx native)
   $options['prefix_nsp'] = 'nsp_';  // prefix cache namespaces
   $options['serializer'] = 'php';   // null, php, json, igbinary.
 
-  $memcached  = new \Memcached;     // a Memcached instance
+  $memcached  = new \Memcached;     // a Memcached*** instance
   $shared_cache = new Cache\Memcached($memcached, $options);
 ```
+\*\*\* see [Memcached](http://php.net/manual/en/book.memcached.php) for instantiation details.
 ### PDO specific
 ```php
   // additional (default) options, specific to the PDO backends
