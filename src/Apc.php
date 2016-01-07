@@ -24,7 +24,7 @@ class Apc extends AbstractCache
     /**
      * Constructor.
      */
-    public function __construct(array $options=array())
+    public function __construct(array $options = array())
     {
         parent::__construct(null, $options);
     }
@@ -53,7 +53,7 @@ class Apc extends AbstractCache
      * @param  boolean    $success The variable to store the success value.
      * @return mixed|null Returns the cached data or null.
      */
-    public function get($id, $success=null)
+    public function get($id, $success = null)
     {
         $cached = apc_fetch($id, $success);
 
@@ -76,7 +76,7 @@ class Apc extends AbstractCache
      *
      * APC does not support natively cache-tags so we simulate them.
      */
-    public function save($data, $key, array $tags=null, $ttl=null)
+    public function save($data, $key, array $tags = null, $ttl = null)
     {
         $key = $this->mapKey($key);
         $store = array($key => $data);
@@ -114,7 +114,7 @@ class Apc extends AbstractCache
 
             $iterator = $this->getIterator(
                 '/^' . preg_quote($this->options['prefix_tag']) . '/',
-                \APC_ITER_VALUE
+                APC_ITER_VALUE
             );
             foreach ($iterator as $tag => $keys) {
                 if ( false !== ($k = array_search($key, $keys['value'])) ) {
@@ -161,7 +161,7 @@ class Apc extends AbstractCache
      *
      * APC does not support natively cache-tags so we simulate them.
      */
-    public function flush($all=false)
+    public function flush($all = false)
     {
         if (true === $all) {
             return apc_clear_cache('user');
@@ -170,7 +170,7 @@ class Apc extends AbstractCache
         $iterator = $this->getIterator(
             '/^' . preg_quote($this->options['prefix_key'])
             .'|' . preg_quote($this->options['prefix_tag']) . '/',
-            \APC_ITER_KEY
+            APC_ITER_KEY
         );
 
         $rmed = array();
@@ -188,9 +188,9 @@ class Apc extends AbstractCache
      * @param integer $format
      * @return \APCIterator
      */
-    protected function getIterator($search=null, $format=\APC_ITER_ALL)
+    protected function getIterator($search = null, $format = APC_ITER_ALL)
     {
-        return new \APCIterator('user', $search, $format, 100, \APC_LIST_ACTIVE);
+        return new \APCIterator('user', $search, $format, 100, APC_LIST_ACTIVE);
     }
 
     /**
@@ -202,7 +202,8 @@ class Apc extends AbstractCache
     public function getInternalInfos($key)
     {
         $iterator = $this->getIterator(
-            '/^' . preg_quote($this->options['prefix_key']) . '/'
+            '/^' . preg_quote($this->options['prefix_key']) . '/',
+            APC_ITER_ALL ^ APC_ITER_VALUE ^ APC_ITER_TYPE ^ APC_ITER_REFCOUNT
         );
 
         $key = $this->mapKey($key);
