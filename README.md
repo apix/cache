@@ -40,8 +40,9 @@ Factory usage (PSR-Cache wrapper)
   $backend = new \Redis();
   // $backend = 'apc';
   // $backend = new \PDO('...');
+  // $backend = new Cache\Files(...); 
 
-  $pool = Cache\Factory::getPool($backend); // without tagging support
+  $pool = Cache\Factory::getPool($backend);               // without tagging support
   // or $pool = Cache\Factory::getTaggablePool($backend); // with tagging!
   
   $item = $pool->getItem('wibble_id');
