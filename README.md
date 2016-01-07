@@ -38,12 +38,13 @@ Factory usage (PSR-Cache wrapper)
   use Apix\Cache;
 
   $backend = new \Redis();
-  // $backend = 'apc';
-  // $backend = new \PDO('...');
-  // $backend = new Cache\Files(...); 
+  # $backend = new \PDO('...');      // Any supported client object e.g. '\Redis', '\MongoClient', ...
+  # $backend = new Cache\Files(...); // or one that implements \Apix\Cache\Adapter
+  # $backend = 'apc';                // or an adapter name (string) e.g. "APC", "Runtime"
+  # $backend = new MyArrayObject();  // or even a plain array() or \ArrayObject.
 
   $pool = Cache\Factory::getPool($backend);               // without tagging support
-  // or $pool = Cache\Factory::getTaggablePool($backend); // with tagging!
+  # $pool = Cache\Factory::getTaggablePool($backend);     // with tagging!
   
   $item = $pool->getItem('wibble_id');
   
