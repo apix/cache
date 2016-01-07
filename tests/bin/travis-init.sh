@@ -12,6 +12,7 @@ else
     # update PECL
     pecl channel-update pecl.php.net
 
+    # install igbinary
     echo "yes" | pecl install igbinary
 fi
 
@@ -51,5 +52,3 @@ fi
 if [ "$DB" = "memcached" ]; then
     echo "extension = memcached.so" >> $PHPINI
 fi
-
-# igbinary
