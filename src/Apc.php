@@ -15,6 +15,7 @@ namespace Apix\Cache;
 /**
  * APC Cache and APCu (User-Cache) wrapper with emulated tag support.
  *
+ * @package Apix\Cache
  * @author Franck Cassedanne <franck at ouarz.net>
  */
 class Apc extends AbstractCache
@@ -113,7 +114,7 @@ class Apc extends AbstractCache
 
             $iterator = $this->getIterator(
                 '/^' . preg_quote($this->options['prefix_tag']) . '/',
-                APC_ITER_VALUE
+                \APC_ITER_VALUE
             );
             foreach ($iterator as $tag => $keys) {
                 if ( false !== ($k = array_search($key, $keys['value'])) ) {
@@ -169,7 +170,7 @@ class Apc extends AbstractCache
         $iterator = $this->getIterator(
             '/^' . preg_quote($this->options['prefix_key'])
             .'|' . preg_quote($this->options['prefix_tag']) . '/',
-            APC_ITER_KEY
+            \APC_ITER_KEY
         );
 
         $rmed = array();
@@ -187,9 +188,9 @@ class Apc extends AbstractCache
      * @param integer $format
      * @return \APCIterator
      */
-    protected function getIterator($search=null, $format=APC_ITER_ALL)
+    protected function getIterator($search=null, $format=\APC_ITER_ALL)
     {
-        return new \APCIterator('user', $search, $format, 100, APC_LIST_ACTIVE);
+        return new \APCIterator('user', $search, $format, 100, \APC_LIST_ACTIVE);
     }
 
     /**
