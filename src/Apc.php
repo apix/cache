@@ -203,7 +203,7 @@ class Apc extends AbstractCache
     {
         $iterator = $this->getIterator(
             '/^' . preg_quote($this->options['prefix_key']) . '/',
-            \APC_ITER_KEY ^ \APC_ITER_VALUE // fix fo HHVM
+            \APC_ITER_KEY # fix HHVM
         );
 
         $key = $this->mapKey($key);
