@@ -14,6 +14,12 @@ namespace Apix\Cache\tests;
 
 use Apix\Cache;
 
+/**
+ * RuntimeTest
+ *
+ * @package Apix\Cache
+ * @author Franck Cassedanne <franck at ouarz.net>
+ */
 class RuntimeTest extends GenericTestCase
 {
     protected $cache = null;

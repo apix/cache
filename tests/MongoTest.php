@@ -14,6 +14,12 @@ namespace Apix\Cache\tests;
 
 use Apix\Cache;
 
+/**
+ * MongoTest
+ *
+ * @package Apix\Cache
+ * @author Franck Cassedanne <franck at ouarz.net>
+ */
 class MongoTest extends GenericTestCase
 {
     protected $cache, $mongo;

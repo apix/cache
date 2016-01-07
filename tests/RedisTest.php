@@ -14,6 +14,12 @@ namespace Apix\Cache\tests;
 
 use Apix\Cache;
 
+/**
+ * RedisTest
+ *
+ * @package Apix\Cache
+ * @author Franck Cassedanne <franck at ouarz.net>
+ */
 class RedisTest extends GenericTestCase
 {
     const HOST = '127.0.0.1';
