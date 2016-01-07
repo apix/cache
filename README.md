@@ -148,6 +148,7 @@ Advanced usage (APIx native)
   $shared_cache = new Cache\Memcached($memcached, $options);
 ```
 \*\*\* see [Memcached](http://php.net/manual/en/book.memcached.php) for instantiation details.
+
 ### PDO specific
 ```php
   // additional (default) options, specific to the PDO backends
