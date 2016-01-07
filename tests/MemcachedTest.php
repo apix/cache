@@ -20,7 +20,11 @@ class MemcachedTest extends GenericTestCase
     const PORT = 11211;
     const AUTH = null;
 
-    protected $cache, $memcached;
+    /** @var \Apix\Cache\AbstractCache */
+    protected $cache;
+
+    /** @var \Memcached */
+    protected $memcached;
 
     protected $options = array(
         'prefix_key' => 'key_',
