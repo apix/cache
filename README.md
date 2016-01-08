@@ -19,15 +19,15 @@ Cache backends
 --------------
 Currently, the following cache store are supplied:
 
-* **[APC](http://php.net/book.apc.php)** (and **[APCu](http://pecl.php.net/package/APCu)**) *with tagging support*,
+* **[APC](http://php.net/book.apc.php)** (which also works with [APCu](http://pecl.php.net/package/APCu)) *with tagging support*,
 * **[Redis](http://redis.io)** using the [PhpRedis](https://github.com/nicolasff/phpredis) extension *with tagging support*,
 * **[MongoDB](http://www.mongodb.org/)** using the [mongo](http://php.net/book.mongo.php) native PHP extension *with tagging support*,
 * **[Memcached](http://memcached.org/)** using the [Memcached](http://php.net/book.memcached.php) extension *with indexing, tagging and namespacing support*,
 * and relational databases usign **[PDO](http://php.net/book.pdo.php)** *with tagging support*:
- * Dedicated drivers (fully tested) for **[SQLite](http://www.sqlite.org)**, **[PostgreSQL](http://www.postgresql.org)** and **[MySQL](http://www.mysql.com)** (including MariaDB and Percona).
- * A generic Sql1999 driver (assumed to work but not fully tested) for [4D](http://www.4d.com/), [Cubrid](http://www.cubrid.org), [MS SQL Server](http://www.microsoft.com/sqlserver/), [Sybase](http://www.sybase.com), [Firebird](http://www.firebirdsql.org), ODBC, [Interbase](http://www.embarcadero.com/products/interbase), [IBM DB2](www.ibm.com/software/data/db2/), [IDS](http://www-01.ibm.com/software/data/informix/) and [Oracle](http://www.oracle.com/database/)...
-* Runtime (in-memory array storage).
-* **[Filesystem](#filesystem-specific)** (directories based, and files based) *with tagging support*.
+ * Dedicated and fully tested drivers for **[SQLite](http://www.sqlite.org)**, **[PostgreSQL](http://www.postgresql.org)** and **[MySQL](http://www.mysql.com)** (also works with MariaDB and Percona),
+ * A generic **[Sql1999](https://en.wikipedia.org/wiki/SQL:1999)** driver for [4D](http://www.4d.com/), [Cubrid](http://www.cubrid.org), [SQL Server](http://www.microsoft.com/sqlserver), [Sybase](http://www.sybase.com), [Firebird](http://www.firebirdsql.org), [ODBC](https://en.wikipedia.org/wiki/Open_Database_Connectivity), [Interbase](http://www.embarcadero.com/products/interbase), [IBM DB2](www.ibm.com/software/data/db2/), [IDS](http://www-01.ibm.com/software/data/informix/), [Oracle](http://www.oracle.com/database)...
+* **[Filesystem](#filesystem-specific)** (**Directory** based, and **Files** based) *with tagging support*,
+* **Runtime** (in-memory array storage).
 
 Feel free to comment, send pull requests and patches...
 
@@ -38,11 +38,13 @@ Factory usage (PSR-Cache wrapper)
   use Apix\Cache;
 
   $backend = new \Redis();
-  // $backend = 'apc';
-  // $backend = new \PDO('...');
+  # $backend = new \PDO('...');      // Any supported client object e.g. '\Redis', '\MongoClient', ...
+  # $backend = new Cache\Files(...); // or one that implements \Apix\Cache\Adapter
+  # $backend = 'apc';                // or an adapter name (string) e.g. "APC", "Runtime"
+  # $backend = new MyArrayObject();  // or even a plain array() or \ArrayObject.
 
-  $pool = Cache\Factory::getPool($backend); // without tagging support
-  // or $pool = Cache\Factory::getTaggablePool($backend); // with tagging!
+  $pool = Cache\Factory::getPool($backend);               // without tagging support
+  # $pool = Cache\Factory::getTaggablePool($backend);     // with tagging!
   
   $item = $pool->getItem('wibble_id');
   
@@ -119,7 +121,7 @@ Advanced usage (APIx native)
   $redis_client = new \Redis;        // instantiate phpredis*
   $distributed_cache = new Cache\Redis($redis_client, $options);
 ```
-\* see [phpredis](https://github.com/nicolasff/phpredis) for instantiation usage.
+\* see [PhpRedis](https://github.com/nicolasff/phpredis) for instantiation usage.
 
 ### MongoDB specific 
 ```php
@@ -131,7 +133,7 @@ Advanced usage (APIx native)
   $mongo  = new \MongoClient;             // MongoDB native driver** instance
   $cache = new Cache\Mongo($mongo, $options);
 ```
-\*\* see [MongoDB](http://php.net/manual/en/book.mongo.php) for more instantiation details.
+\*\* see [MongoDB](http://php.net/manual/en/book.mongo.php) for instantiation usage.
 
 ### Memcached specific
 ```php
@@ -142,9 +144,10 @@ Advanced usage (APIx native)
   $options['prefix_nsp'] = 'nsp_';  // prefix cache namespaces
   $options['serializer'] = 'php';   // null, php, json, igbinary.
 
-  $memcached  = new \Memcached;     // a Memcached instance
+  $memcached  = new \Memcached;     // a Memcached*** instance
   $shared_cache = new Cache\Memcached($memcached, $options);
 ```
+\*\*\* see [Memcached](http://php.net/manual/en/book.memcached.php) for instantiation details.
 ### PDO specific
 ```php
   // additional (default) options, specific to the PDO backends
