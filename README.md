@@ -191,16 +191,13 @@ Once these tables exist, set `preflight` to `false` in order to avoid some addit
 Installation
 ------------------------
 
-Install the current major version using Composer with (recommended)
-```
-$ composer require apix/cache:1.2.*
-```
+This project adheres to [Semantic Versioning](http://semver.org/) and can be installed using composer:  
 
-Or install the latest stable version with
-```
-$ composer require apix/cache
-```
+    $ composer require apix/cache:1.2.*
+
+All notable changes to this project are documented in its [CHANGELOG](CHANGELOG.md).
 
 License
 -------
-APIx Cache is licensed under the New BSD license -- see the `LICENSE.txt` for the full license details.
+This work is licensed under the New BSD license -- see the [LICENSE](LICENSE.txt) for the full details.
+Copyright (c) 2010-2016 Franck Cassedanne
