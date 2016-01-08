@@ -199,5 +199,4 @@ All notable changes to this project are documented in its [CHANGELOG](CHANGELOG.
 
 License
 -------
-This work is licensed under the New BSD license -- see the [LICENSE](LICENSE.txt) for the full details.
-Copyright (c) 2010-2016 Franck Cassedanne
+This work is licensed under the New BSD license -- see the [LICENSE](LICENSE.txt) for the full details.<br>Copyright (c) 2010-2016 Franck Cassedanne
