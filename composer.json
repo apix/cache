@@ -1,6 +1,6 @@
 {
     "name": "apix/cache",
-    "description": "A thin PSR-6 cache wrapper with a generic interface to various caching backends emphasising cache taggging and indexing.",
+    "description": "A thin PSR-6 cache wrapper with a generic interface to various caching backends emphasising cache taggging and indexing to Redis, Memcached, PDO/SQL, APC and other adapters.",
     "type": "library",
     "keywords": ["apc", "APCu", "redis", "mongodb", "mongo", "igbinary", "serializer", "json", "pdo", "sqlite", "mysql", "postgres", "pgsql", "memcached", "memcache", "psrCache", "psr-6", "psr-cache", "Filesystem", "session", "cache", "caching"],
     "homepage": "https://github.com/frqnck/apix-cache",
@@ -32,7 +32,7 @@
         "ext-redis": "So you can cache into Redis servers.",
         "ext-mongo": "Allows to cache into MongoDB instances.",
         "ext-memcached": "Allows to use Memcached distributed memory caching system",
-        "ext-pdo": "Allows to cache into PDO supported DBs.",
+        "ext-pdo": "Allows to cache into PDO supported DBs such as Oracle, MS SQL server, IBM DB2.",
         "ext-pdo_sqlite": "Allows to cache into SQLite.",
         "ext-pdo_mysql": "Allows to use MySQL.",
         "ext-pdo_pgsql": "Allows to use PostgreSQL"
