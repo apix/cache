@@ -24,7 +24,7 @@ Currently, the following cache store are supplied:
 * **[MongoDB](http://www.mongodb.org/)** using the [mongo](http://php.net/book.mongo.php) native PHP extension *with tagging support*,
 * **[Memcached](http://memcached.org/)** using the [Memcached](http://php.net/book.memcached.php) extension *with indexing, tagging and namespacing support*,
 * and relational databases usign **[PDO](http://php.net/book.pdo.php)** *with tagging support*:
- * Dedicated and fully tested drivers for **[SQLite](http://www.sqlite.org)**, **[PostgreSQL](http://www.postgresql.org)** and **[MySQL](http://www.mysql.com)** (also works with MariaDB and Percona),
+ * Dedicated drivers for **[SQLite](http://www.sqlite.org)**, **[PostgreSQL](http://www.postgresql.org)** and **[MySQL](http://www.mysql.com)** (also works with Amazon Aurora, MariaDB and Percona),
  * A generic **[Sql1999](https://en.wikipedia.org/wiki/SQL:1999)** driver for [4D](http://www.4d.com/), [Cubrid](http://www.cubrid.org), [SQL Server](http://www.microsoft.com/sqlserver), [Sybase](http://www.sybase.com), [Firebird](http://www.firebirdsql.org), [ODBC](https://en.wikipedia.org/wiki/Open_Database_Connectivity), [Interbase](http://www.embarcadero.com/products/interbase), [IBM DB2](www.ibm.com/software/data/db2/), [IDS](http://www-01.ibm.com/software/data/informix/), [Oracle](http://www.oracle.com/database)...
 * **[Filesystem](#filesystem-specific)** (**Directory** based, and **Files** based) *with tagging support*,
 * **Runtime** (in-memory array storage).
