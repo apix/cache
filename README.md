@@ -96,7 +96,7 @@ You can also use the folowing in your use cases:
   $cache->flush();
 ```
 
-Advanced usage (APIx native)
+Advanced usage
 --------------
 ###  Options shared by all the backends
 ```php
