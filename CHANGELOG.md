@@ -1,5 +1,9 @@
 # APIx Cache changelog
 
+#### Version 1.2.5 (20-Jun-2016)
+- Fix issue #12 by adding `Files` and `Directory` backends to the Factory class (thanks goes to @alexpica). 
+- Added some additional Factory tests.
+
 #### Version 1.2.4 (6-Jan-2016)
 - Updated PSR-Cache (Draft) to PSR-6 (Accepted).
 - Marked as deprecated: `PsrCache::setExpiration`, `PsrCache::isRegenerating`, `PsrCache::exists`.
