@@ -173,9 +173,8 @@ Advanced usage
   $dbh = new \PDO('oci:dbname=xxx', 'xxx', 'xxx');
   $sql1999_cache = new Cache\Pdo\Sql1999($dbh, $options);
 ```
-
-Note if `preflight` is set to `true` (the default), the required tables, if missing, will be created on-the-fly.
-Once these tables exist, set `preflight` to `false` in order to avoid some additional checks... 
+The `preflight` option will create the required tables on-the-fly if these happen are mssing.
+Once these tables exist, set `preflight` to `false` in order to avoid the extraneous checks. 
 
 ### Filesystem specific
 ```php
