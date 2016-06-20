@@ -26,7 +26,7 @@ class Directory extends AbstractCache
      *
      * @param array  $options Array of options.
      */
-    public function __construct(array $options=null)
+    public function __construct(array $options = array())
     {
         $options += array(
             'directory' => sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'apix-cache',
