@@ -101,4 +101,30 @@ class FactoryTest extends TestCase
         Cache\Factory::getPool($adapter);
     }
 
+    public function providerAsPerExample()
+    {
+        return array(
+            'pdo client' => array(new \PDO('sqlite::memory:'), 'Pdo\Sqlite'),
+            'files' => array('files', 'Files'),
+            'Files adapter' => array(new Cache\Files(), 'Files'),
+            'directory' => array('Directory', 'Directory'),
+            'Directory adapter' => array(new Cache\Directory(), 'Directory'),
+            'apc' => array('apc', 'Apc'),
+            'runtime' => array('runtime', 'Runtime'),
+            'array' => array(array(), 'Runtime'),
+        );
+    }
+
+    /**
+     * @dataProvider providerAsPerExample
+     */
+    public function testFactoryExample($backend, $expected)
+    {
+        $pool = Cache\Factory::getPool( $backend );
+        $this->assertInstanceOf(
+            '\Apix\Cache\\' . $expected,
+            $pool->getCacheAdapter()
+        );
+    }
+
 }

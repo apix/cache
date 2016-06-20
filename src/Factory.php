@@ -29,7 +29,8 @@ class Factory
      */
     public static $clients = array(
         'Runtime', 'Array', 'ArrayObject', 'Apc',
-        'Redis', 'MongoClient', 'Memcached', 'PDO'
+        'Redis', 'MongoClient', 'Memcached', 'PDO',
+        'Files', 'Directory'
     );
 
     /**
@@ -60,6 +61,7 @@ class Factory
 
             case is_a($mix, 'Apix\Cache\Adapter'):
                 $class = $mix;
+                $mix = null;
             break;
 
             case is_object($mix)
