@@ -40,8 +40,7 @@ class Pool implements ItemPoolInterface
         $this->cache_adapter = $cache_adapter;
 
         $options = array(
-            'prefix_key' => 'cask-key-',  // prefix cache keys
-            'tag_enable' => false         // wether to enable tagging
+            'tag_enable' => false // wether to enable tagging
         );
         $this->cache_adapter->setOptions($options);
     }

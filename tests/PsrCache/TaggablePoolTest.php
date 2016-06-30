@@ -73,4 +73,29 @@ class TaggablePoolTest extends PoolTest
         $this->assertTrue($this->pool->clearByTags( array('fooTag') ));
     }
 
+    /**
+     * Regression test for bug GH#13
+     *
+     * @link https://github.com/frqnck/apix-cache/issues/13
+     *       "TaggablePool and Pool overrides prefix_key and prefix_tag options
+     *       with hardcoded values"
+     * @group regression
+     */
+    public function testBug13()
+    {
+        $pool = new TaggablePool(
+            new Cache\Runtime(array(), $this->options)
+        );
+        $adapter = $pool->getCacheAdapter();
+
+        $this->assertSame(
+            $this->options['prefix_key'],
+            $adapter->getOption('prefix_key')
+        );
+        $this->assertSame(
+            $this->options['prefix_tag'],
+            $adapter->getOption('prefix_tag')
+        );
+    }
+
 }

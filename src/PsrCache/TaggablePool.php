@@ -32,9 +32,7 @@ class TaggablePool extends Pool
         $this->cache_adapter = $cache_adapter;
 
         $options = array(
-            'prefix_key' => 'apix-key-',   // prefix cache keys
-            'prefix_tag' => 'apix-tag-',   // prefix cache tags
-            'tag_enable' => true           // wether to enable tagging
+            'tag_enable' => true // wether to enable tagging
         );
         $this->cache_adapter->setOptions($options);
     }

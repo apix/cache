@@ -66,7 +66,7 @@ class Factory
 
             case is_object($mix)
                  && in_array($name = get_class($mix), self::$clients):
-                
+
                 if ($name == 'PDO') {
                     $name = 'Pdo\\' . AbstractPdo::getDriverName($mix);
                 } else {
@@ -89,7 +89,6 @@ class Factory
 
             case is_array($mix):
                 $name = 'Runtime';
-                $mix = null;
             break;
 
             default:

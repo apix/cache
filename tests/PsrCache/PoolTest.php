@@ -55,7 +55,7 @@ class PoolTest extends TestCase
     {
         // Create the 'bar' item.
         $item = $this->pool->getItem('bar');
-  
+
         // Set a the 'bar' item value.
         $item->set('bar value');
         $this->assertNull($item->get());
@@ -127,4 +127,30 @@ class PoolTest extends TestCase
         $this->assertEquals('foo value', $items['foo']->get());
         // $this->assertEquals($item, $items['foo']);
     }
+
+    /**
+     * Regression test for bug GH#13
+     *
+     * @link https://github.com/frqnck/apix-cache/issues/13
+     *       "TaggablePool and Pool overrides prefix_key and prefix_tag options
+     *       with hardcoded values"
+     * @group regression
+     */
+    public function testBug13()
+    {
+        $pool = new Pool(
+            new Cache\Runtime(array(), $this->options)
+        );
+        $adapter = $pool->getCacheAdapter();
+
+        $this->assertSame(
+            $this->options['prefix_key'],
+            $adapter->getOption('prefix_key')
+        );
+        $this->assertSame(
+            $this->options['prefix_tag'],
+            $adapter->getOption('prefix_tag')
+        );
+    }
+
 }

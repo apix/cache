@@ -116,14 +116,38 @@ class FactoryTest extends TestCase
     }
 
     /**
+     * Regression test for bug GH#12
+     *
+     * @link https://github.com/frqnck/apix-cache/issues/12
+     *       "'Files' and 'Directory' are not listed as clients in the Factory"
+     * @group regression
      * @dataProvider providerAsPerExample
      */
-    public function testFactoryExample($backend, $expected)
+    public function testBugFactoryExample($backend, $expected)
     {
         $pool = Cache\Factory::getPool( $backend );
         $this->assertInstanceOf(
             '\Apix\Cache\\' . $expected,
             $pool->getCacheAdapter()
+        );
+    }
+
+    /**
+     * Regression test for bug GH#13
+     *
+     * @link https://github.com/frqnck/apix-cache/issues/13
+     *       "TaggablePool and Pool overrides prefix_key and prefix_tag options
+     *       with hardcoded values"
+     * @group regression
+     * @see PsrCache\PoolTest\testBug13()
+     * @see PsrCache\TaggablePoolTest\testBug13()
+     */
+    public function testBug13()
+    {
+        $pool = Cache\Factory::getPool([], $this->options, true);
+        $this->assertSame(
+            $this->options['prefix_key'],
+            $pool->getCacheAdapter()->getOption('prefix_key')
         );
     }
 
