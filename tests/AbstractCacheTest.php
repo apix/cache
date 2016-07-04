@@ -53,4 +53,22 @@ class AbstractCacheTest extends TestCase
 
         $this->assertSame('foo', $this->cache->getOption('prefix_key'));
     }
+
+    public function testGetAdapter()
+    {
+        $this->assertNull( $this->cache->getAdapter() );
+    }
+
+    public function testGetSetSerializer()
+    {
+        $this->cache->setSerializer(null);
+        $this->assertNull( $this->cache->getSerializer() );
+
+        $this->cache->setSerializer('none');
+        $this->assertInstanceOf(
+            '\Apix\Cache\Serializer\None',
+            $this->cache->getSerializer()
+        );
+    }
+
 }

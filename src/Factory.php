@@ -38,8 +38,9 @@ class Factory
      * @var array
      */
     public static $adapters = array(
-        'MongoClient' => 'Mongo', 'PDO' => 'Pdo',
-        'ArrayObject' => 'Runtime'
+        'MongoClient'   => 'Mongo',
+        'PDO'           => 'Pdo',
+        'ArrayObject'   => 'Runtime'
     );
 
     /**
@@ -101,15 +102,9 @@ class Factory
             $class = '\Apix\Cache\\' . $name;
         }
 
-        try {
-            if (null === $mix) {
-                $cache = new $class($options);
-            } else {
-                $cache = new $class($mix, $options);
-            }
-        } catch (\Exception $e) {
-            throw new Cache\Exception($e);
-        }
+        $cache = null === $mix
+                 ? new $class($options)
+                 : new $class($mix, $options);
 
         return $taggable
                 ? new PsrCache\TaggablePool($cache)
