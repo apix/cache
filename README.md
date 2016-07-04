@@ -177,15 +177,19 @@ The `preflight` option will create on-the-fly the required tables if these are m
 Once these tables exist, set `preflight` to `false` in order to avoid the extraneous checks. 
 
 ### Filesystem specific
+
 ```php
   // additional (default) options
-  $options['directory'] = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'apix-cache'; // Directory where cache is created
-  $options['locking'] = true;                                                      // File locking (recommended)
+  $options['directory'] = sys_get_temp_dir() . '/apix-cache'; // Directory where the cache is created
+  $options['locking'] = true;                                 // File locking (recommended)
   
   $files_cache = new Cache\Files($options);
   // or
-  $directory_cache = new Cache\Directory($options);
+  $directory_cache = new Cache\Directory($options);  
 ```
+
+  - **Files**: the cache metadata (expiration time and tags) are stored in the cache file directly.
+  - **Directory**: the metadata are stored separately from the cached data. 
 
 Installation
 ------------------------
