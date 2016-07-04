@@ -41,6 +41,7 @@ interface Adapter
      *
      * @param  string   $str
      * @return boolean
+     * @deprecated
      */
     public function isSerialized($str);
 
