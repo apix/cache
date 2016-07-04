@@ -13,4 +13,5 @@ filter:
     excluded_paths:
         - 'vendor/*'
         - 'tests/*'
+        - 'build/*'
     paths: {  }
