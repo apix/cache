@@ -144,7 +144,7 @@ class FactoryTest extends TestCase
      */
     public function testBug13()
     {
-        $pool = Cache\Factory::getPool([], $this->options, true);
+        $pool = Cache\Factory::getPool(array(), $this->options, true);
         $this->assertSame(
             $this->options['prefix_key'],
             $pool->getCacheAdapter()->getOption('prefix_key')
