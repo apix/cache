@@ -14,6 +14,14 @@ else
 
     # install igbinary
     echo "yes" | pecl install igbinary
+
+    # install msgpack
+    if [ "$(expr "${VERSION}" "<" "7.0")" -eq 1 ]
+    then
+        echo "yes" | pecl install msgpack-0.5.7
+    else
+        echo "yes" | pecl install msgpack-2.0.1
+    fi
 fi
 
 if [ "$DB" = "apc" ]; then
