@@ -2,7 +2,7 @@
     "name": "apix/cache",
     "description": "A thin PSR-6 cache wrapper with a generic interface to various caching backends emphasising cache taggging and indexing to Redis, Memcached, PDO/SQL, APC and other adapters.",
     "type": "library",
-    "keywords": ["apc", "APCu", "redis", "mongodb", "mongo", "igbinary", "serializer", "json", "pdo", "sqlite", "mysql", "postgres", "pgsql", "memcached", "memcache", "psrCache", "psr-6", "psr-cache", "Filesystem", "session", "cache", "caching"],
+    "keywords": ["apc", "APCu", "redis", "mongodb", "mongo", "igbinary", "serializer", "json", "pdo", "sqlite", "mysql", "postgres", "pgsql", "memcached", "memcache", "psrCache", "psr-6", "psr-cache", "Filesystem", "session", "cache", "caching", "msgpack"],
     "homepage": "https://github.com/frqnck/apix-cache",
     "license": "BSD-3-Clause",
     "authors": [
@@ -35,7 +35,9 @@
         "ext-pdo": "Allows to cache into PDO supported DBs such as Oracle, MS SQL server, IBM DB2.",
         "ext-pdo_sqlite": "Allows to cache into SQLite.",
         "ext-pdo_mysql": "Allows to use MySQL.",
-        "ext-pdo_pgsql": "Allows to use PostgreSQL"
+        "ext-pdo_pgsql": "Allows to use PostgreSQL",
+        "ext-igbinbary": "Fast and small serialization format",
+        "msgpack/msgpack-php": "MessagePack serialization format",
     },
     "autoload": {
         "psr-4": {
