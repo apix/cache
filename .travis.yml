@@ -74,6 +74,6 @@ matrix:
     - php: hhvm
       env: DB=pgsql     # pgsql client currently unsupported by HHVM, requires 3rd party dependency.
 
-#cache:
-#  directories:
-#    - $HOME/.composer/cache
+cache:
+ directories:
+   - $HOME/.composer/cache
