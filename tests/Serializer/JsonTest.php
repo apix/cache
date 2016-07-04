@@ -17,14 +17,20 @@ use Apix\Cache\Serializer\Json;
 class JsonTest extends TestCase
 {
 
+    public function setUp()
+    {
+        $this->skipIfMissing('json');
+        $this->serializer = new Json;
+    }
+
     /**
      * @dataProvider serializerProvider
      */
     public function testSerialize($var)
     {
-        $formatter = new Json();
         $this->assertEquals(
-            json_encode($var), $formatter->serialize($var)
+            \json_encode($var),
+            $this->serializer->serialize($var)
         );
     }
 
@@ -33,24 +39,12 @@ class JsonTest extends TestCase
      */
     public function testUnserialize($var)
     {
-        $formatter = new Json();
         if(is_array($var)) $var = (object) $var;
+
         $this->assertEquals(
-            $var, $formatter->unserialize(json_encode($var))
-        );
-    }
-
-    /**
-     * @dataProvider serializerProvider
-     */
-    public function testIsSerialized($var)
-    {
-        $formatter = new Json();
-        $this->assertFalse($formatter->isSerialized($var));
-
-        $this->assertTrue(
-            $formatter->isSerialized(
-                $formatter->serialize($var)
+            $var,
+            $this->serializer->unserialize(
+                \json_encode($var)
             )
         );
     }

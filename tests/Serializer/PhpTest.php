@@ -17,14 +17,19 @@ use Apix\Cache\Serializer\Php;
 class PhpTest extends TestCase
 {
 
+    public function setUp()
+    {
+        $this->serializer = new Php;
+    }
+
     /**
      * @dataProvider serializerProvider
      */
     public function testSerialize($var)
     {
-        $formatter = new Php();
         $this->assertEquals(
-            serialize($var), $formatter->serialize($var)
+            \serialize($var),
+            $this->serializer->serialize($var)
         );
     }
 
@@ -33,23 +38,10 @@ class PhpTest extends TestCase
      */
     public function testUnserialize($var)
     {
-        $formatter = new Php();
         $this->assertEquals(
-            $var, $formatter->unserialize(serialize($var))
-        );
-    }
-
-    /**
-     * @dataProvider serializerProvider
-     */
-    public function testIsSerialized($var)
-    {
-        $formatter = new Php();
-        $this->assertFalse($formatter->isSerialized($var));
-
-        $this->assertTrue(
-            $formatter->isSerialized(
-                $formatter->serialize($var)
+            $var,
+            $this->serializer->unserialize(
+                \serialize($var)
             )
         );
     }

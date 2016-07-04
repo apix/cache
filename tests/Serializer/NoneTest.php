@@ -17,14 +17,19 @@ use Apix\Cache\Serializer\None;
 class NoneTest extends TestCase
 {
 
+    public function setUp()
+    {
+        $this->serializer = new None;
+    }
+
     /**
      * @dataProvider serializerProvider
      */
     public function testSerialize($var)
     {
-        $formatter = new None();
         $this->assertEquals(
-            $var, $formatter->serialize($var)
+            $var,
+            $this->serializer->serialize($var)
         );
     }
 
@@ -33,19 +38,21 @@ class NoneTest extends TestCase
      */
     public function testUnserialize($var)
     {
-        $formatter = new None();
         $this->assertEquals(
-            $var, $formatter->unserialize($var)
+            $var,
+            $this->serializer->unserialize($var)
         );
     }
 
     /**
      * @dataProvider serializerProvider
+     * @deprecated
      */
-    public function testIsSerialized($var)
+    public function testIsSerialized($var, $str = null)
     {
-        $formatter = new None();
-        $this->assertFalse($formatter->isSerialized($var));
+        $this->assertFalse(
+            $this->serializer->isSerialized($var)
+        );
     }
 
 }

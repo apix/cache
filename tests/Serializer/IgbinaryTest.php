@@ -20,6 +20,8 @@ class IgbinaryTest extends TestCase
     public function setUp()
     {
         $this->skipIfMissing('igbinary');
+        $this->serializer = new Igbinary;
+
     }
 
     /**
@@ -27,9 +29,9 @@ class IgbinaryTest extends TestCase
      */
     public function testSerialize($var)
     {
-        $formatter = new Igbinary();
         $this->assertEquals(
-            igbinary_serialize($var), $formatter->serialize($var)
+            \igbinary_serialize($var),
+            $this->serializer->serialize($var)
         );
     }
 
@@ -38,23 +40,10 @@ class IgbinaryTest extends TestCase
      */
     public function testUnserialize($var)
     {
-        $formatter = new IgBinary();
         $this->assertEquals(
-            $var, $formatter->unserialize(igbinary_serialize($var))
-        );
-    }
-
-    /**
-     * @dataProvider serializerProvider
-     */
-    public function testIsSerialized($var)
-    {
-        $formatter = new Igbinary();
-        $this->assertFalse($formatter->isSerialized($var));
-
-        $this->assertTrue(
-            $formatter->isSerialized(
-                $formatter->serialize($var)
+            $var,
+            $this->serializer->unserialize(
+                \igbinary_serialize($var)
             )
         );
     }

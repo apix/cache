@@ -16,6 +16,7 @@ use Apix\Cache\tests\TestCase as ApixTestCase;
 
 class TestCase extends ApixTestCase
 {
+    protected $serializer = null;
 
     public function serializerProvider()
     {
@@ -25,6 +26,23 @@ class TestCase extends ApixTestCase
             array(new \stdClass()),
             array(' '),
             // array(null),
+        );
+    }
+
+    /**
+     * @dataProvider serializerProvider
+     * @deprecated
+     */
+    public function testIsSerialized($var, $str = null)
+    {
+        $this->assertFalse(
+            $this->serializer->isSerialized($var)
+        );
+
+        $this->assertTrue(
+            $this->serializer->isSerialized(
+                $this->serializer->serialize($var)
+            )
         );
     }
 

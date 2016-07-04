@@ -19,7 +19,7 @@ class StringsetTest extends TestCase
 
     public function setUp()
     {
-        $this->formatter = new Stringset();
+        $this->serializer = new Stringset();
     }
 
     public function serializerProvider()
@@ -36,9 +36,12 @@ class StringsetTest extends TestCase
     /**
      * @dataProvider serializerProvider
      */
-    public function testSerialize($arr, $str)
+    public function testSerialize($var, $exp)
     {
-        $this->assertEquals( $str, $this->formatter->serialize($arr) );
+        $this->assertEquals(
+            $exp,
+            $this->serializer->serialize($var)
+        );
     }
 
     public function unserializerProvider()
@@ -56,8 +59,14 @@ class StringsetTest extends TestCase
      */
     public function testUnserializer($arr, $str, $dirt)
     {
-        $this->assertEquals($arr, $this->formatter->unserialize($str));
-        $this->assertEquals($dirt, $this->formatter->getDirtiness());
+        $this->assertEquals(
+            $arr,
+            $this->serializer->unserialize($str)
+        );
+        $this->assertEquals(
+            $dirt,
+            $this->serializer->getDirtiness()
+        );
     }
 
     public function isSerializerProvider()
@@ -71,10 +80,15 @@ class StringsetTest extends TestCase
 
     /**
      * @dataProvider isSerializerProvider
+     * @deprecated
      */
-    public function testIsSerialized($arr, $str)
+    public function testIsSerialized($var, $str = null)
     {
-        $this->assertFalse($this->formatter->isSerialized($arr));
-        $this->assertTrue($this->formatter->isSerialized($str));
+        $this->assertFalse(
+            $this->serializer->isSerialized($var)
+        );
+        $this->assertTrue(
+            $this->serializer->isSerialized($str)
+        );
     }
 }
