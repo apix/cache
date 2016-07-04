@@ -37,7 +37,7 @@
         "ext-pdo_mysql": "Allows to use MySQL.",
         "ext-pdo_pgsql": "Allows to use PostgreSQL",
         "ext-igbinbary": "Fast and small serialization format",
-        "msgpack/msgpack-php": "MessagePack serialization format",
+        "msgpack/msgpack-php": "MessagePack serialization format"
     },
     "autoload": {
         "psr-4": {
