@@ -202,8 +202,8 @@ class Apc extends AbstractCache
     public function getInternalInfos($key)
     {
         $iterator = $this->getIterator(
-            '/^' . preg_quote($this->options['prefix_key']) . '/'
-            // need a fix for HHVM here!
+            '/^' . preg_quote($this->options['prefix_key']) . '/',
+            APC_ITER_KEY | APC_ITER_VALUE // fix for HHVM
         );
 
         $key = $this->mapKey($key);
