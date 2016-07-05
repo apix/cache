@@ -109,6 +109,7 @@ class ApcTest extends GenericTestCase
     {
         $this->cache->save('someData', 'someId', null, 69);
         $infos = $this->cache->getInternalInfos('someId');
+        var_dump($infos);
         $this->assertSame(69, $infos['ttl']);
     }
 
