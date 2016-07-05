@@ -13,6 +13,7 @@
 namespace Apix\Cache\Serializer;
 
 /**
+ * IgBinary - fast binary serializer.
  * Serializes cache data using the IgBinary extension.
  * @see https://github.com/IgBinary/IgBinary
  *
