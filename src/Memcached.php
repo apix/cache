@@ -125,12 +125,14 @@ class Memcached extends AbstractCache
 
         // Fix environments (some HHVM versions) that don't handle deleteMulti.
         // @see https://github.com/facebook/hhvm/issues/4602
+        // @codeCoverageIgnoreStart
         $success = true;
         foreach ($items as $item) {
             $success = $this->adapter->delete($item) && $success;
         }
 
         return $success;
+        // @codeCoverageIgnoreEnd
     }
 
     /**
@@ -209,6 +211,10 @@ class Memcached extends AbstractCache
     {
         switch ($serializer) {
 
+            case 'php':
+                $opt = \Memcached::SERIALIZER_PHP;
+            break;
+
             // @codeCoverageIgnoreStart
             case 'igBinary':
                 if (!\Memcached::HAVE_IGBINARY) {
@@ -238,10 +244,6 @@ class Memcached extends AbstractCache
                 $opt = \Memcached::SERIALIZER_MSGPACK;
             break;
             // @codeCoverageIgnoreEnd
-
-            case 'php':
-                $opt = \Memcached::SERIALIZER_PHP;
-            break;
 
             default:
         }
