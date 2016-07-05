@@ -27,22 +27,30 @@ env:
   - DB=pgsql
   - DB=memcached
 
-install:
+before_install:
+  - if [[ $TRAVIS_PHP_VERSION =~ ^7 ]]; then phpenv config-rm xdebug.ini; fi
   - travis_retry composer self-update
+
+install:
+  - composer require --no-update --no-interaction "phpunit/phpunit:*"
   - travis_retry composer install -o --no-interaction --prefer-source
   - mkdir -p build/logs
   - tests/bin/travis-init.sh
+  - travis_retry wget https://scrutinizer-ci.com/ocular.phar
 
 before_script:
-  # xdebug is not installed on HHVM and PHP 7, so skip code coverage...
-  - if [ "${TRAVIS_PHP_VERSION}" = "hhvm" ] || [ "$(expr "${TRAVIS_PHP_VERSION}" ">=" "7.0")" -eq 1 ]; then COVERAGE="no"; else COVERAGE="yes"; fi;
+  # xdebug does not work with PHP 7.
+ - if [[ $TRAVIS_PHP_VERSION =~ ^7 ]]; then phpenv config-rm xdebug.ini; fi
 
 script:
-  - if [ "$COVERAGE" != "no" ]; then vendor/bin/phpunit --colors --verbose --coverage-text --coverage-clover build/logs/clover.xml; fi
-  - if [ "$COVERAGE" == "no" ]; then vendor/bin/phpunit --colors --verbose; fi
+  - if [[ $TRAVIS_PHP_VERSION =~ ^7 ]]; then
+      phpdbg -qrr vendor/phpunit/phpunit/phpunit --colors --coverage-clover=build/logs/clover.xml --coverage-text;
+    else
+      vendor/bin/phpunit --colors --coverage-clover build/logs/clover.xml --coverage-text;
+    fi
 
 after_script:
-  - if [ "$COVERAGE" != "no" ]; then wget https://scrutinizer-ci.com/ocular.phar; php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml; fi
+  - php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml; fi
   - php vendor/bin/coveralls -v
 
 notifications:

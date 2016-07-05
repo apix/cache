@@ -24,6 +24,12 @@ else
     fi
 fi
 
+# enable xdebug
+if [[ $TRAVIS_PHP_VERSION =~ ^hhvm ]]
+then
+    echo 'xdebug.enable = On' >> $PHPINI
+fi
+
 if [ "$DB" = "apc" ]; then
     if [ "${VERSION}" = "hhvm" ] || [ "$(expr "${VERSION}" "<" "5.5")" -eq 1 ]
     then

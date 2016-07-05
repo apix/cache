@@ -199,11 +199,11 @@ class Apc extends AbstractCache
      * @param string $key
      * @return array|false
      */
-    public function getInternalInfos($key)
+    public function getInternalInfos($key, $format = \APC_ITER_KEY|\APC_ITER_VALUE)
     {
         $iterator = $this->getIterator(
             '/^' . preg_quote($this->options['prefix_key']) . '/',
-            APC_ITER_KEY | APC_ITER_VALUE // fix for HHVM
+            $format
         );
 
         $key = $this->mapKey($key);
@@ -222,7 +222,7 @@ class Apc extends AbstractCache
      */
     public function getTtl($key)
     {
-        $info = $this->getInternalInfos($key);
+        $info = $this->getInternalInfos($key, \APC_ITER_TTL);
         if ( $info && isset($info['ttl']) ) {
             return $info['ttl'];
             // return $info['ttl'] > 0 ? $info['creation_time']+$info['ttl'] : 0;
