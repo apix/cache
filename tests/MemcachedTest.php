@@ -224,6 +224,18 @@ class MemcachedTest extends GenericTestCase
         }
     }
 
+    public function testSetSerializerToJsonArray()
+    {
+        if (defined('\Memcached::SERIALIZER_JSON_ARRAY')
+            && \Memcached::HAVE_JSON
+        ) {
+            $this->cache->setSerializer('json_array');
+            $this->assertSame(
+                \Memcached::SERIALIZER_JSON_ARRAY, $this->cache->getSerializer()
+            );
+        }
+    }
+
     public function testSetSerializerToIgbinary()
     {
         if (defined('\Memcached::SERIALIZER_IGBINARY')
@@ -232,6 +244,18 @@ class MemcachedTest extends GenericTestCase
             $this->cache->setSerializer('igBinary');
             $this->assertSame(
                 \Memcached::SERIALIZER_IGBINARY, $this->cache->getSerializer()
+            );
+        }
+    }
+
+    public function testSetSerializerToMsgpack()
+    {
+        if (defined('\Memcached::SERIALIZER_MSGPACK')
+            && \Memcached::HAVE_MSGPACK
+        ) {
+            $this->cache->setSerializer('msgpack');
+            $this->assertSame(
+                \Memcached::SERIALIZER_MSGPACK, $this->cache->getSerializer()
             );
         }
     }

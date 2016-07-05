@@ -48,7 +48,9 @@ class Memcached extends AbstractCache
         $this->options['prefix_idx'] = 'idx_';  // prefix cache indexes
         $this->options['prefix_nsp'] = 'nsp_';  // prefix cache namespaces
 
-        $this->options['serializer'] = 'php';   // none, php, json, igBinary.
+        // 'auto' is igbinary or msgpack if available, php otherwise.
+        $this->options['serializer'] = 'auto';   // auto, php, json, json_array
+                                                 // igBinary and msgpack
 
         parent::__construct($memcached, $options);
 
@@ -214,20 +216,34 @@ class Memcached extends AbstractCache
                 }
                 $opt = \Memcached::SERIALIZER_IGBINARY;
             break;
-            // @codeCoverageIgnoreEnd
 
-            // @codeCoverageIgnoreStart
             case 'json':
                 if (!\Memcached::HAVE_JSON) {
                     continue;
                 }
                 $opt = \Memcached::SERIALIZER_JSON;
             break;
+
+            case 'json_array':
+                if (!\Memcached::HAVE_JSON_ARRAY) {
+                    continue;
+                }
+                $opt = \Memcached::SERIALIZER_JSON_ARRAY;
+            break;
+
+            case 'msgpack':
+                if (!\Memcached::HAVE_MSGPACK) {
+                    continue;
+                }
+                $opt = \Memcached::SERIALIZER_MSGPACK;
+            break;
             // @codeCoverageIgnoreEnd
 
             case 'php':
-            default:
                 $opt = \Memcached::SERIALIZER_PHP;
+            break;
+
+            default:
         }
 
         if (isset($opt)) {

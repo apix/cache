@@ -33,7 +33,8 @@ class Redis extends AbstractCache
                                  ? \Redis::MULTI
                                  : \Redis::PIPELINE;
 
-        $this->options['serializer'] = 'php'; // null, php, igBinary, json.
+        $this->options['serializer'] = 'php'; // null, php, igBinary, json,
+                                              // msgpack
 
         parent::__construct($redis, $options);
 
@@ -149,13 +150,6 @@ class Redis extends AbstractCache
     public function setSerializer($serializer)
     {
         switch ($serializer) {
-            // @codeCoverageIgnoreStart
-            case 'igBinary':
-                // igBinary is not always compiled on the host machine.
-                $this->serializer = \Redis::SERIALIZER_IGBINARY;
-            break;
-            // @codeCoverageIgnoreEnd
-
             case 'json':
                 // $this->serializer = \Redis::SERIALIZER_JSON;
                 parent::setSerializer($serializer);
@@ -164,6 +158,18 @@ class Redis extends AbstractCache
             case 'php':
                 $this->serializer = \Redis::SERIALIZER_PHP;
             break;
+
+            // @codeCoverageIgnoreStart
+            case 'igBinary':
+                // igBinary is not always compiled on the host machine.
+                $this->serializer = \Redis::SERIALIZER_IGBINARY;
+            break;
+
+            case 'msgpack':
+                // available on PHP7 since msgpack 2.0.1
+                $this->serializer = \Redis::SERIALIZER_MSGPACK;
+            break;
+            // @codeCoverageIgnoreEnd
 
             default:
                 $this->serializer = \Redis::SERIALIZER_NONE;

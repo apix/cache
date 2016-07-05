@@ -1,16 +1,20 @@
 # APIx Cache changelog
 
-#### Version 1.2.7 (xx-xxx-2016)
-- Fix HHVM issues.
-- Fix APC/APCu for PHP7 and HHVM.
-- Updated Travis (optimisations).
-- Added additional unit-tests, aiming for 100% code coverage.
+#### Version 1.X.x (xx-xxx-2016)
+- Fix the HHVM issues.
+- Fix APC/APCu for both PHP7 and HHVM.
+- Updated `.travis` (optimisations).
+- Added `msgpack` to Redis, Memcached and to all the PDO backends.  
+- Added 'auto' and 'json_array' to Memcached.
+- Changed Memcached default serializer to `auto`.
+- Updated `README.md`.
+- Added some additional unit-tests.
 
 #### Version 1.2.6 (4-July-2016)
 - Fix issue #13 "TaggablePool and Pool overrides prefix_key and prefix_tag options with hardcoded value" (thanks goes to @alexpica). 
 - Fix PHP 5.3, using `array()` instead of the short array syntax `[]`.
 - Marcked as depreciated `isSerialized()` and `testIsSerialized()`.
-- Added `Msgpack` serializer.
+- Added `msgpack` serializer.
 - Set Travis to skip Memcached on PHP 7.0 (not yet officially supported).
 - Added additional unit-tests, aiming for 100% code coverage.
 
@@ -35,7 +39,7 @@
 #### Version 1.2.2 (1-Sept-2015)
 - Added a `CHANGELOG.md` file.
 - Updated PHPUnit to 4.8 version.
-- Dropped PHP 5.3 support.
+- Dropped (partially) PHP 5.3 support - Memcached seems to be broken.
 - Dropped PEAR support.
 - Refactored `.travis.yml` tests.
 - Made Travis faster (using Docker containers and skipping allowable failures).

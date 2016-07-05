@@ -112,6 +112,17 @@ class RedisTest extends GenericTestCase
         }
     }
 
+    // msgpack 2.0.1, compatible with PHP 7
+    public function testSetSerializerToMsgpack()
+    {
+        if (defined('Redis::SERIALIZER_MSGPACK')) {
+            $this->cache->setSerializer('msgpack');
+            $this->assertSame(
+                \Redis::SERIALIZER_MSGPACK, $this->cache->getSerializer()
+            );
+        }
+    }
+
     public function testSetSerializerToNull()
     {
         $this->cache->setSerializer(null);

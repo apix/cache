@@ -43,6 +43,7 @@ abstract class AbstractPdo extends AbstractCache
         // default options
         $this->options['db_table']   = 'cache'; // table to hold the cache
         $this->options['serializer'] = 'php';   // null, php, igBinary, json
+                                                // and msgpack
         $this->options['preflight']  = true;    // wether to preflight the DB
         $this->options['timestamp']  = 'Y-m-d H:i:s'; // timestamp db format
 

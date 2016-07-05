@@ -10,7 +10,8 @@ APIx Cache is a generic and thin cache wrapper with a simple interface to variou
 * Fully unit **tested** and compliant with PSR-1, PSR-2, PSR-4 and PSR-6.
 * Continuously integrated
   * with **PHP** ~~5.3~~, **5.4**, **5.5**, **5.6**, **7.0** and **HHVM**,
-  * and against APC, Redis, MongoDB, Sqlite, MySQL, PgSQL and Memcached...
+  * and against APC, Redis, MongoDB, Sqlite, MySQL, PgSQL and Memcached, ...
+  * supports a range of serializers: `igBinary`, `msgpack`, `json`, `php`, ...
 * Available as a **[Composer](https://packagist.org/packages/apix/cache)** ~~and as a [PEAR](http://pear.ouarz.net)~~ package.
 
 ---
@@ -20,14 +21,14 @@ Cache backends
 Currently, the following cache store are supplied:
 
 * **[APC](http://php.net/book.apc.php)** (which also works with [APCu](http://pecl.php.net/package/APCu)) *with tagging support*,
-* **[Redis](http://redis.io)** using the [PhpRedis](https://github.com/nicolasff/phpredis) extension *with tagging support*,
+* **[Redis](http://redis.io)** using the [PhpRedis](https://github.com/phpredis/phpredis) extension *with tagging support*,
 * **[MongoDB](http://www.mongodb.org/)** using the [mongo](http://php.net/book.mongo.php) native PHP extension *with tagging support*,
 * **[Memcached](http://memcached.org/)** using the [Memcached](http://php.net/book.memcached.php) extension *with indexing, tagging and namespacing support*,
 * and relational databases usign **[PDO](http://php.net/book.pdo.php)** *with tagging support*:
  * Dedicated drivers for **[SQLite](http://www.sqlite.org)**, **[PostgreSQL](http://www.postgresql.org)** and **[MySQL](http://www.mysql.com)** (also works with Amazon Aurora, MariaDB and Percona),
  * A generic **[Sql1999](https://en.wikipedia.org/wiki/SQL:1999)** driver for [4D](http://www.4d.com/), [Cubrid](http://www.cubrid.org), [SQL Server](http://www.microsoft.com/sqlserver), [Sybase](http://www.sybase.com), [Firebird](http://www.firebirdsql.org), [ODBC](https://en.wikipedia.org/wiki/Open_Database_Connectivity), [Interbase](http://www.embarcadero.com/products/interbase), [IBM DB2](www.ibm.com/software/data/db2/), [IDS](http://www-01.ibm.com/software/data/informix/), [Oracle](http://www.oracle.com/database)...
-* **[Filesystem](#filesystem-specific)** (**Directory** based, and **Files** based) *with tagging support*,
-* **Runtime** (in-memory array storage).
+* **[Directory](#filesystem-specific)** and **[Files](#filesystem-specific)** based *with tagging support*,
+* **Runtime**, in-memory array storage.
 
 Feel free to comment, send pull requests and patches...
 
@@ -112,16 +113,34 @@ Advanced usage
   // start APC as a local cache
   $local_cache = new Cache\Apc($options);
 ```
+
 ### Redis specific
 ```php
   // additional (default) options
-  $options['atomicity']  = false;    // false is faster, true is guaranteed
-  $options['serializer'] = 'php';    // null, php, igbinary and json
+  $options['atomicity']  = false;   // false is faster, true is guaranteed
+  $options['serializer'] = 'php';   // null, php, igbinary, json and msgpack
 
-  $redis_client = new \Redis;        // instantiate phpredis*
+  $redis_client = new \Redis;       // instantiate phpredis*
   $distributed_cache = new Cache\Redis($redis_client, $options);
 ```
 \* see [PhpRedis](https://github.com/nicolasff/phpredis) for instantiation usage.
+
+### Memcached specific
+```php
+  // additional (default) options, specific to Memcached
+  $options['prefix_key'] = 'key_';  // prefix cache keys
+  $options['prefix_tag'] = 'tag_';  // prefix cache tags
+  $options['prefix_idx'] = 'idx_';  // prefix cache indexes
+  $options['prefix_nsp'] = 'nsp_';  // prefix cache namespaces
+  $options['serializer'] = 'auto';  // auto, igbinary, msgpack, php, json and json_array.
+
+  $memcached  = new \Memcached;     // a Memcached*** instance
+  $shared_cache = new Cache\Memcached($memcached, $options);
+```
+
+The serialzer `auto` (default) is `igBinary` if available, then `msgpack` if available, then `php` otherwise.
+
+\*\*\* see [Memcached](http://php.net/manual/en/book.memcached.php) for instantiation details.
 
 ### MongoDB specific 
 ```php
@@ -135,25 +154,11 @@ Advanced usage
 ```
 \*\* see [MongoDB](http://php.net/manual/en/book.mongo.php) for instantiation usage.
 
-### Memcached specific
-```php
-  // additional (default) options, specific to Memcached
-  $options['prefix_key'] = 'key_';  // prefix cache keys
-  $options['prefix_tag'] = 'tag_';  // prefix cache tags
-  $options['prefix_idx'] = 'idx_';  // prefix cache indexes
-  $options['prefix_nsp'] = 'nsp_';  // prefix cache namespaces
-  $options['serializer'] = 'php';   // null, php, json, igbinary.
-
-  $memcached  = new \Memcached;     // a Memcached*** instance
-  $shared_cache = new Cache\Memcached($memcached, $options);
-```
-\*\*\* see [Memcached](http://php.net/manual/en/book.memcached.php) for instantiation details.
-
 ### PDO specific
 ```php
   // additional (default) options, specific to the PDO backends
   $options['db_table']   = 'cache';       // table to hold the cache
-  $options['serializer'] = 'php';         // null, php, igbinary, json
+  $options['serializer'] = 'php';         // null, php, igbinary, json and msgpack
   $options['preflight']  = true;          // wether to preflight the DB
   $options['timestamp']  = 'Y-m-d H:i:s'; // the timestamp DB format
 

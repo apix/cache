@@ -13,6 +13,7 @@
 namespace Apix\Cache\Serializer;
 
 /**
+ * MessagePack - a light cross-language binary serializer.
  * Serializes data using the Msgpack extension.
  * @see https://github.com/msgpack/msgpack-php
  *
