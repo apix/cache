@@ -28,7 +28,6 @@ env:
   - DB=memcached
 
 before_install:
-  - if [[ $TRAVIS_PHP_VERSION =~ ^7 ]]; then phpenv config-rm xdebug.ini; fi
   - travis_retry composer self-update
 
 install:
@@ -44,9 +43,9 @@ before_script:
 
 script:
   - if [[ $TRAVIS_PHP_VERSION =~ ^7 ]]; then
-      phpdbg -qrr vendor/phpunit/phpunit/phpunit --colors --coverage-clover=build/logs/clover.xml --coverage-text;
+      phpdbg -qrr vendor/phpunit/phpunit/phpunit --verbose --colors --coverage-clover=build/logs/clover.xml --coverage-text;
     else
-      vendor/bin/phpunit --colors --coverage-clover build/logs/clover.xml --coverage-text;
+      vendor/bin/phpunit --verbose --colors --coverage-clover build/logs/clover.xml --coverage-text;
     fi
 
 after_script:
@@ -78,9 +77,6 @@ matrix:
       env: DB=memcached # memcached client is broken on PHP 5.3.
     - php: 7.0
       env: DB=memcached # memcached client does not fully support PHP7.
-    - php: hhvm
-    - php: hhvm
-      env: DB=pgsql     # pgsql client currently unsupported by HHVM, requires 3rd party dependency.
 
 cache:
  directories:

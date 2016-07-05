@@ -9,7 +9,7 @@ APIx Cache is a generic and thin cache wrapper with a simple interface to variou
 * **PSR-6** (Cache) standard is provided thru a factory wrapper class.
 * Fully unit **tested** and compliant with PSR-1, PSR-2, PSR-4 and PSR-6.
 * Continuously integrated
-  * with **PHP** ~~5.3~~, **5.4**, **5.5**, **5.6** and **7.0**,
+  * with **PHP** ~~5.3~~, **5.4**, **5.5**, **5.6**, **7.0** and **HHVM**,
   * and against APC, Redis, MongoDB, Sqlite, MySQL, PgSQL and Memcached...
 * Available as a **[Composer](https://packagist.org/packages/apix/cache)** ~~and as a [PEAR](http://pear.ouarz.net)~~ package.
 
