@@ -96,8 +96,7 @@ class Mongo extends AbstractCache
             return null;
         }
 
-        return null !== $this->serializer
-              && $this->serializer->isSerialized($cache['data'])
+        return null !== $this->serializer && null !== $this->serializer
               ? $this->serializer->unserialize($cache['data'])
               : $cache['data'];
     }
