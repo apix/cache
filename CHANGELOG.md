@@ -1,6 +1,6 @@
 # APIx Cache changelog
 
-#### Version 1.X.x (xx-xxx-2016)
+#### Version 1.2.7 (20-July-2016)
 - Fix the HHVM issues.
 - Fix APC/APCu for both PHP7 and HHVM.
 - Updated `.travis` (optimisations).
@@ -9,6 +9,7 @@
 - Changed Memcached default serializer to `auto`.
 - Updated `README.md`.
 - Added some additional unit-tests.
+- Fix issue #15 "Files cache not correctly handling EOL on Windows" (thanks goes to @davybatsalle). 
 
 #### Version 1.2.6 (4-July-2016)
 - Fix issue #13 "TaggablePool and Pool overrides prefix_key and prefix_tag options with hardcoded value" (thanks goes to @alexpica). 
