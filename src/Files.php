@@ -200,8 +200,8 @@ class Files extends AbstractCache
     public function clean(array $tags)
     {
         $toRemove = array();
-        $cleaned = true;
-        
+        $cleaned = false;
+
         foreach ($tags as $tag) {
             $keys = $this->loadTag($tag);
             if (null === $keys) {
@@ -216,7 +216,7 @@ class Files extends AbstractCache
             $this->delete($this->removePrefixKey($key));
         }
 
-        return true;
+        return $cleaned;
     }
 
     /**
