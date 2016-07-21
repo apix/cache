@@ -367,19 +367,22 @@ class Directory extends AbstractCache
      */
     public function clean(array $tags)
     {
+        $cleaned = false;
         foreach ($tags as $tag) {
             $ids = $this->loadTag($tag);
 
             if (null === $ids) {
                 continue;
             }
+            $cleaned = true;
+
             foreach ($ids as $key) {
                 $this->delete($this->removePrefixKey($key));
             }
             unlink($this->getTagPath($this->mapTag($tag)));
         }
 
-        return true;
+        return $cleaned;
     }
 
     /**
