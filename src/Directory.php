@@ -371,7 +371,7 @@ class Directory extends AbstractCache
             $ids = $this->loadTag($tag);
 
             if (null === $ids) {
-                return false;
+                continue;
             }
             foreach ($ids as $key) {
                 $this->delete($this->removePrefixKey($key));
