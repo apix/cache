@@ -6,6 +6,7 @@ VERSION=`phpenv version-name`
 
 if [ "${VERSION}" = "hhvm" ]; then
     PHPINI=/etc/hhvm/php.ini
+    HPHP_TOOLS=`pwd`/hhvm/hphp/tools
 else
     PHPINI=~/.phpenv/versions/$VERSION/etc/php.ini
 
@@ -60,7 +61,7 @@ if [ "$DB" = "mongodb" ]; then
             git clone https://github.com/mongodb/mongo-hhvm-driver.git --branch 1.1.3
             cd mongo-hhvm-driver
             git submodule sync && git submodule update --init --recursive
-            hphpize && cmake . && make configlib && make -j 2 && make install
+            $HPHP_TOOLS/hphpize/hphpize && cmake . && make configlib && make -j 2 && make install
             echo "hhvm.dynamic_extensions[mongodb] = mongodb.so" >> $PHPINI
         fi
         echo "extension = mongodb.so" >> $PHPINI
