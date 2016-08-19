@@ -111,4 +111,12 @@ class MongoTest extends GenericTestCase
         $this->assertNull( $this->cache->loadKey('ttlId') );
     }
 
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testThrowAnInvalidArgumentException()
+    {
+        new Cache\Mongo(new \stdClass);
+    }
+
 }
