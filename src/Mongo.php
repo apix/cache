@@ -39,13 +39,22 @@ class Mongo extends AbstractCache
     public $collection;
 
     /**
+     * @var bool PHP7 new extension
+     */
+    private $usingMongoDBDriver;
+
+    /**
      * Constructor. Sets the Mongo DB adapter.
      *
-     * @param \MongoClient $Mongo     A \MongoClient instance.
+     * @param \MongoClient|\MongoDB\Client $Mongo     A \MongoClient instance.
      * @param array        $options   Array of options.
      */
-    public function __construct(\MongoClient $Mongo, array $options=null)
+    public function __construct($Mongo, array $options=null)
     {
+        if (!is_a($Mongo, '\MongoClient') && !is_a($Mongo, '\MongoDB\Client')) {
+            throw new \InvalidArgumentException('expected instance of "MongoClient" or "MongoDB\Client"');
+        }
+
         // default options
         $this->options['db_name'] = 'apix';
         $this->options['collection_name'] = 'cache';
@@ -54,10 +63,17 @@ class Mongo extends AbstractCache
         // Set the adapter and merge the user+default options
         parent::__construct($Mongo, $options);
 
-        $this->db = $this->adapter->selectDB($this->options['db_name']);
+        if (is_a($Mongo, '\MongoDB\Client')) {
+            $this->usingMongoDBDriver = true;
+            $this->db = new Mongo\DatabaseAdapter($this->adapter->{$this->options['db_name']});
+        } else {
+            $this->usingMongoDBDriver = false;
+            $this->db = $this->adapter->selectDB($this->options['db_name']);
+        }
+
         $this->collection = $this->db->createCollection(
                                 $this->options['collection_name'],
-                                false
+                                array()
                             );
 
         $this->collection->ensureIndex(
@@ -164,14 +180,17 @@ class Mongo extends AbstractCache
             }
         }
 
+        $this->ttls[$key] = 0;
+
         if (null !== $ttl && 0 !== $ttl) {
             $expire = time()+$ttl;
-            $cache['expire'] = new \MongoDate($expire);
+            if ($this->usingMongoDBDriver) {
+                $cache['expire'] = new \MongoDB\BSON\UTCDateTime($expire * 1000);
+            } else {
+                $cache['expire'] = new \MongoDate($expire);
+            }
+            $this->ttls[$key] = $ttl;
         }
-
-        $this->ttls[$key] = isset($cache['expire'])
-                                ? $cache['expire']->sec - time()
-                                : 0;
 
         $res = $this->collection->update(
             array('key' => $key), $cache, array('upsert' => true)
@@ -214,12 +233,15 @@ class Mongo extends AbstractCache
     public function flush($all=false)
     {
         if (true === $all) {
-            $res = $this->db->drop();
-
+            $res = $this->collection->drop();
             return (boolean) $res['ok'];
         }
-        // $res = $this->collection->drop();
-        $regex = new \MongoRegex('/^' . $this->mapKey('') . '/');
+
+        if ($this->usingMongoDBDriver)
+            $regex = ['$regex' => '^' . $this->mapKey('')];
+        else
+            $regex = new \MongoRegex('/^' . $this->mapKey('') . '/');
+
         $res = $this->collection->remove( array('key' => $regex) );
 
         return (boolean) $res['ok'];

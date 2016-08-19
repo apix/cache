@@ -36,8 +36,14 @@ class GenericTestCase extends TestCase
     {
         $data = array('foo' => 'bar');
         $this->assertTrue($this->cache->save($data, 'id'));
-        $this->assertEquals($data, $this->cache->loadKey('id'));
-        $this->assertEquals($data, $this->cache->load('id'));
+
+        $check = $this->cache->loadKey('id');
+        if (is_a($check, 'ArrayObject')) $check = $check->getArrayCopy();
+        $this->assertEquals($data, $check);
+
+        $check = $this->cache->load('id');
+        if (is_a($check, 'ArrayObject')) $check = $check->getArrayCopy();
+        $this->assertEquals($data, $check);
     }
 
     public function testSaveAndLoadWithObject()
