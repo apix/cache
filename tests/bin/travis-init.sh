@@ -56,6 +56,7 @@ if [ "$DB" = "mongodb" ]; then
         echo "extension = mongo.so" >> $PHPINI
     else
         echo "extension = mongodb.so" >> $PHPINI
+        composer require "mongodb/mongodb=^1.0.0"
     fi
 fi
 
