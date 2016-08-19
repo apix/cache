@@ -26,7 +26,7 @@ class MongoTest extends GenericTestCase
 
     public function setUp()
     {
-        if (phpversion() >= '7.0.0') {
+        if (phpversion() >= '7.0.0' || defined('HHVM_VERSION')) {
             $this->skipIfMissing('mongodb');
             $class = '\MongoDB\Client';
         } else {
