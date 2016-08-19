@@ -28,13 +28,13 @@ class Mongo extends AbstractCache
 
     /**
      * Holds the MongoDB object
-     * @var \MongoDB
+     * @var \MongoDB|Mongo\DatabaseAdapter
      */
     public $db;
 
     /**
      * Holds the MongoCollection object
-     * @var \MongoCollection
+     * @var \MongoCollection|Mongo\CollectionAdapter
      */
     public $collection;
 
@@ -243,7 +243,7 @@ class Mongo extends AbstractCache
 
         $regex = $this->is_legacy
                 ? new \MongoRegex('/^' . $this->mapKey('') . '/')
-                : ['$regex' => '^' . $this->mapKey('')];
+                : array('$regex' => '^' . $this->mapKey(''));
 
         $res = $this->collection->remove( array('key' => $regex) );
 
