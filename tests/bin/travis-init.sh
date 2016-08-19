@@ -55,6 +55,14 @@ if [ "$DB" = "mongodb" ]; then
     then
         echo "extension = mongo.so" >> $PHPINI
     else
+        if [ "${VERSION}" = "hhvm" ]
+        then
+            git clone https://github.com/mongodb/mongo-hhvm-driver.git --branch 1.1.3
+            cd mongo-hhvm-driver
+            git submodule sync && git submodule update --init --recursive
+            hphpize && cmake . && make configlib && make -j 2 && make install
+            echo "hhvm.dynamic_extensions[mongodb] = mongodb.so" >> $PHPINI
+        fi
         echo "extension = mongodb.so" >> $PHPINI
         composer require "mongodb/mongodb=^1.0.0"
     fi
