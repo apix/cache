@@ -60,13 +60,19 @@ class Files extends AbstractCache
             return null;
         }
         $pos = strpos($data, PHP_EOL, 0);
-        $pos = strpos($data, PHP_EOL, $pos+1);
         if (false === $pos) {// Un-complete file
             unlink($path);
             return null;
         }
 
-        $serialized = substr($data, $pos+1);
+        $eolLen = strlen(PHP_EOL);
+        $pos = strpos($data, PHP_EOL, $pos+$eolLen);
+        if (false === $pos) {// Un-complete file
+            unlink($path);
+            return null;
+        }
+
+        $serialized = substr($data, $pos+$eolLen);
         return unserialize($serialized);
     }
 
