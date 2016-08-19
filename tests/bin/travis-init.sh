@@ -4,7 +4,7 @@ set -o pipefail
 
 VERSION=`phpenv version-name`
 
-if [ "${VERSION}" = 'hhvm' ]; then
+if [ "${VERSION}" = "hhvm" ]; then
     PHPINI=/etc/hhvm/php.ini
 else
     PHPINI=~/.phpenv/versions/$VERSION/etc/php.ini
@@ -51,7 +51,12 @@ if [ "$DB" = "redis" ]; then
 fi
 
 if [ "$DB" = "mongodb" ]; then
-    echo "extension = mongo.so" >> $PHPINI
+    if [ "${VERSION}" != "hhvm" ] && [ "$(expr "${VERSION}" "<" "7.0")" -eq 1 ]
+    then
+        echo "extension = mongo.so" >> $PHPINI
+    else
+        echo "extension = mongodb.so" >> $PHPINI
+    fi
 fi
 
 if [ "$DB" = "mysql" ]; then
