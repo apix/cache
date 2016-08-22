@@ -57,16 +57,13 @@ if [ "$DB" = "mongodb" ]; then
     else
         if [ "${VERSION}" = "hhvm" ]
         then
-            sudo apt-get install cmake
-            git clone git://github.com/facebook/hhvm.git
-            cd hhvm && git checkout 1da451b && cd -  # Tag:3.0.1
-            HPHP_HOME=`pwd`/hhvm
+            sudo apt-get install -y cmake
 
-            cd $HPHP_HOME && git submodule update --init --recursive && export CMAKE_PREFIX_PATH=`pwd`/.. && time TRAVIS=1 ./configure_generic.sh
             git clone https://github.com/mongodb/mongo-hhvm-driver.git --branch 1.1.3
             cd mongo-hhvm-driver
             git submodule sync && git submodule update --init --recursive
-            $HPHP_HOME/hphp/tools/hphpize/hphpize && cmake . && make configlib && make -j 2 && make install
+
+            ${TRAVIS_BUILD_DIR}/hphpize && cmake . && make configlib && make -j 2 && make install
             echo "hhvm.dynamic_extensions[mongodb] = mongodb.so" >> $PHPINI
         fi
         echo "extension = mongodb.so" >> $PHPINI
