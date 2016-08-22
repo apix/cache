@@ -22,7 +22,7 @@ Currently, the following cache store are supplied:
 
 * **[APC](http://php.net/book.apc.php)** (which also works with [APCu](http://pecl.php.net/package/APCu)) *with tagging support*,
 * **[Redis](http://redis.io)** using the [PhpRedis](https://github.com/phpredis/phpredis) extension *with tagging support*,
-* **[MongoDB](http://www.mongodb.org/)** using the [mongo](http://php.net/book.mongo.php) native PHP extension *with tagging support*,
+* **[MongoDB](http://www.mongodb.org/)** using either the new [mongodb](http://php.net/mongodb) or the legacy [mongo](http://php.net/mongo) extension *with tagging support*,
 * **[Memcached](http://memcached.org/)** using the [Memcached](http://php.net/book.memcached.php) extension *with indexing, tagging and namespacing support*,
 * and relational databases usign **[PDO](http://php.net/book.pdo.php)** *with tagging support*:
  * Dedicated drivers for **[SQLite](http://www.sqlite.org)**, **[PostgreSQL](http://www.postgresql.org)** and **[MySQL](http://www.mysql.com)** (also works with Amazon Aurora, MariaDB and Percona),
