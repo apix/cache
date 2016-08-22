@@ -57,8 +57,7 @@ if [ "$DB" = "mongodb" ]; then
     else
         if [ "${VERSION}" = "hhvm" ]
         then
-            sudo apt-get install -y cmake
-
+            # sudo apt-get install -y cmake
             git clone https://github.com/mongodb/mongo-hhvm-driver.git --branch 1.1.3
             cd mongo-hhvm-driver
             git submodule sync && git submodule update --init --recursive
