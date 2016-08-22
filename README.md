@@ -149,10 +149,10 @@ The serialzer `auto` (default) is `igBinary` if available, then `msgpack` if ava
   $options['db_name'] = 'apix';           // name of the mongo db
   $options['collection_name'] = 'cache';  // name of the mongo collection
 
-  $mongo  = new \MongoClient;             // MongoDB native driver** instance
+  $mongo  = new \MongoDB\Client;             // MongoDB native driver
+  // or $mongo  = new \MongoClient;          // MongoDB legacy driver
   $cache = new Cache\Mongo($mongo, $options);
 ```
-\*\* see [MongoDB](http://php.net/manual/en/book.mongo.php) for instantiation usage.
 
 ### PDO specific
 ```php
