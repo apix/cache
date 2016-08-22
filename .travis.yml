@@ -1,6 +1,7 @@
 language: php
 
-sudo: false
+# sudo: false
+sudo: required
 
 services:
   - redis-server
