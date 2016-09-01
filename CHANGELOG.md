@@ -1,5 +1,9 @@
 # APIx Cache changelog
 
+#### Version 1.2.8 (xx-Xxx-2016)
+- Added new `mongodb` extension for PHP 5.4 and higher (contrib by @dimasikturbo). Also supports HHVM 3.9 and higher. The legacy `mongo` extension is still provided for PHP 5.6 and lower.
+- TODO: Travis is curently broken with HHVM and `mongodb`.
+
 #### Version 1.2.7 (20-July-2016)
 - Fix the HHVM issues.
 - Fix APC/APCu for both PHP7 and HHVM.
