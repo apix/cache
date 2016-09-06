@@ -14,6 +14,8 @@ APIx Cache is a generic and thin cache wrapper with a simple interface to variou
   * supports a range of serializers: `igBinary`, `msgpack`, `json`, `php`, ...
 * Available as a **[Composer](https://packagist.org/packages/apix/cache)** ~~and as a [PEAR](http://pear.ouarz.net)~~ package.
 
+⇄ *Pull requests* and ★ *Stars* are always welcome. For bugs and feature request, please [create an issue](//github.com/frqnck/apix-cache/issues/new).
+
 ---
 
 Cache backends
@@ -29,8 +31,6 @@ Currently, the following cache store are supplied:
  * A generic **[Sql1999](https://en.wikipedia.org/wiki/SQL:1999)** driver for [4D](http://www.4d.com/), [Cubrid](http://www.cubrid.org), [SQL Server](http://www.microsoft.com/sqlserver), [Sybase](http://www.sybase.com), [Firebird](http://www.firebirdsql.org), [ODBC](https://en.wikipedia.org/wiki/Open_Database_Connectivity), [Interbase](http://www.embarcadero.com/products/interbase), [IBM DB2](www.ibm.com/software/data/db2/), [IDS](http://www-01.ibm.com/software/data/informix/), [Oracle](http://www.oracle.com/database)...
 * **[Directory](#filesystem-specific)** and **[Files](#filesystem-specific)** based *with tagging support*,
 * **Runtime**, in-memory array storage.
-
-Feel free to comment, send pull requests and patches...
 
 Factory usage (PSR-Cache wrapper)
 -------------
