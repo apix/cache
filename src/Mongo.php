@@ -116,11 +116,11 @@ class Mongo extends AbstractCache
             return null;
         }
 
-        // Serializer\Adapter::isSerialized() has been deprecated
-        // Only mongo needs it...
-        return null !== $this->serializer
-              && $this->serializer->isSerialized($cache['data'])
-              ? $this->serializer->unserialize($cache['data'])
+        return $cache['serialized']
+              ? $this->serializer->unserialize(
+                    $this->is_legacy
+                        ? $cache['serialized']->bin
+                        : $cache['serialized']->getData())
               : $cache['data'];
     }
 
@@ -134,7 +134,7 @@ class Mongo extends AbstractCache
     {
         $cache = $this->collection->findOne(
             array('key' => $key),
-            array('data', 'expire')
+            array('data', 'expire', 'serialized')
         );
 
         if ($cache !== null) {
@@ -171,11 +171,16 @@ class Mongo extends AbstractCache
     {
         $key = $this->mapKey($key);
 
-        if (null !== $this->serializer && is_object($data)) {
-            $data = $this->serializer->serialize($data);
-        }
+        $cache = array('key' => $key, 'data' => null, 'serialized' => null);
 
-        $cache = array('key' => $key, 'data'  => $data);
+        if (null !== $this->serializer && (is_object($data) || is_array($data))) {
+            $cache['serialized'] =
+                $this->is_legacy
+                    ? new \MongoBinData($this->serializer->serialize($data), \MongoBinData::BYTE_ARRAY)
+                    : new \MongoDB\BSON\Binary($this->serializer->serialize($data), \MongoDB\BSON\Binary::TYPE_GENERIC);
+        } else {
+            $cache['data'] = $data;
+        }
 
         if ($this->options['tag_enable'] && null !== $tags) {
             $cache['tags'] = array();
