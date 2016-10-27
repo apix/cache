@@ -73,7 +73,7 @@ class PdoTest extends GenericTestCase
             return $dbs[$DB];
         }
 
-        $this->markTestSkipped("Unsupported DB ($DB) environment.");
+        $this->markTestSkipped("Unsupported PDO DB ($DB) environment.");
     }
 
     public function setUp()
