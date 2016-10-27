@@ -113,9 +113,10 @@ class MongoTest extends GenericTestCase
 
     public function testArrayWithArbitraryKeys()
     {
-        $this->assertTrue(
-            $this->cache->save(array('A:B' => 'test', 'A&B' => 'test2', 'A.B' => 'test3'), 'array', array(), -1)
-        );
+        $arr = array('A:B' => 'test', 'A&B' => 'test2', 'A.B' => 'test3');
+
+        $this->assertTrue($this->cache->save($arr, 'array', array(), 5));
+        $this->assertEquals($arr, $this->cache->loadKey('array'));
     }
 
     /**
