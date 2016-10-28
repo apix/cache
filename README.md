@@ -26,7 +26,7 @@ Currently, the following cache store are supplied:
 * **[Redis](#redis-specific)** using the [`PhpRedis`](https://github.com/phpredis/phpredis) extension *with tagging support*,
 * **[MongoDB](#mongodb-specific)** using either the new [`mongodb`](http://php.net/mongodb) or the legacy [`mongo`](http://php.net/mongo) extension *with tagging support*,
 * **[Memcached](#memcached-specific)** using the [`Memcached`](http://php.net/book.memcached.php) extension *with indexing, tagging and namespacing support*,
-* and relational databases using **[PDO](#PDO-specific)** *with tagging support*:
+* and relational databases using **[PDO](#pdo-specific)** *with tagging support*:
  * Dedicated drivers for **[SQLite](http://www.sqlite.org)**, **[PostgreSQL](http://www.postgresql.org)** and **[MySQL](http://www.mysql.com)** (also works with Amazon Aurora, MariaDB and Percona),
  * A generic **[Sql1999](https://en.wikipedia.org/wiki/SQL:1999)** driver for [4D](http://www.4d.com/), [Cubrid](http://www.cubrid.org), [SQL Server](http://www.microsoft.com/sqlserver), [Sybase](http://www.sybase.com), [Firebird](http://www.firebirdsql.org), [ODBC](https://en.wikipedia.org/wiki/Open_Database_Connectivity), [Interbase](http://www.embarcadero.com/products/interbase), [IBM DB2](www.ibm.com/software/data/db2/), [IDS](http://www-01.ibm.com/software/data/informix/), [Oracle](http://www.oracle.com/database)...
 * **[Directory](#filesystem-specific)** and **[Files](#filesystem-specific)** based *with tagging support*,
