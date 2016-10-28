@@ -26,10 +26,16 @@ class MongoTest extends GenericTestCase
 
     public function setUp()
     {
-        $this->skipIfMissing('mongo');
+        if (phpversion() >= '7.0.0' || defined('HHVM_VERSION')) {
+            $this->skipIfMissing('mongodb');
+            $class = '\MongoDB\Client';
+        } else {
+            $this->skipIfMissing('mongo');
+            $class = '\MongoClient';
+        }
 
         try {
-            $this->mongo = new \MongoClient();
+            $this->mongo = new $class();
         } catch (\Exception $e) {
             $this->markTestSkipped( $e->getMessage() );
         }
@@ -41,7 +47,8 @@ class MongoTest extends GenericTestCase
     {
         if (null !== $this->cache) {
             $this->cache->flush();
-            $this->mongo->close();
+            if (method_exists($this->mongo, 'close'))
+                $this->mongo->close();
             unset($this->cache, $this->mongo);
         }
     }
@@ -67,9 +74,9 @@ class MongoTest extends GenericTestCase
 
         $this->assertTrue($this->cache->flush());
 
-        $this->assertEquals(
-            $foo, $this->cache->collection->findOne(array('foo'=>'bar'))
-        );
+        $check = $this->cache->collection->findOne(array('foo'=>'bar'));
+        if (is_a($check, 'ArrayObject')) $check = $check->getArrayCopy();
+        $this->assertEquals($foo, $check);
 
         $this->assertNull($this->cache->loadKey('id3'));
         $this->assertNull($this->cache->loadTag('tag1'));
@@ -102,6 +109,22 @@ class MongoTest extends GenericTestCase
         // ));
 
         $this->assertNull( $this->cache->loadKey('ttlId') );
+    }
+
+    public function testArrayWithArbitraryKeys()
+    {
+        $arr = array('A:B' => 'test', 'A&B' => 'test2', 'A.B' => 'test3');
+
+        $this->assertTrue($this->cache->save($arr, 'array', array(), 5));
+        $this->assertEquals($arr, $this->cache->loadKey('array'));
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testThrowAnInvalidArgumentException()
+    {
+        new Cache\Mongo(new \stdClass);
     }
 
 }

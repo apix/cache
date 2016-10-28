@@ -24,7 +24,7 @@ Currently, the following cache store are supplied:
 
 * **[APC](http://php.net/book.apc.php)** (which also works with [APCu](http://pecl.php.net/package/APCu)) *with tagging support*,
 * **[Redis](http://redis.io)** using the [PhpRedis](https://github.com/phpredis/phpredis) extension *with tagging support*,
-* **[MongoDB](http://www.mongodb.org/)** using the [mongo](http://php.net/book.mongo.php) native PHP extension *with tagging support*,
+* **[MongoDB](http://www.mongodb.org/)** using either the new [mongodb](http://php.net/mongodb) or the legacy [mongo](http://php.net/mongo) extension *with tagging support*,
 * **[Memcached](http://memcached.org/)** using the [Memcached](http://php.net/book.memcached.php) extension *with indexing, tagging and namespacing support*,
 * and relational databases usign **[PDO](http://php.net/book.pdo.php)** *with tagging support*:
  * Dedicated drivers for **[SQLite](http://www.sqlite.org)**, **[PostgreSQL](http://www.postgresql.org)** and **[MySQL](http://www.mysql.com)** (also works with Amazon Aurora, MariaDB and Percona),
@@ -39,13 +39,13 @@ Factory usage (PSR-Cache wrapper)
   use Apix\Cache;
 
   $backend = new \Redis();
-  # $backend = new \PDO('sqlite:...');    // Any supported client object e.g. Memcached, MongoClient, ...
-  # $backend = new Cache\Files($options); // or one that implements Apix\Cache\Adapter
-  # $backend = 'apc';                     // or an adapter name (string) e.g. "APC", "Runtime"
-  # $backend = new MyArrayObject();       // or even a plain array() or \ArrayObject.
+  #$backend = new \PDO('sqlite:...');    // Any supported client object e.g. Memcached, MongoClient, ...
+  #$backend = new Cache\Files($options); // or one that implements Apix\Cache\Adapter
+  #$backend = 'apc';                     // or an adapter name (string) e.g. "APC", "Runtime"
+  #$backend = new MyArrayObject();       // or even a plain array() or \ArrayObject.
 
   $pool = Cache\Factory::getPool($backend);             // without tagging support
-  # $pool = Cache\Factory::getTaggablePool($backend);   // with tagging
+  #$pool = Cache\Factory::getTaggablePool($backend);    // with tagging
   
   $item = $pool->getItem('wibble_id');
   
@@ -149,10 +149,10 @@ The serialzer `auto` (default) is `igBinary` if available, then `msgpack` if ava
   $options['db_name'] = 'apix';           // name of the mongo db
   $options['collection_name'] = 'cache';  // name of the mongo collection
 
-  $mongo  = new \MongoClient;             // MongoDB native driver** instance
+  $mongo  = new \MongoDB\Client;          // MongoDB native driver
+  //$mongo  = new \MongoClient;           // or MongoDB legacy driver
   $cache = new Cache\Mongo($mongo, $options);
 ```
-\*\* see [MongoDB](http://php.net/manual/en/book.mongo.php) for instantiation usage.
 
 ### PDO specific
 ```php

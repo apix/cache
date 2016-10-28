@@ -1,5 +1,10 @@
 # APIx Cache changelog
 
+#### Version 1.2.8 (28-Oct-2016)
+- Added new `mongodb` extension for PHP 5.4 and higher (contrib by @dimasikturbo) which also supports HHVM 3.9 and higher. The legacy `mongo` extension is still provided for PHP 5.6 and lower.
+- Set Travis to skip `mongodb` on HHVM (compilation issue).
+- Fix array serialisation of nested keys with Mongo (contrib by @dimasikturbo).
+
 #### Version 1.2.7 (20-July-2016)
 - Fix the HHVM issues.
 - Fix APC/APCu for both PHP7 and HHVM.
@@ -16,7 +21,7 @@
 - Fix PHP 5.3, using `array()` instead of the short array syntax `[]`.
 - Marcked as depreciated `isSerialized()` and `testIsSerialized()`.
 - Added `msgpack` serializer.
-- Set Travis to skip Memcached on PHP 7.0 (not yet officially supported).
+- Set Travis to skip `Memcached` on PHP 7.0 (not yet officially supported).
 - Added additional unit-tests, aiming for 100% code coverage.
 
 #### Version 1.2.5 (20-Jun-2016)
