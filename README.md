@@ -39,13 +39,13 @@ Factory usage (PSR-Cache wrapper)
   use Apix\Cache;
 
   $backend = new \Redis();
-  # $backend = new \PDO('sqlite:...');    // Any supported client object e.g. Memcached, MongoClient, ...
-  # $backend = new Cache\Files($options); // or one that implements Apix\Cache\Adapter
-  # $backend = 'apc';                     // or an adapter name (string) e.g. "APC", "Runtime"
-  # $backend = new MyArrayObject();       // or even a plain array() or \ArrayObject.
+  #$backend = new \PDO('sqlite:...');    // Any supported client object e.g. Memcached, MongoClient, ...
+  #$backend = new Cache\Files($options); // or one that implements Apix\Cache\Adapter
+  #$backend = 'apc';                     // or an adapter name (string) e.g. "APC", "Runtime"
+  #$backend = new MyArrayObject();       // or even a plain array() or \ArrayObject.
 
   $pool = Cache\Factory::getPool($backend);             // without tagging support
-  # $pool = Cache\Factory::getTaggablePool($backend);   // with tagging
+  #$pool = Cache\Factory::getTaggablePool($backend);    // with tagging
   
   $item = $pool->getItem('wibble_id');
   
@@ -149,8 +149,8 @@ The serialzer `auto` (default) is `igBinary` if available, then `msgpack` if ava
   $options['db_name'] = 'apix';           // name of the mongo db
   $options['collection_name'] = 'cache';  // name of the mongo collection
 
-  $mongo  = new \MongoDB\Client;             // MongoDB native driver
-  // or $mongo  = new \MongoClient;          // MongoDB legacy driver
+  $mongo  = new \MongoDB\Client;          // MongoDB native driver
+  //$mongo  = new \MongoClient;           // or MongoDB legacy driver
   $cache = new Cache\Mongo($mongo, $options);
 ```
 
