@@ -111,6 +111,14 @@ class MongoTest extends GenericTestCase
         $this->assertNull( $this->cache->loadKey('ttlId') );
     }
 
+    public function testArrayWithArbitraryKeys()
+    {
+        $arr = array('A:B' => 'test', 'A&B' => 'test2', 'A.B' => 'test3');
+
+        $this->assertTrue($this->cache->save($arr, 'array', array(), 5));
+        $this->assertEquals($arr, $this->cache->loadKey('array'));
+    }
+
     /**
      * @expectedException InvalidArgumentException
      */
