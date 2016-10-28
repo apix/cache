@@ -58,4 +58,26 @@ class FilesTest extends GenericTestCase
         file_put_contents($this->cache->getOption('directory').DIRECTORY_SEPARATOR.$encoded, PHP_EOL);
         $this->assertNull($this->cache->loadKey('id'));
     }
+
+    /**
+     * Regression test for pull request GH#17
+     *
+     * @link https://github.com/frqnck/apix-cache/pull/17/files
+     *       "File and Directory Adapters @clean returns when fails to find a
+     *        key within a tag"
+     * @see DirectoryTest\testPullRequest17()
+     * @group pr
+     */
+    public function testPullRequest17()
+    {
+        $this->cache->save('data1', 'id1', array('tag1', 'tag2'));
+
+        $this->assertNotNull($this->cache->loadTag('tag2'));
+        $this->assertTrue($this->cache->clean(array('non-existant', 'tag2')));
+        $this->assertNull($this->cache->loadTag('tag2'));
+
+        // for good measure.
+        $this->assertFalse($this->cache->clean(array('tag2')));
+    }
+
 }
