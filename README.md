@@ -14,7 +14,7 @@ APIx Cache is a generic and thin cache wrapper with a simple interface to variou
   * supports a range of serializers: `igBinary`, `msgpack`, `json`, `php`, ...
 * Available as a **[Composer](https://packagist.org/packages/apix/cache)** ~~and as a [PEAR](http://pear.ouarz.net)~~ package.
 
-⇄ *Pull requests* and ★ *Stars* are always welcome. For bugs and feature request, please [create an issue](//github.com/frqnck/apix-cache/issues/new).
+⇄ *[Pull requests](//github.com/frqnck/apix-cache/blob/master/.github/CONTRIBUTING.md)* and ★ *Stars* are always welcome. For bugs and feature request, please [create an issue](//github.com/frqnck/apix-cache/issues/new).
 
 ---
 
