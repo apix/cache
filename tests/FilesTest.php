@@ -58,6 +58,16 @@ class FilesTest extends GenericTestCase
         file_put_contents($this->cache->getOption('directory').DIRECTORY_SEPARATOR.$encoded, PHP_EOL);
         $this->assertNull($this->cache->loadKey('id'));
     }
+	
+	public function testFlushAll()
+	{
+		$this->cache->save('testdata1', 'id1', array('tag1', 'tag2'));
+		$this->cache->save('testdata2', 'id2', array('tag3', 'tag4'));
+		$this->assertEquals(2, $this->getDirectoryFileCount($this->dir));
+		
+		$this->cache->flush(true);
+		$this->assertEquals(0, $this->getDirectoryFileCount($this->dir));
+	}
 
     /**
      * Regression test for pull request GH#17
@@ -79,5 +89,10 @@ class FilesTest extends GenericTestCase
         // for good measure.
         $this->assertFalse($this->cache->clean(array('tag2')));
     }
+		
+	private function getDirectoryFileCount($folder){
+		$iterator = new \FilesystemIterator($folder, \FilesystemIterator::SKIP_DOTS);
+		return iterator_count($iterator);
+	}
 
 }

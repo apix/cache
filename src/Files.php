@@ -237,7 +237,7 @@ class Files extends AbstractCache
             $fullKey = base64_decode($file);
             $key = $this->removePrefixKey($fullKey);
 
-            if (!$all && ($key !== $fullKey || '' === $this->options['prefix_key'])) {
+            if ($all || (!$all && ($key !== $fullKey || '' === $this->options['prefix_key']))) {
                 unlink($path);
             }
         }
