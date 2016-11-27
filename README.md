@@ -150,7 +150,7 @@ The serialzer `auto` (default) is `igBinary` if available, then `msgpack` if ava
   $options['collection_name'] = 'cache';  // name of the mongo collection
 
   $mongo  = new \MongoDB\Client;          // MongoDB native driver
-  //$mongo  = new \MongoClient;           // or MongoDB legacy driver
+  #$mongo  = new \MongoClient;            // or MongoDB legacy driver
   $cache = new Cache\Mongo($mongo, $options);
 ```
 
