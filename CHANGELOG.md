@@ -1,8 +1,10 @@
 # APIx Cache changelog
 
-#### Version 1.2.9 (xx-Xxx-2016)
+#### Version 1.2.9 (5-Jan-2017)
 - Fix `Files::clean` and `Directory::clean` return to early if failing to find a tag (PR #17 by @melloc01 + relevant tests PR #24).
-- Fix: `Files::flush(true)` the implementation to flush all was missing (PR #25 contrib by @alexpica).
+- Fix `Files::flush(true)` the implementation to flush all was missing (PR #25 contrib by @alexpica).
+- Updated to allow patches from php-fig/cache (PR #26 contrib by @vaibhavpandeyvpz).
+- Fix to a deprecated method `PsrCache::setExpiration` (PR #27 contrib by @damianopetrungaro).
 
 #### Version 1.2.8 (28-Oct-2016)
 - Added new `mongodb` extension for PHP 5.4 and higher (contrib by @dimasikturbo) which also supports HHVM 3.9 and higher. The legacy `mongo` extension is still provided for PHP 5.6 and lower.
