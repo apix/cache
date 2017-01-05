@@ -131,7 +131,7 @@ class Item implements ItemInterface
      */
     public function setExpiration($ttl = null)
     {
-        if (is_int($expiration)) {
+        if (is_int($ttl)) {
             $ttl = new \DateTime('now +' . $ttl . ' seconds');
         }
 
