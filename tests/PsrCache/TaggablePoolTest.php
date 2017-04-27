@@ -41,17 +41,17 @@ class TaggablePoolTest extends PoolTest
 
     public function testGetItemsByTagIsEmptyArrayByDefault()
     {
-        $this->assertEquals(array(), $this->pool->getItemsByTag('non-existant'));
-
-        $this->assertSame($this->pool, $this->pool->save($this->item));
-        $this->assertEquals(array(), $this->pool->getItemsByTag('non-existant'));
+        $this->assertEquals(
+            array(),
+            $this->pool->getItemsByTag('non-existant')
+        );
     }
 
     public function testGetItemsByTag()
     {
         $tags = array('fooTag', 'barTag');
         $this->assertSame($this->item, $this->item->setTags($tags));
-        $this->assertSame($this->pool, $this->pool->save($this->item));
+        $this->assertTrue($this->pool->save($this->item));
 
         $items = $this->pool->getItemsByTag('fooTag');
 
@@ -68,7 +68,7 @@ class TaggablePoolTest extends PoolTest
 
         $tags = array('fooTag', 'barTag');
         $this->assertSame($this->item, $this->item->setTags($tags));
-        $this->assertSame($this->pool, $this->pool->save($this->item));
+        $this->assertTrue($this->pool->save($this->item));
 
         $this->assertTrue($this->pool->clearByTags( array('fooTag') ));
     }

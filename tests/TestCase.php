@@ -13,7 +13,7 @@
 namespace Apix\Cache\tests;
 
 /**
- * Generic TextCase
+ * Generic TestCase
  *
  * @package Apix\Cache
  * @author Franck Cassedanne <franck at ouarz.net>
@@ -30,7 +30,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     {
         if (defined('HHVM_VERSION')) {
             switch($name) {
-                case 'redis': 
+                case 'redis':
                 #case 'mongo':
                     self::markTestSkipped(
                         sprintf('`%s` cannot be used with HHVM.', $name)

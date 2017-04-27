@@ -1,5 +1,12 @@
 # APIx Cache changelog
 
+#### Version 1.3.0 (27-Apr-2017)
+- Fix a PSR-6 expiration issue.
+- Added PsrCache\Item::__toString` method to simplify cached value output.
+- Added `PsrCache\Pool::__destruct()` method to magically commit all deferred items at gc.
+- Removed all deprecated methods from `PsrCache`.
+- Some variosu fixes and cleanup.
+
 #### Version 1.2.9 (5-Jan-2017)
 - Fix `Files::clean` and `Directory::clean` return to early if failing to find a tag (PR #17 by @melloc01 + relevant tests PR #24).
 - Fix `Files::flush(true)` the implementation to flush all was missing (PR #25 contrib by @alexpica).

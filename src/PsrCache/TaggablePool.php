@@ -74,7 +74,7 @@ class TaggablePool extends Pool
                     );
         $item->setHit($success);
 
-        return $this;
+        return $success;
     }
 
     /**

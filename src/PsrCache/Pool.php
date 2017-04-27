@@ -50,6 +50,12 @@ class Pool implements ItemPoolInterface
      */
     public function getItem($key)
     {
+        $key = Item::normalizedKey($key);
+
+        if (isset($this->deferred[$key])) {
+            return $this->deferred[$key];
+        }
+
         $value = $this->cache_adapter->loadKey($key);
 
         return new Item(
@@ -86,6 +92,7 @@ class Pool implements ItemPoolInterface
      */
     public function clear()
     {
+        $this->deferred = array();
         return $this->cache_adapter->flush(true);
     }
 
@@ -94,11 +101,15 @@ class Pool implements ItemPoolInterface
      */
     public function deleteItems(array $keys)
     {
+        $checks = array();
         foreach ($keys as $key) {
-            $this->cache_adapter->delete($key);
+            // Only delete from cache if it actually exists
+            if($this->getItem($key)->isHit()) {
+                $checks[] = $this->cache_adapter->delete($key);
+            }
+            unset($this->deferred[$key]);
         }
-
-        return $this;
+        return (bool) !in_array(false, $checks, true);
     }
 
     /**
@@ -125,7 +136,7 @@ class Pool implements ItemPoolInterface
                     );
         $item->setHit($success);
 
-        return $this;
+        return $success;
     }
 
     /**
@@ -133,7 +144,7 @@ class Pool implements ItemPoolInterface
      */
     public function saveDeferred(ItemInterface $item)
     {
-        $this->deferred[] = $item;
+        $this->deferred[$item->getKey()] = $item;
 
         return $this;
     }
@@ -161,6 +172,14 @@ class Pool implements ItemPoolInterface
     public function getCacheAdapter()
     {
         return $this->cache_adapter;
+    }
+
+    /**
+     * Commit the deferred items ~ acts as the last resort garbage collector.
+     */
+    public function __destruct()
+    {
+        $this->commit();
     }
 
 }

@@ -60,15 +60,26 @@ class Item implements ItemInterface
      */
     public function __construct($key, $value = null, $ttl = null, $hit = false)
     {
-        if (strpbrk($key, '{}()/\@:')) {
-            throw new InvalidArgumentException(
-                'Item key contains an invalide character.' . $key
-            );
-        }
-        $this->key = $key;
+        $this->key = self::normalizedKey($key);
         $this->value = $value;
         $this->hit = $hit;
         $this->expiresAt($ttl);
+    }
+
+    /**
+     * Returns a normalised key.
+     *
+     * @return string
+     */
+    public static function normalizedKey($key)
+    {
+        if (!is_string($key) || empty($key) || strpbrk($key, '{}()/\@:') ) {
+            throw new InvalidArgumentException(
+                'Item key (' . var_export($key, true) . ') is invalid.'
+            );
+        }
+
+        return $key;
     }
 
     /**
@@ -93,7 +104,7 @@ class Item implements ItemInterface
     public function set($value = null)
     {
         $this->value = $value;
-        $this->hit = false; // TODO: check wether we should we do this?
+        $this->hit = false;
 
         return $this;
     }
@@ -103,7 +114,7 @@ class Item implements ItemInterface
      */
     public function isHit()
     {
-        return $this->hit;
+        return  $this->hit && $this->getTtlInSecond() > 0;
     }
 
     /**
@@ -160,8 +171,7 @@ class Item implements ItemInterface
      * Sets the cache hit for this item.
      *
      * @param  boolean $hit
-     * @return static
-     *                     The invoked object.
+     * @return static The invoked object.
      */
     public function setHit($hit)
     {
@@ -177,7 +187,7 @@ class Item implements ItemInterface
     {
         if ($expiration instanceof \DateTime) {
             $this->expiration = $expiration;
- 
+
         } elseif (is_int($expiration)) {
             $this->expiration = new \DateTime(
                 'now +' . $expiration . ' seconds'
@@ -185,7 +195,7 @@ class Item implements ItemInterface
 
         } elseif (null === $expiration) {
             $this->expiration = new \DateTime(self::DEFAULT_EXPIRATION);
-        
+
         } else {
 
             throw new InvalidArgumentException(
@@ -210,7 +220,7 @@ class Item implements ItemInterface
 
         } elseif (null === $time) {
             $this->expiration = new \DateTime(self::DEFAULT_EXPIRATION);
-        
+
         } else {
 
             throw new InvalidArgumentException(
@@ -219,6 +229,16 @@ class Item implements ItemInterface
         }
 
         return $this;
+    }
+
+    /**
+     * Returns the item value.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->value;
     }
 
 }

@@ -27,9 +27,7 @@ class PoolTest extends TestCase
 
         $this->pool = new Pool($cache);
         $this->item = $this->pool->getItem('foo')->set('foo value');
-        $this->pool->save($this->item);
-
-        $this->assertTrue($this->item->isHit());
+        $this->assertTrue( $this->pool->save($this->item) );
     }
 
     public function tearDown()
@@ -78,7 +76,7 @@ class PoolTest extends TestCase
             '\Psr\Cache\CacheItemInterface', $items['non-existant']
         );
 
-        $items = $this->pool->getItems(array('foo'));
+        $items = $this->pool->getItems( array('foo') );
         $this->assertEquals('foo value', $items['foo']->get());
     }
 
@@ -86,8 +84,7 @@ class PoolTest extends TestCase
     {
         $item = $this->pool->getItem('baz')->set('foo value');
         $this->assertFalse($item->isHit());
-        $this->assertSame($this->pool, $this->pool->save($item));
-        $this->assertTrue($item->isHit());
+        $this->assertTrue($this->pool->save($item));
     }
 
     public function testClear()
@@ -101,7 +98,7 @@ class PoolTest extends TestCase
 
     public function testDeleteItems()
     {
-        $this->assertSame($this->pool,
+        $this->assertTrue(
             $this->pool->deleteItems(array('foo', 'non-existant'))
         );
 
@@ -110,22 +107,38 @@ class PoolTest extends TestCase
 
     public function testDeleteItem()
     {
-        $this->assertSame( $this->pool, $this->pool->deleteItem('foo') );
+        $this->assertTrue( $this->pool->deleteItem('foo') );
 
+        $this->assertTrue( $this->pool->deleteItem('foo') );
         $this->assertFalse( $this->pool->hasItem('foo') );
+    }
+
+    /**
+     * It MUST NOT be considered an error condition if the specified key does
+     * not exist. The post-condition is the same (the key does not exist, or
+     * the pool is empty), thus there is no error condition.
+     */
+    public function testDeleteNonExistant()
+    {
+        $this->assertTrue($this->pool->deleteItem('non-existant'));
+        $this->assertFalse($this->pool->hasItem('non-existant'));
     }
 
     public function testSaveDeferredAndCommit()
     {
         $item = $this->pool->getItem('foo')->set('foo value');
         $this->assertSame($this->pool, $this->pool->saveDeferred($item));
+
         $this->assertNull($item->get());
+
+        // get the deferred version
+        $this->assertEquals('foo value', $this->pool->getItem('foo'));
+
         $this->assertTrue($this->pool->commit());
         $this->assertEquals('foo value', $item->get());
 
         $items = $this->pool->getItems(array('foo', 'bar'));
         $this->assertEquals('foo value', $items['foo']->get());
-        // $this->assertEquals($item, $items['foo']);
     }
 
     /**
@@ -151,6 +164,17 @@ class PoolTest extends TestCase
             $this->options['prefix_tag'],
             $adapter->getOption('prefix_tag')
         );
+    }
+
+    public function testDestructDoesCommit()
+    {
+        $item = $this->pool->getItem('foo')->set('foo value');
+        $this->assertSame($this->pool, $this->pool->saveDeferred($item));
+        $this->pool->__destruct();
+        $this->assertEquals('foo value', $item->get());
+
+        $item = $this->pool->getItem('foo');
+        $this->assertEquals('foo value', $item );
     }
 
 }
