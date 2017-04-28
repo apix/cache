@@ -18,9 +18,9 @@ else
     # install msgpack
     if [ "$(expr "${VERSION}" "<" "7.0")" -eq 1 ]
     then
-        echo "yes" | pecl install msgpack-0.5.7
+        echo "yes" | pecl install -s msgpack-0.5.7
     else
-        echo "yes" | pecl install msgpack-2.0.1
+        echo "yes" | pecl install -s msgpack-2.0.1
     fi
 fi
 
@@ -39,9 +39,9 @@ if [ "$DB" = "apc" ]; then
         echo "extension = apc.so" >> $PHPINI
     elif [ "$(expr "${VERSION}" "<" "7.0")" -eq 1 ]
     then
-        echo "yes" | pecl install apcu-4.0.10
+        echo "yes" | pecl install -s apcu-4.0.10
     else
-        echo "yes" | pecl install apcu-5.1.2
+        echo "yes" | pecl install -s apcu-5.1.2
     fi
     echo "apc.enable_cli = 1" >> $PHPINI
 fi
