@@ -50,21 +50,20 @@ class PoolTest extends TestCase
      */
     public static function _invalidKeyProvider()
     {
-        return [
-            ['foo{bar'],
-            ['foo}bar'],
-            ['foo(bar'],
-            ['foo)bar'],
-            ['foo/bar'],
-            ['foo\\bar'],
-            ['foo@bar'],
-            ['foo:bar'],
-            'null'    => [ null ],
-            'boolean' => [ true ],
-            'integer' => [ 1 ],
-            'float'   => [ 1.1 ],
-
-        ];
+        return array(
+            array('foo{bar'),
+            array('foo}bar'),
+            array('foo(bar'),
+            array('foo)bar'),
+            array('foo/bar'),
+            array('foo\\bar'),
+            array('foo@bar'),
+            array('foo:bar'),
+            'null'    => array( null ),
+            'boolean' => array( true ),
+            'integer' => array( 1 ),
+            'float'   => array( 1.1 )
+        );
     }
 
     /**

@@ -5,7 +5,7 @@
 - Added PsrCache\Item::__toString` method to simplify cached value output.
 - Added `PsrCache\Pool::__destruct()` method to magically commit all deferred items at gc.
 - Removed all deprecated methods from `PsrCache`.
-- Some variosu fixes and cleanup.
+- Some various fixes, more unit-tests and cleanup.
 
 #### Version 1.2.9 (5-Jan-2017)
 - Fix `Files::clean` and `Directory::clean` return to early if failing to find a tag (PR #17 by @melloc01 + relevant tests PR #24).
