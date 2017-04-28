@@ -2,7 +2,7 @@
     "name": "apix/cache",
     "description": "A thin PSR-6 cache wrapper with a generic interface to various caching backends emphasising cache taggging and indexing to Redis, Memcached, PDO/SQL, APC and other adapters.",
     "type": "library",
-    "keywords": ["apc", "APCu", "redis", "mongodb", "mongo", "igbinary", "serializer", "json", "pdo", "sqlite", "mysql", "postgres", "pgsql", "memcached", "memcache", "psrCache", "psr-6", "psr-cache", "Filesystem", "session", "cache", "caching", "msgpack"],
+    "keywords": ["apc", "APCu", "redis", "mongodb", "mongo", "igbinary", "serializer", "json", "pdo", "sqlite", "mysql", "postgres", "pgsql", "memcached", "memcache", "psrCache", "psr-6", "psr-cache", "Filesystem", "session", "cache", "caching", "msgpack", "tagging"],
     "homepage": "https://github.com/frqnck/apix-cache",
     "license": "BSD-3-Clause",
     "authors": [
