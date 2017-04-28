@@ -42,11 +42,38 @@ class PoolTest extends TestCase
     }
 
     /**
+     * The following characters are reserved for future extensions
+     * and MUST NOT be supported by implementing libraries:
+     *      {}()/\@:
+     *
+     * @return array
+     */
+    public static function _invalidKeyProvider()
+    {
+        return [
+            ['foo{bar'],
+            ['foo}bar'],
+            ['foo(bar'],
+            ['foo)bar'],
+            ['foo/bar'],
+            ['foo\\bar'],
+            ['foo@bar'],
+            ['foo:bar'],
+            'null'    => [ null ],
+            'boolean' => [ true ],
+            'integer' => [ 1 ],
+            'float'   => [ 1.1 ],
+
+        ];
+    }
+
+    /**
+     * @dataProvider _invalidKeyProvider
      * @expectedException \Apix\Cache\PsrCache\InvalidArgumentException
      */
-    public function testGetItemThrowsException()
+    public function testGetItemThrowsException($key)
     {
-        $item = $this->pool->getItem('{}');
+        $this->pool->getItem($key);
     }
 
     public function testBasicSetAndGetOperations()
@@ -58,13 +85,13 @@ class PoolTest extends TestCase
         $item->set('bar value');
         $this->assertNull($item->get());
         $this->pool->save($item);
-        $this->assertEquals('bar value', $item->get());
+        $this->assertEquals('bar value', $item);
 
         // Update the 'bar' item value.
         $item->set('new bar value');
         $this->assertNull($item->get());
         $this->pool->save($item);
-        $this->assertEquals('new bar value', $item->get());
+        $this->assertEquals('new bar value', $item);
     }
 
     public function testGetItems()
@@ -77,7 +104,7 @@ class PoolTest extends TestCase
         );
 
         $items = $this->pool->getItems( array('foo') );
-        $this->assertEquals('foo value', $items['foo']->get());
+        $this->assertEquals('foo value', $items['foo']);
     }
 
     public function testSave()
@@ -135,10 +162,10 @@ class PoolTest extends TestCase
         $this->assertEquals('foo value', $this->pool->getItem('foo'));
 
         $this->assertTrue($this->pool->commit());
-        $this->assertEquals('foo value', $item->get());
+        $this->assertEquals('foo value', $item);
 
         $items = $this->pool->getItems(array('foo', 'bar'));
-        $this->assertEquals('foo value', $items['foo']->get());
+        $this->assertEquals('foo value', $items['foo']);
     }
 
     /**
@@ -171,7 +198,7 @@ class PoolTest extends TestCase
         $item = $this->pool->getItem('foo')->set('foo value');
         $this->assertSame($this->pool, $this->pool->saveDeferred($item));
         $this->pool->__destruct();
-        $this->assertEquals('foo value', $item->get());
+        $this->assertEquals('foo value', $item);
 
         $item = $this->pool->getItem('foo');
         $this->assertEquals('foo value', $item );
