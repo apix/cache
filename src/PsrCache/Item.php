@@ -20,12 +20,6 @@ class Item implements ItemInterface
     const DEFAULT_EXPIRATION = 'now +1 year';
 
     /**
-     * The pool that the item belongs to.
-     * @var ItemPoolInterface
-     */
-    // protected $pool;
-
-    /**
      * The cache key for the item.
      * @var string
      */
@@ -114,39 +108,7 @@ class Item implements ItemInterface
      */
     public function isHit()
     {
-        return  $this->hit && $this->getTtlInSecond() > 0;
-    }
-
-    /**
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public function exists()
-    {
-        return $this->hit;
-    }
-
-    /**
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public function isRegenerating()
-    {
-        return false;
-    }
-
-    /**
-     * @deprecated
-     * @see Item::expiresAt()
-     * @codeCoverageIgnore
-     */
-    public function setExpiration($ttl = null)
-    {
-        if (is_int($ttl)) {
-            $ttl = new \DateTime('now +' . $ttl . ' seconds');
-        }
-
-        return $this->expiresAt($ttl);
+        return $this->hit && $this->getTtlInSecond() > 0;
     }
 
     /**

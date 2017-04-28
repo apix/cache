@@ -38,7 +38,6 @@ class ItemTest extends TestCase
         $this->assertNull($item->get());
 
         $this->assertFalse($item->isHit());
-        $this->assertFalse($item->exists());
     }
 
     public function testItemConstructorHittingCache()
@@ -48,7 +47,6 @@ class ItemTest extends TestCase
         $this->assertEquals('bar', $item->get());
 
         $this->assertTrue($item->isHit());
-        $this->assertTrue($item->exists());
     }
 
     public function testSetAndisHit()
@@ -121,11 +119,6 @@ class ItemTest extends TestCase
         $this->assertEquals(
             (int) $date->format('U'), $expire->format('U'), '', 10
         );
-    }
-
-    public function testItemIsRegenerating()
-    {
-        $this->assertFalse($this->item->isRegenerating());
     }
 
     /**

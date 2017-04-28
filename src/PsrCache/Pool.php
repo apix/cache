@@ -132,7 +132,7 @@ class Pool implements ItemPoolInterface
                         $item->get(),             // value to store
                         $item->getKey(),          // its key
                         null,                     // disable tags support
-                        is_null($ttl) ? 0 : $ttl  // ttl in sec or null for ever
+                        is_null($ttl) ? 0 : $ttl  // ttl in sec or null forever
                     );
         $item->setHit($success);
 
