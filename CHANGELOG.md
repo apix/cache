@@ -3,7 +3,7 @@
 #### Version 1.3.0 (27-Apr-2017)
 - Fix a PSR-6 expiration issue.
 - Added PsrCache\Item::__toString` method to simplify cached value output.
-- Added `PsrCache\Pool::__destruct()` method to magically commit all deferred items at gc.
+- Added `PsrCache\Pool::__destruct()` method to (garbage collect) magically commit all deferred cached items.
 - Removed all deprecated methods from `PsrCache`.
 - Some various fixes, more unit-tests and cleanup.
 
