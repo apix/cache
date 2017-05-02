@@ -32,7 +32,6 @@ before_install:
   - travis_retry composer self-update
 
 install:
-  - composer require --no-update --no-interaction "phpunit/phpunit:*"
   - travis_retry composer install -o --no-interaction --prefer-source
   - mkdir -p build/logs
   - tests/bin/travis-init.sh
