@@ -4,6 +4,14 @@ set -o pipefail
 
 VERSION=`phpenv version-name`
 
+function pecl_install()
+{
+    local _PKG=$1
+    local _VERSION=$2
+
+    pecl shell-test $_PKG || (echo "yes" | pecl install $_PKG-$_VERSION)
+}
+
 if [ "${VERSION}" = "hhvm" ]; then
     PHPINI=/etc/hhvm/php.ini
 else
@@ -13,14 +21,14 @@ else
     pecl channel-update pecl.php.net
 
     # install igbinary
-    echo "yes" | pecl install igbinary
+    pecl_install igbinary 2.0.1
 
     # install msgpack
     if [ "$(expr "${VERSION}" "<" "7.0")" -eq 1 ]
     then
-        echo "yes" | pecl install -s msgpack-0.5.7
+        pecl_install msgpack 0.5.7
     else
-        echo "yes" | pecl install -s msgpack-2.0.1
+        pecl_install msgpack 2.0.2
     fi
 fi
 
@@ -39,9 +47,9 @@ if [ "$DB" = "apc" ]; then
         echo "extension = apc.so" >> $PHPINI
     elif [ "$(expr "${VERSION}" "<" "7.0")" -eq 1 ]
     then
-        echo "yes" | pecl install -s apcu-4.0.10
+        pecl_install apcu 4.0.11
     else
-        echo "yes" | pecl install -s apcu-5.1.2
+        pecl_install apcu 5.1.8
     fi
     echo "apc.enable_cli = 1" >> $PHPINI
 fi
