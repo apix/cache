@@ -2,18 +2,17 @@ APIx Cache, cache-tagging for PHP [![Build Status](https://travis-ci.org/frqnck/
 =================================
 [![Latest Stable Version](https://poser.pugx.org/apix/cache/v/stable.svg)](https://packagist.org/packages/apix/cache)  [![Build Status](https://scrutinizer-ci.com/g/frqnck/apix-cache/badges/build.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-cache/build-status/master)  [![Code Quality](https://scrutinizer-ci.com/g/frqnck/apix-cache/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-cache/?branch=master)  [![Code Coverage](https://scrutinizer-ci.com/g/frqnck/apix-cache/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-cache/?branch=master)  [![License](https://poser.pugx.org/apix/cache/license.svg)](https://packagist.org/packages/apix/cache)
 
-APIx Cache is a generic and thin cache wrapper with a simple interface to various different caching backends and emphasising cache **tagging** and **indexing**.
+APIx Cache is a generic and thin cache wrapper with a PSR-6 (cache) interface to various caching backends and emphasising cache **tagging** and **indexing**.
 
 > Cache-tagging allows to find/update all data items with one or more given tags. Providing, for instance, a batch delete of all obsolete entries matching a speficic tag such as a version string.
 
-* **PSR-6** (Cache) interface.
-* Fully unit **tested** and compliant with PSR-1, PSR-2 and PSR-4.
+* Fully **unit-tested** and compliant with PSR-1, PSR-2, PSR-4 and **PSR-6** (Cache).
 * Continuously integrated
-  * with **PHP** ~~5.3~~, **5.4**, **5.5**, **5.6**, **7.0** and **HHVM**,
+  * against **PHP** ~~5.3~~, **5.4**, **5.5**, **5.6**, **7.0** and **HHVM**,
   * and against `APC`, `Redis`, `MongoDB`, `Sqlite`, `MySQL`, `PgSQL` and `Memcached`, ...
   * supports a range of serializers: `igBinary`, `msgpack`, `json`, `php`, ...
 * Available as a **[Composer](https://packagist.org/packages/apix/cache)** ~~and as a [PEAR](http://pear.ouarz.net)~~ package.
-* Extendable, additional extension are available:
+* Extendable, additional extensions are available:
    * [apix/simple-cache](//github.com/apix/simple-cache) ~ provides a PSR-16 (SimpleCache) interface.
    * More contributions will be linked here.
 
