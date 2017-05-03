@@ -14,7 +14,7 @@ APIx Cache is a generic and thin cache wrapper with a simple interface to variou
   * supports a range of serializers: `igBinary`, `msgpack`, `json`, `php`, ...
 * Available as a **[Composer](https://packagist.org/packages/apix/cache)** ~~and as a [PEAR](http://pear.ouarz.net)~~ package.
 * Extendable, additional extension are available:
-   * [apix/simple-cache](//github.com/frqnck/apix/simple-cache) ~ provides a PSR-16 (SimpleCache) interface.
+   * [apix/simple-cache](//github.com/apix/simple-cache) ~ provides a PSR-16 (SimpleCache) interface.
    * More contributions will be linked here.
 
 ⇄ *[Pull requests](//github.com/frqnck/apix-cache/blob/master/.github/CONTRIBUTING.md)* and ★ *Stars* are always welcome. For bugs and feature request, please [create an issue](//github.com/frqnck/apix-cache/issues/new).
