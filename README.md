@@ -6,13 +6,16 @@ APIx Cache is a generic and thin cache wrapper with a simple interface to variou
 
 > Cache-tagging allows to find/update all data items with one or more given tags. Providing, for instance, a batch delete of all obsolete entries matching a speficic tag such as a version string.
 
-* **PSR-6** (Cache) standard is provided thru a factory wrapper class.
-* Fully unit **tested** and compliant with PSR-1, PSR-2, PSR-4 and PSR-Cache.
+* **PSR-6** (Cache) interface.
+* Fully unit **tested** and compliant with PSR-1, PSR-2 and PSR-4.
 * Continuously integrated
   * with **PHP** ~~5.3~~, **5.4**, **5.5**, **5.6**, **7.0** and **HHVM**,
   * and against `APC`, `Redis`, `MongoDB`, `Sqlite`, `MySQL`, `PgSQL` and `Memcached`, ...
   * supports a range of serializers: `igBinary`, `msgpack`, `json`, `php`, ...
 * Available as a **[Composer](https://packagist.org/packages/apix/cache)** ~~and as a [PEAR](http://pear.ouarz.net)~~ package.
+* Extendable, additional extension are available:
+   * [apix/simple-cache](//github.com/frqnck/apix/simple-cache) ~ provides a PSR-16 (SimpleCache) interface.
+   * More contributions will be linked here.
 
 ⇄ *[Pull requests](//github.com/frqnck/apix-cache/blob/master/.github/CONTRIBUTING.md)* and ★ *Stars* are always welcome. For bugs and feature request, please [create an issue](//github.com/frqnck/apix-cache/issues/new).
 
