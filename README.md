@@ -46,15 +46,15 @@ Factory usage (PSR-Cache wrapper)
   #$backend = 'apc';                     // or an adapter name (string) e.g. "APC", "Runtime"
   #$backend = new MyArrayObject();       // or even a plain array() or \ArrayObject.
 
-  $pool = Cache\Factory::getPool($backend);             // without tagging support
-  #$pool = Cache\Factory::getTaggablePool($backend);    // with tagging
+  $cache = Cache\Factory::getPool($backend);             // without tagging support
+  #$cache = Cache\Factory::getTaggablePool($backend);    // with tagging
   
-  $item = $pool->getItem('wibble_id');
+  $item = $cache->getItem('wibble_id');
   
-  if ( !$item->isHit() ) {
+  if ( !$cache->isHit() ) {
     $data = compute_expensive_stuff();
     $item->set($data);
-    $pool->save($item);
+    $cache->save($item);
   }
 
   return $item->get();
