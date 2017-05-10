@@ -11,10 +11,10 @@ APIx Cache is a generic and thin cache wrapper with a PSR-6 (cache) interface to
   * against **PHP** ~~5.3~~, **5.4**, **5.5**, **5.6**, **7.0** and **HHVM**,
   * and against `APC`, `Redis`, `MongoDB`, `Sqlite`, `MySQL`, `PgSQL` and `Memcached`, ...
   * supports a range of serializers: `igBinary`, `msgpack`, `json`, `php`, ...
-* Available as a **[Composer](https://packagist.org/packages/apix/cache)** ~~and as a [PEAR](http://pear.ouarz.net)~~ package.
 * Extendable, additional extensions are available:
-   * [apix/simple-cache](//github.com/apix/simple-cache) ~ provides a PSR-16 (SimpleCache) interface.
+   * **[apix/simple-cache](//github.com/apix/simple-cache)** provides a PSR-16 (SimpleCache) interface.
    * More contributions will be linked here.
+* Available as a [Composer](https://packagist.org/packages/apix/cache) ~~and as a [PEAR](http://pear.ouarz.net)~~ package.
 
 ⇄ *[Pull requests](//github.com/frqnck/apix-cache/blob/master/.github/CONTRIBUTING.md)* and ★ *Stars* are always welcome. For bugs and feature request, please [create an issue](//github.com/frqnck/apix-cache/issues/new).
 
