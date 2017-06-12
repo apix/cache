@@ -200,4 +200,10 @@ class PdoTest extends GenericTestCase
         }
     }
 
+    public function testSameKeyData() {
+        $this->cache->save('same_data', 'same_key');
+        $this->cache->save('same_data', 'same_key');
+
+        $this->assertEquals('same_data', $this->cache->load('same_key'));
+    }
 }

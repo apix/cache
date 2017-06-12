@@ -45,6 +45,9 @@ class Mysql extends AbstractPdo
                         `dated`=:dated WHERE `key`=:key;',
         'insert'    => 'INSERT INTO `%s` (`key`, `data`, `tags`, `expire`, `dated`)
                         VALUES (:key, :data, :tags, :exp, :dated);',
+        'upsert'    => 'INSERT INTO `%s` (`key`, `data`, `tags`, `expire`, `dated`)
+                        VALUES (:key, :data, :tags, :exp, :dated)
+                        ON DUPLICATE KEY UPDATE `data`=VALUES(`data`),`tags`=VALUES(`tags`),`expire`=VALUES(`expire`);',
         'delete'    => 'DELETE FROM `%s` WHERE `key`=?;',
         'clean'     => 'DELETE FROM `%s` WHERE %s;', // %s 'clean_like' iterated
         'clean_like'=> 'tags LIKE ?',
