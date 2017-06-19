@@ -64,8 +64,7 @@ class PdoTest extends GenericTestCase
                     return new \PDO('sqlite::memory:');
                 },
                 'Sql1999'
-            ),
-
+            )
         );
         $DB = getenv('DB') ? getenv('DB') : 'sqlite';
 
@@ -198,6 +197,22 @@ class PdoTest extends GenericTestCase
                 . Cache\AbstractPdo::getDriverName($this->pdo)
             );
         }
+    }
+
+    /**
+     * Regression test for pull request GH#28
+     *
+     * @link https://github.com/frqnck/apix-cache/pull/28
+     *  PDOException: SQLSTATE[23000]: Integrity constraint violation:
+     *  1062 Duplicate entry 'apix-cache-key:same_key' for key 'PRIMARY'
+     * @group pr
+     */
+    public function testPullRequest28()
+    {
+        $this->cache->save('same_data', 'same_key');
+        $this->cache->save('same_data', 'same_key');
+
+        $this->assertEquals('same_data', $this->cache->load('same_key'));
     }
 
 }

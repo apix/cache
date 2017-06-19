@@ -37,14 +37,16 @@ class Mysql extends AbstractPdo
         // we should split keys and tags into diff tables and use varchar(255).
         // 'tag_idx'   => 'CREATE INDEX `%s_tag_idx` ON `%s` (`tags`);',
 
-        'loadKey'   => 'SELECT `data`, `expire` FROM `%s` WHERE `key`=:key AND
-                        (`expire` IS NULL OR `expire` > :now);',
-        'loadTag'   => 'SELECT `key` FROM `%s` WHERE `tags` LIKE :tag AND
-                        (`expire` IS NULL OR `expire` > :now);',
-        'update'    => 'UPDATE `%s` SET `data`=:data, `tags`=:tags, `expire`=:exp,
-                        `dated`=:dated WHERE `key`=:key;',
-        'insert'    => 'INSERT INTO `%s` (`key`, `data`, `tags`, `expire`, `dated`)
-                        VALUES (:key, :data, :tags, :exp, :dated);',
+        'loadKey'   => 'SELECT `data`, `expire` FROM `%s` WHERE `key`=:key
+                        AND (`expire` IS NULL OR `expire` > :now);',
+        'loadTag'   => 'SELECT `key` FROM `%s` WHERE `tags` LIKE :tag
+                        AND (`expire` IS NULL OR `expire` > :now);',
+        'update'    => 'UPDATE `%s` SET `data`=:data, `tags`=:tags,
+                        `expire`=:exp, `dated`=:dated WHERE `key`=:key;',
+        'insert'    => 'INSERT INTO `%s` (`key`, `data`, `tags`, `expire`,
+                        `dated`) VALUES (:key, :data, :tags, :exp, :dated)
+                        ON DUPLICATE KEY UPDATE `data`=VALUES(`data`),
+                        `tags`=VALUES(`tags`), `expire`=VALUES(`expire`);',
         'delete'    => 'DELETE FROM `%s` WHERE `key`=?;',
         'clean'     => 'DELETE FROM `%s` WHERE %s;', // %s 'clean_like' iterated
         'clean_like'=> 'tags LIKE ?',

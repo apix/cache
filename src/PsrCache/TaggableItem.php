@@ -17,7 +17,7 @@ class TaggableItem extends Item
 
     /**
      * The tags associated with this entry.
-     * @var array
+     * @var array|null
      */
     protected $tags = null;
 
@@ -37,7 +37,7 @@ class TaggableItem extends Item
     /**
      * Returns this item tags.
      *
-     * @return array|false
+     * @return array|null
      */
     public function getTags()
     {
