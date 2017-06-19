@@ -151,12 +151,17 @@ abstract class AbstractPdo extends AbstractCache
                             ? implode(', ', $tags)
                             : null;
 
-        // upsert
-        $sql = $this->getSql('update');
-        $nb = $this->exec($sql, $values)->rowCount();
-        if ($nb == 0) {
-            $sql = $this->getSql('insert');
+        if (!empty($this->sql_definitions['upsert'])) {
+            $sql = $this->getSql('upsert');
             $nb = $this->exec($sql, $values)->rowCount();
+        } else {
+            // upsert
+            $sql = $this->getSql('update');
+            $nb = $this->exec($sql, $values)->rowCount();
+            if ($nb == 0) {
+                $sql = $this->getSql('insert');
+                $nb = $this->exec($sql, $values)->rowCount();
+            }
         }
 
         return (boolean) $nb;
