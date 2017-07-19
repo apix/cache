@@ -9,7 +9,7 @@ APIx Cache is a generic and thin cache wrapper with a PSR-6 interface to various
 * Fully **unit-tested** and compliant with PSR-1, PSR-2, PSR-4 and **PSR-6** (Cache).
 * Continuously integrated
   * against **PHP** ~~5.3~~, **5.4**, **5.5**, **5.6**, **7.0** and **HHVM**,
-  * and against `APC`, `Redis`, `MongoDB`, `Sqlite`, `MySQL`, `PgSQL` and `Memcached`, ...
+  * and against `APC`, `APCu`, `Redis`, `MongoDB`, `Sqlite`, `MySQL`, `PgSQL` and `Memcached`, ...
   * supports a range of serializers: `igBinary`, `msgpack`, `json`, `php`, ...
 * Extendable, additional extensions are available:
    * **[apix/simple-cache](//github.com/apix/simple-cache)** provides a SimpleCache (PSR-16) interface.
@@ -24,7 +24,7 @@ Cache backends
 --------------
 Currently, the following cache store are supplied:
 
-* **[APC](http://php.net/book.apc.php)** (which also works with [`APCu`](http://pecl.php.net/package/APCu)) *with tagging support*,
+* **[`APCu`](http://php.net/apcu)** and **[APC](http://php.net/apc)**) *with tagging support*,
 * **[Redis](#redis-specific)** using the [`PhpRedis`](https://github.com/phpredis/phpredis) extension *with tagging support*,
 * **[MongoDB](#mongodb-specific)** using either the new [`mongodb`](http://php.net/mongodb) or the legacy [`mongo`](http://php.net/mongo) extension *with tagging support*,
 * **[Memcached](#memcached-specific)** using the [`Memcached`](http://php.net/book.memcached.php) extension *with indexing, tagging and namespacing support*,
@@ -43,7 +43,7 @@ Factory usage (PSR-Cache wrapper)
   $backend = new \Redis();
   #$backend = new \PDO('sqlite:...');    // Any supported client object e.g. Memcached, MongoClient, ...
   #$backend = new Cache\Files($options); // or one that implements Apix\Cache\Adapter
-  #$backend = 'apc';                     // or an adapter name (string) e.g. "APC", "Runtime"
+  #$backend = 'apcu';                    // or an adapter name (string) e.g. "APC", "Runtime"
   #$backend = new MyArrayObject();       // or even a plain array() or \ArrayObject.
 
   $cache = Cache\Factory::getPool($backend);             // without tagging support
@@ -66,7 +66,7 @@ Basic usage (APIx native)
 ```php
   use Apix\Cache;
 
-  $cache = new Cache\Apc;
+  $cache = new Cache\Apcu;
 
   // try to retrieve 'wibble_id' from the cache
   if ( !$data = $cache->load('wibble_id') ) {
@@ -112,8 +112,8 @@ Advanced usage
       'tag_enable'  => true               // wether to enable tags support
   );
 
-  // start APC as a local cache
-  $local_cache = new Cache\Apc($options);
+  // start APCu as a local cache
+  $local_cache = new Cache\Apcu($options);
 ```
 
 ### Redis specific
