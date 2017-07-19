@@ -110,6 +110,7 @@ class FactoryTest extends TestCase
             'directory' => array('Directory', 'Directory'),
             'Directory adapter' => array(new Cache\Directory(), 'Directory'),
             'apc' => array('apc', 'Apc'),
+            'apcu' => array('apcu', 'Apcu'),
             'runtime' => array('runtime', 'Runtime'),
             'array' => array(array(), 'Runtime'),
         );
