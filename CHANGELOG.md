@@ -1,5 +1,8 @@
 # APIx Cache changelog
 
+#### Version 1.3.2 (19-Jul-2017)
+- Added a dedicated `APCu` backend (+ relevant tests) as the extension no longer ship with the backward compatibility module 'apcu-bc’ (see #29).
+
 #### Version 1.3.1 (19-Jun-2017)
 - Fix a MySQL issue where same key/value returned 0 number of updated rows and triggered "SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry" (PR #28 contrib by @dimasikturbo).
 
