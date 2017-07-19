@@ -24,7 +24,7 @@ Cache backends
 --------------
 Currently, the following cache store are supplied:
 
-* **[`APCu`](http://php.net/apcu)** and **[APC](http://php.net/apc)**) *with tagging support*,
+* **[`APCu`](http://php.net/apcu)** and **[APC](http://php.net/apc)** *with tagging support*,
 * **[Redis](#redis-specific)** using the [`PhpRedis`](https://github.com/phpredis/phpredis) extension *with tagging support*,
 * **[MongoDB](#mongodb-specific)** using either the new [`mongodb`](http://php.net/mongodb) or the legacy [`mongo`](http://php.net/mongo) extension *with tagging support*,
 * **[Memcached](#memcached-specific)** using the [`Memcached`](http://php.net/book.memcached.php) extension *with indexing, tagging and namespacing support*,
