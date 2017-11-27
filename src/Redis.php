@@ -133,7 +133,7 @@ class Redis extends AbstractCache
     public function flush($all=false)
     {
         if (true === $all) {
-            return $this->adapter->flushAll();
+            return $this->adapter->flushDb();
         }
         $items = array_merge(
             $this->adapter->keys($this->mapTag('*')),
