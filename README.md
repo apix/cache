@@ -1,18 +1,18 @@
-APIx Cache, cache-tagging for PHP [![Build Status](https://travis-ci.org/frqnck/apix-cache.png?branch=master)](https://travis-ci.org/frqnck/apix-cache)
+APIx Cache, cache-tagging for PHP [![Build Status](https://travis-ci.org/apix/cache.png?branch=master)](https://travis-ci.org/apix/cache)
 =================================
 [![Latest Stable Version](https://poser.pugx.org/apix/cache/v/stable.svg)](https://packagist.org/packages/apix/cache)  [![Build Status](https://scrutinizer-ci.com/g/frqnck/apix-cache/badges/build.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-cache/build-status/master)  [![Code Quality](https://scrutinizer-ci.com/g/frqnck/apix-cache/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-cache/?branch=master)  [![Code Coverage](https://scrutinizer-ci.com/g/frqnck/apix-cache/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-cache/?branch=master)  [![License](https://poser.pugx.org/apix/cache/license.svg)](https://packagist.org/packages/apix/cache)
 
-APIx Cache is a generic and thin cache wrapper with a PSR-6 (cache) interface to various caching backends and emphasising cache **tagging** and **indexing**.
+APIx Cache is a generic and thin cache wrapper with a PSR-6 interface to various caching backends and emphasising cache **tagging** and **indexing**.
 
 > Cache-tagging allows to find/update all data items with one or more given tags. Providing, for instance, a batch delete of all obsolete entries matching a speficic tag such as a version string.
 
 * Fully **unit-tested** and compliant with PSR-1, PSR-2, PSR-4 and **PSR-6** (Cache).
 * Continuously integrated
   * against **PHP** ~~5.3~~, **5.4**, **5.5**, **5.6**, **7.0** and **HHVM**,
-  * and against `APC`, `Redis`, `MongoDB`, `Sqlite`, `MySQL`, `PgSQL` and `Memcached`, ...
+  * and against `APC`, `APCu`, `Redis`, `MongoDB`, `Sqlite`, `MySQL`, `PgSQL` and `Memcached`, ...
   * supports a range of serializers: `igBinary`, `msgpack`, `json`, `php`, ...
 * Extendable, additional extensions are available:
-   * **[apix/simple-cache](//github.com/apix/simple-cache)** provides a PSR-16 (SimpleCache) interface.
+   * **[apix/simple-cache](//github.com/apix/simple-cache)** provides a SimpleCache (PSR-16) interface.
    * More contributions will be linked here.
 * Available as a [Composer](https://packagist.org/packages/apix/cache) ~~and as a [PEAR](http://pear.ouarz.net)~~ package.
 
@@ -24,13 +24,13 @@ Cache backends
 --------------
 Currently, the following cache store are supplied:
 
-* **[APC](http://php.net/book.apc.php)** (which also works with [`APCu`](http://pecl.php.net/package/APCu)) *with tagging support*,
+* **[`APCu`](http://php.net/apcu)** and **[APC](http://php.net/apc)** *with tagging support*,
 * **[Redis](#redis-specific)** using the [`PhpRedis`](https://github.com/phpredis/phpredis) extension *with tagging support*,
 * **[MongoDB](#mongodb-specific)** using either the new [`mongodb`](http://php.net/mongodb) or the legacy [`mongo`](http://php.net/mongo) extension *with tagging support*,
 * **[Memcached](#memcached-specific)** using the [`Memcached`](http://php.net/book.memcached.php) extension *with indexing, tagging and namespacing support*,
 * and relational databases using **[PDO](#pdo-specific)** *with tagging support*:
- * Dedicated drivers for **[SQLite](http://www.sqlite.org)**, **[PostgreSQL](http://www.postgresql.org)** and **[MySQL](http://www.mysql.com)** (also works with Amazon Aurora, MariaDB and Percona),
- * A generic **[Sql1999](https://en.wikipedia.org/wiki/SQL:1999)** driver for [4D](http://www.4d.com/), [Cubrid](http://www.cubrid.org), [SQL Server](http://www.microsoft.com/sqlserver), [Sybase](http://www.sybase.com), [Firebird](http://www.firebirdsql.org), [ODBC](https://en.wikipedia.org/wiki/Open_Database_Connectivity), [Interbase](http://www.embarcadero.com/products/interbase), [IBM DB2](www.ibm.com/software/data/db2/), [IDS](http://www-01.ibm.com/software/data/informix/), [Oracle](http://www.oracle.com/database)...
+  * Dedicated drivers for **[SQLite](http://www.sqlite.org)**, **[PostgreSQL](http://www.postgresql.org)** and **[MySQL](http://www.mysql.com)** (also works with Amazon Aurora, MariaDB and Percona),
+  * A generic **[Sql1999](https://en.wikipedia.org/wiki/SQL:1999)** driver for [4D](http://www.4d.com/), [Cubrid](http://www.cubrid.org), [SQL Server](http://www.microsoft.com/sqlserver), [Sybase](http://www.sybase.com), [Firebird](http://www.firebirdsql.org), [ODBC](https://en.wikipedia.org/wiki/Open_Database_Connectivity), [Interbase](http://www.embarcadero.com/products/interbase), [IBM DB2](www.ibm.com/software/data/db2/), [IDS](http://www-01.ibm.com/software/data/informix/), [Oracle](http://www.oracle.com/database)...
 * **[Directory](#filesystem-specific)** and **[Files](#filesystem-specific)** based *with tagging support*,
 * **Runtime**, in-memory array storage.
 
@@ -43,7 +43,7 @@ Factory usage (PSR-Cache wrapper)
   $backend = new \Redis();
   #$backend = new \PDO('sqlite:...');    // Any supported client object e.g. Memcached, MongoClient, ...
   #$backend = new Cache\Files($options); // or one that implements Apix\Cache\Adapter
-  #$backend = 'apc';                     // or an adapter name (string) e.g. "APC", "Runtime"
+  #$backend = 'apcu';                    // or an adapter name (string) e.g. "APC", "Runtime"
   #$backend = new MyArrayObject();       // or even a plain array() or \ArrayObject.
 
   $cache = Cache\Factory::getPool($backend);             // without tagging support
@@ -66,7 +66,7 @@ Basic usage (APIx native)
 ```php
   use Apix\Cache;
 
-  $cache = new Cache\Apc;
+  $cache = new Cache\Apcu;
 
   // try to retrieve 'wibble_id' from the cache
   if ( !$data = $cache->load('wibble_id') ) {
@@ -112,8 +112,8 @@ Advanced usage
       'tag_enable'  => true               // wether to enable tags support
   );
 
-  // start APC as a local cache
-  $local_cache = new Cache\Apc($options);
+  // start APCu as a local cache
+  $local_cache = new Cache\Apcu($options);
 ```
 
 ### Redis specific

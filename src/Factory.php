@@ -28,7 +28,7 @@ class Factory
      * @var array
      */
     public static $clients = array(
-        'Runtime', 'Array', 'ArrayObject', 'Apc',
+        'Runtime', 'Array', 'ArrayObject', 'Apc', 'Apcu',
         'Redis', 'MongoClient', 'Memcached', 'PDO',
         'Files', 'Directory'
     );
