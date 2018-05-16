@@ -60,6 +60,8 @@ notifications:
 matrix:
   fast_finish: true
   include:
+    - php: 5.3
+      dist: precise
     - php: 7.0
       env: DB=mariadb
       addons:
