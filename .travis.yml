@@ -74,6 +74,7 @@ matrix:
     - php: nightly
     - php: 5.3
       env: DB=memcached # memcached client is broken on PHP 5.3.
+      dist: precise
     - php: 7.0
       env: DB=memcached # memcached client does not fully support PHP7.
     - php: hhvm
