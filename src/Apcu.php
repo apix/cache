@@ -153,6 +153,8 @@ class Apcu extends Apc
      */
     protected function getIterator($search = null, $format = \APC_ITER_ALL)
     {
-        return new \APCUIterator($search, $format, 100, \APC_LIST_ACTIVE);
+        return class_exists('\APCUIterator')
+            ? new \APCUIterator($search, $format, 100, \APC_LIST_ACTIVE)
+            : new \APCIterator('user', $search, $format, 100, \APC_LIST_ACTIVE);
     }
 }
