@@ -34,6 +34,7 @@ matrix:
       addons:
         mariadb: 10.1
   allow_failures:
+    - php: 5.3
     - php: nightly
     - php: 5.3
       env: DB=memcached # memcached client is broken on PHP 5.3
