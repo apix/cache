@@ -1,5 +1,11 @@
 # APIx Cache changelog
 
+#### Version 1.3.3 (18-May-2017)
+- Modified `Redis::flush` to delete all keys only from the current DB, instead of deleting all keys from the server (PR #31 contrib by @alexpica).
+- Fixes to handle changes with phpredis >= 4, cast return value to Boolean. 
+- Fix `APCu` adapter to use either `\APCUIterator` or `\APCIterator`.
+- Modified Travis config to handle PHP 5.3 and Precise distro.
+
 #### Version 1.3.2 (19-Jul-2017)
 - Added a dedicated `APCu` backend (+ relevant tests) as the extension no longer ship with the backward compatibility module 'apcu-bc’ (see #29).
 
@@ -8,7 +14,7 @@
 
 #### Version 1.3.0 (2-May-2017)
 - Fix a PSR-6 expiration issue.
-- Added PsrCache\Item::__toString` method to simplify cached value output.
+- Added `PsrCache\Item::__toString` method to simplify cached value output.
 - Added `PsrCache\Pool::__destruct()` method to (garbage collect) magically commit all deferred cached items.
 - Removed all deprecated methods from `PsrCache`.
 - Various fixes, more unit-tests and some cleanup.

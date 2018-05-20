@@ -66,7 +66,7 @@ class RedisTest extends GenericTestCase
         $this->redis->set('foo', 'bar');
         $this->assertTrue($this->cache->flush());
         $this->assertFalse($this->cache->flush());
-        $this->assertTrue($this->redis->exists('foo'));
+        $this->assertTrue((boolean) $this->redis->exists('foo'));
 
         $this->assertNull($this->cache->loadKey('id3'));
         $this->assertNull($this->cache->loadTag('tag1'));
@@ -82,7 +82,7 @@ class RedisTest extends GenericTestCase
 
         $this->redis->set('foo', 'bar');
         $this->assertTrue($this->cache->flush(true)); // always true!
-        $this->assertFalse($this->redis->exists('foo'));
+        $this->assertFalse((boolean) $this->redis->exists('foo'));
 
         $this->assertNull($this->cache->loadKey('id3'));
         $this->assertNull($this->cache->loadTag('tag1'));
