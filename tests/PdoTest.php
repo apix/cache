@@ -214,5 +214,4 @@ class PdoTest extends GenericTestCase
 
         $this->assertEquals('same_data', $this->cache->load('same_key'));
     }
-    
 }
