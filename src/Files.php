@@ -59,15 +59,21 @@ class Files extends AbstractCache
             unlink($path);
             return null;
         }
-        $pos = strpos($data, PHP_EOL, 0);
-        if (false === $pos) {// Un-complete file
+        $pos0 = strpos($data, PHP_EOL, 0);
+        if (false === $pos0) {// Un-complete file
             unlink($path);
             return null;
         }
 
         $eolLen = strlen(PHP_EOL);
-        $pos = strpos($data, PHP_EOL, $pos+$eolLen);
+        $pos = strpos($data, PHP_EOL, $pos0+$eolLen);
         if (false === $pos) {// Un-complete file
+            unlink($path);
+            return null;
+        }
+
+        $expire = (int)substr($data, $pos0 + $eolLen, $pos - $pos0 - $eolLen);
+        if ($expire != 0 && ($expire - time() < 0)) { // expired
             unlink($path);
             return null;
         }

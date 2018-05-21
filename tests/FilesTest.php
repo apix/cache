@@ -58,6 +58,19 @@ class FilesTest extends GenericTestCase
         file_put_contents($this->cache->getOption('directory').DIRECTORY_SEPARATOR.$encoded, PHP_EOL);
         $this->assertNull($this->cache->loadKey('id'));
     }
+
+    public function testExpired()
+    {
+        // 1 second ttl
+        $this->cache->save('data', 'id1', null, 1);
+        sleep(2);
+        $this->assertNull($this->cache->loadKey('id1'));
+
+        $this->cache->save('data', 'id2', null, 3);
+        sleep(1);
+        $this->assertEquals('data', $this->cache->loadKey('id2'));
+
+    }
 	
 	public function testFlushAll()
 	{
