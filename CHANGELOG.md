@@ -1,6 +1,9 @@
 # APIx Cache changelog
 
-#### Version 1.3.3 (18-May-2017)
+#### Version 1.3.4 (xx-xx-2018)
+- Added check of "expire" when entry is read from a file (PR #31 contrib by @dimasikturbo).
+
+#### Version 1.3.3 (18-May-2018)
 - Modified `Redis::flush` to delete all keys only from the current DB, instead of deleting all keys from the server (PR #31 contrib by @alexpica).
 - Fixes to handle changes with phpredis >= 4, cast return value to Boolean. 
 - Fix `APCu` adapter to use either `\APCUIterator` or `\APCIterator`.
