@@ -203,7 +203,7 @@ Installation
 
 This project adheres to [Semantic Versioning](http://semver.org/) and can be installed using composer:  
 
-    $ composer require apix/cache:1.2.*
+    $ composer require apix/cache:1.3.*
 
 All notable changes to this project are documented in its [CHANGELOG](CHANGELOG.md).
 
