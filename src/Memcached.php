@@ -395,10 +395,13 @@ class Memcached extends AbstractCache
      * {@inheritdoc}
      *
      * The number of seconds may not exceed 60*60*24*30 = 2,592,000 (30 days).
+     * 
+     * @param string $key       The cache key to retrieve.
+     * @param float  $cas_token The variable to store the CAS token in.
      *
      * @see http://php.net/manual/en/memcached.expiration.php
      */
-    public function getTtl($key)
+    public function getTtl($key, &$cas_token = null)
     {
         $mKey = $this->mapKey($key);
 
