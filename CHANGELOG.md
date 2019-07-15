@@ -1,8 +1,8 @@
 # APIx Cache changelog
 
 #### Version 1.3.4 (xx-xx-2019)
-- Fixed typo in composer suggested package (PR #35 by Great-Antique).
-- Added cas_token to `getTtl()` method (PR #34 contrib by BlairCooper).
+- Fixed typo in composer suggested package (PR #35 by @Great-Antique).
+- Added cas_token to `getTtl()` method (PR #34 contrib by @BlairCooper).
 - Added check of "expire" when entry is read from a file (PR #33 contrib by @dimasikturbo).
 
 #### Version 1.3.3 (18-May-2018)
