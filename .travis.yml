@@ -5,7 +5,7 @@ services:
   - memcached
   - mongodb
   - mysql
-  - pgsql
+  - postgresql
 php:
   - 5.3
   - 5.4
