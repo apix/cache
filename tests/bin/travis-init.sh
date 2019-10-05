@@ -28,7 +28,7 @@ else
     then
         pecl_install msgpack 0.5.7
     else
-        pecl_install msgpack 2.0.2
+        pecl_install msgpack 2.0.3
     fi
 fi
 
