@@ -218,28 +218,28 @@ class Memcached extends AbstractCache
             // @codeCoverageIgnoreStart
             case 'igBinary':
                 if (!\Memcached::HAVE_IGBINARY) {
-                    continue;
+                    break;
                 }
                 $opt = \Memcached::SERIALIZER_IGBINARY;
             break;
 
             case 'json':
                 if (!\Memcached::HAVE_JSON) {
-                    continue;
+                    break;
                 }
                 $opt = \Memcached::SERIALIZER_JSON;
             break;
 
             case 'json_array':
                 if (!\Memcached::HAVE_JSON_ARRAY) {
-                    continue;
+                    break;
                 }
                 $opt = \Memcached::SERIALIZER_JSON_ARRAY;
             break;
 
             case 'msgpack':
                 if (!\Memcached::HAVE_MSGPACK) {
-                    continue;
+                    break;
                 }
                 $opt = \Memcached::SERIALIZER_MSGPACK;
             break;
