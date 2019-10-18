@@ -21,14 +21,14 @@ else
     pecl channel-update pecl.php.net
 
     # install igbinary
-    pecl_install igbinary 2.0.1
+    pecl_install igbinary 2.0.8
 
     # install msgpack
     if [ "$(expr "${VERSION}" "<" "7.0")" -eq 1 ]
     then
         pecl_install msgpack 0.5.7
     else
-        pecl_install msgpack 2.0.2
+        pecl_install msgpack 2.0.3
     fi
 fi
 
