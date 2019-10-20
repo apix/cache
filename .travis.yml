@@ -101,14 +101,14 @@ matrix:
     #- php: nightly
     - php: 5.3
       env: DB=memcached # memcached client is broken on PHP 5.3
-    - php: 7.0
-      env: DB=memcached # memcached client does not fully support PHP7
-    - php: 7.1
-      env: DB=memcached # memcached client does not fully support PHP7
-    - php: 7.2
-      env: DB=memcached # memcached client does not fully support PHP7
-    - php: 7.3
-      env: DB=memcached # memcached client does not fully support PHP7
+    #- php: 7.0
+     # env: DB=memcached # memcached client does not fully support PHP7
+    #- php: 7.1
+     # env: DB=memcached # memcached client does not fully support PHP7
+    #- php: 7.2
+     # env: DB=memcached # memcached client does not fully support PHP7
+    #- php: 7.3
+     # env: DB=memcached # memcached client does not fully support PHP7
     #- php: hhvm
       # env: DB=mongodb   # mongodb client does not compile under hhvm
 
