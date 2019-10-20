@@ -8,7 +8,7 @@ APIx Cache is a generic and thin cache wrapper with a PSR-6 interface to various
 
 * Fully **unit-tested** and compliant with PSR-1, PSR-2, PSR-4 and **PSR-6** (Cache).
 * Continuously integrated
-  * against **PHP** ~~5.3~~, **5.4**, **5.5**, **5.6**, **7.*** and **HHVM**,
+  * against **PHP** ~~5.3~~, **5.4**, **5.5**, **5.6**, **7.*** ~~and HHVM~~,
   * and against `APC`, `APCu`, `Redis`, `MongoDB`, `Sqlite`, `MySQL`, `PgSQL` and `Memcached`, ...
   * supports a range of serializers: `igBinary`, `msgpack`, `json`, `php`, ...
 * Extendable, additional extensions are available:

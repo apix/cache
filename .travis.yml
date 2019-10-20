@@ -96,19 +96,47 @@ matrix:
       env: DB=mariadb
       addons:
         mariadb: 10.1
+    - php: 7.1
+      env: DB=mariadb
+      addons:
+        mariadb: 5.5
+    - php: 7.1
+      env: DB=mariadb
+      addons:
+        mariadb: 10.1
+    - php: 7.2
+      env: DB=mariadb
+      addons:
+        mariadb: 5.5
+    - php: 7.2
+      env: DB=mariadb
+      addons:
+        mariadb: 10.1
+    - php: 7.3
+      env: DB=mariadb
+      addons:
+        mariadb: 5.5
+    - php: 7.3
+      env: DB=mariadb
+      addons:
+        mariadb: 10.1
   allow_failures:
     - php: 5.3
     #- php: nightly
     - php: 5.3
       env: DB=memcached # memcached client is broken on PHP 5.3
-    - php: 7.0
-      env: DB=memcached # memcached client does not fully support PHP7
-    - php: 7.1
-      env: DB=memcached # memcached client does not fully support PHP7
-    - php: 7.2
-      env: DB=memcached # memcached client does not fully support PHP7
-    - php: 7.3
-      env: DB=memcached # memcached client does not fully support PHP7
+    - php: 5.4
+      env: DB=memcached # memcached client is broken on PHP 5.4
+    - php: 5.5
+      env: DB=memcached # memcached client is broken on PHP 5.5
+    #- php: 7.0
+     # env: DB=memcached # memcached client does not fully support PHP7
+    #- php: 7.1
+     # env: DB=memcached # memcached client does not fully support PHP7
+    #- php: 7.2
+     # env: DB=memcached # memcached client does not fully support PHP7
+    #- php: 7.3
+     # env: DB=memcached # memcached client does not fully support PHP7
     #- php: hhvm
       # env: DB=mongodb   # mongodb client does not compile under hhvm
 
