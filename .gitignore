@@ -14,3 +14,4 @@ composer.phar
 /build/
 phpunit.xml
 TODO
+/vendor/

@@ -74,9 +74,7 @@ class MemcachedIndexerTest extends GenericIndexerTestCase
 
         $this->assertEquals(array('a'), $this->indexer->load() );
 
-        $this->assertEquals(
-            'a ', $this->cache->get($this->indexKey)
-        );
+        $this->assertNull($this->cache->get($this->indexKey));
     }
 
 }

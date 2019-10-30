@@ -229,7 +229,7 @@ class Memcached extends AbstractCache
             break;
 
             case 'json_array':
-                if (\Memcached::HAVE_JSON_ARRAY) {
+                if (\Memcached::HAVE_JSON) {
                     $opt = \Memcached::SERIALIZER_JSON_ARRAY;
                 }
             break;
@@ -391,7 +391,7 @@ class Memcached extends AbstractCache
      * {@inheritdoc}
      *
      * The number of seconds may not exceed 60*60*24*30 = 2,592,000 (30 days).
-     * 
+     *
      * @param string $key       The cache key to retrieve.
      * @param float  $cas_token The variable to store the CAS token in.
      *
