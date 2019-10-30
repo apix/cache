@@ -1,6 +1,10 @@
 # APIx Cache changelog
 
-#### Version 1.3.4 (xx-xx-2019)
+#### Version 1.3.4 (30-Oct-2019)
+- Fixed Memcached unit tests for PHP 7.x (PR #39 by @BlairCooper).
+- Fixed `Memcached.php::setSerializer` for PHP 7.3 compatibility (PR #37 by @BlairCooper & PR #38 by @mgmbh).
+- Fixed Travis builds with PHP 5.* (PR #37 by @BlairCooper).
+- Fixed Travis on PHP 5.4 and 5.5 cannot run on Xenial (PR #37 by @BlairCooper).
 - Fixed typo in composer suggested package (PR #35 by @Great-Antique).
 - Added cas_token to `getTtl()` method (PR #34 contrib by @BlairCooper).
 - Added check of "expire" when entry is read from a file (PR #33 contrib by @dimasikturbo).
