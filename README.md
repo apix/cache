@@ -1,14 +1,20 @@
-APIx Cache, cache-tagging for PHP [![Build Status](https://travis-ci.org/apix/cache.png?branch=master)](https://travis-ci.org/apix/cache)
+APIx Cache, cache-tagging for PHP
+[![Build Status](https://travis-ci.org/apix/cache.svg?branch=master)](https://travis-ci.org/apix/cache)
 =================================
-[![Latest Stable Version](https://poser.pugx.org/apix/cache/v/stable.svg)](https://packagist.org/packages/apix/cache) [![Total Downloads](https://poser.pugx.org/apix/cache/downloads)](https://packagist.org/packages/apix/cache) [![Build Status](https://scrutinizer-ci.com/g/frqnck/apix-cache/badges/build.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-cache/build-status/master)  [![Code Quality](https://scrutinizer-ci.com/g/frqnck/apix-cache/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-cache/?branch=master)  [![Code Coverage](https://scrutinizer-ci.com/g/frqnck/apix-cache/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-cache/?branch=master)  [![License](https://poser.pugx.org/apix/cache/license.svg)](https://packagist.org/packages/apix/cache)
+[![Latest Stable Version](https://poser.pugx.org/apix/cache/v/stable.svg)](https://packagist.org/packages/apix/cache)
+[![Total Downloads](https://poser.pugx.org/apix/cache/downloads)](https://packagist.org/packages/apix/cache)
+[![Build Status](https://scrutinizer-ci.com/g/frqnck/apix-cache/badges/build.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-cache/build-status/master)
+[![Code Quality](https://scrutinizer-ci.com/g/frqnck/apix-cache/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-cache/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/frqnck/apix-cache/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-cache/?branch=master)
+[![License](https://poser.pugx.org/apix/cache/license.svg)](https://packagist.org/packages/apix/cache)
 
 APIx Cache is a generic and thin cache wrapper with a PSR-6 interface to various caching backends and emphasising cache **tagging** and **indexing**.
 
 > Cache-tagging allows to find/update all data items with one or more given tags. Providing, for instance, a batch delete of all obsolete entries matching a speficic tag such as a version string.
 
 * Fully **unit-tested** and compliant with PSR-1, PSR-2, PSR-4 and **PSR-6** (Cache).
-* Continuously integrated
-  * against **PHP** ~~5.3~~, **5.4**, **5.5**, **5.6**, **7.*** ~~and HHVM~~,
+* [Continuously integrated](https://travis-ci.org/apix/cache)
+  * against **PHP** ~~5.3~~, **5.4**, **5.5**, **5.6**, **7.0**, **7.1**, **7.2**, **7.3** ~~and HHVM~~,
   * and against `APC`, `APCu`, `Redis`, `MongoDB`, `Sqlite`, `MySQL`, `PgSQL` and `Memcached`, ...
   * supports a range of serializers: `igBinary`, `msgpack`, `json`, `php`, ...
 * Extendable, additional extensions are available:
