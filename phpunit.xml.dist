@@ -18,6 +18,17 @@
         </testsuite>
     </testsuites>
 
+    <filter>
+        <whitelist>
+            <directory>./</directory>
+            <exclude>
+                <directory>build</directory>
+                <directory>tests</directory>
+                <directory>vendor</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+
 </phpunit>
 
 <!-- vim: set tabstop=4 shiftwidth=4 expandtab: -->
