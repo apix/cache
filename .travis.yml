@@ -140,11 +140,8 @@ matrix:
     #- php: hhvm
       # env: DB=mongodb   # mongodb client does not compile under hhvm
 
-before_install:
-  - travis_retry composer self-update
-
 install:
-  - travis_retry composer install -o --no-interaction --prefer-source
+  - travis_retry composer self-update && composer install --no-interaction --prefer-source
   - mkdir -p build/logs
   - tests/bin/travis-init.sh
   - travis_retry wget https://scrutinizer-ci.com/ocular.phar
@@ -172,5 +169,5 @@ notifications:
     on_failure: change
 
 cache:
- directories:
-   - $HOME/.composer/cache
+  directories:
+    - $HOME/.composer/cache
