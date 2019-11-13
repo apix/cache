@@ -1,4 +1,4 @@
-APIx Cache, cache-tagging for PHP
+Apix Cache, cache-tagging for PHP
 [![Build Status](https://travis-ci.org/apix/cache.svg?branch=master)](https://travis-ci.org/apix/cache)
 =================================
 [![Latest Stable Version](https://poser.pugx.org/apix/cache/v/stable.svg)](https://packagist.org/packages/apix/cache)
@@ -8,7 +8,7 @@ APIx Cache, cache-tagging for PHP
 [![Code Coverage](https://scrutinizer-ci.com/g/frqnck/apix-cache/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-cache/?branch=master)
 [![License](https://poser.pugx.org/apix/cache/license.svg)](https://packagist.org/packages/apix/cache)
 
-APIx Cache is a generic and thin cache wrapper with a PSR-6 interface to various caching backends and emphasising cache **tagging** and **indexing**.
+Apix Cache is a generic and thin cache wrapper with a PSR-6 interface to various caching backends and emphasising cache **tagging** and **indexing**.
 
 > Cache-tagging allows to find/update all data items with one or more given tags. Providing, for instance, a batch delete of all obsolete entries matching a speficic tag such as a version string.
 
@@ -66,7 +66,7 @@ Factory usage (PSR-Cache wrapper)
   return $item->get();
 ```
 
-Basic usage (APIx native)
+Basic usage (Apix native)
 -----------
 
 ```php
@@ -209,7 +209,7 @@ Installation
 
 This project adheres to [Semantic Versioning](http://semver.org/) and can be installed using composer:  
 
-    $ composer require apix/cache:1.3.*
+    $ composer require apix/cache:^1.3
 
 All notable changes to this project are documented in its [CHANGELOG](CHANGELOG.md).
 
