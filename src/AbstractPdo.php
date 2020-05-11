@@ -201,7 +201,11 @@ abstract class AbstractPdo extends AbstractCache
             return false !== $this->adapter->exec($this->getSql('flush_all'));
         }
 
-        return (boolean) $this->adapter->exec($this->getSql('flush'));
+        $value = implode(' OR ', array(
+            'key like \''.$this->options['prefix_key'].'%\'',
+            'tags like \''.$this->options['prefix_tag'].'%\''));
+
+        return (boolean) $this->adapter->exec($this->getSql('flush', $value));
     }
 
     /**

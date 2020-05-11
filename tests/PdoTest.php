@@ -133,7 +133,7 @@ class PdoTest extends GenericTestCase
     }
 
     /**
-     * @expectedException PDOException
+     *
      */
     public function testFlushAll()
     {
