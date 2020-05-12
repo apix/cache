@@ -49,8 +49,8 @@ class Sql1999 extends AbstractPdo
         'delete'    => 'DELETE FROM "%s" WHERE "key"=?;',
         'clean'     => 'DELETE FROM "%s" WHERE %s;', // %s 'clean_like' iterated
         'clean_like'=> 'tags LIKE ?',
-        'flush_all' => 'DELETE FROM `%s`;',
-        'flush'     => 'DELETE FROM `%s` WHERE %s;',
+        'flush_all' => 'DELETE FROM "%s";',
+        'flush'     => 'DELETE FROM "%s" WHERE %s;',
         'purge'     => 'DELETE FROM "%s" WHERE "expire" IS NOT NULL AND "expire" < %d;'
     );
 
