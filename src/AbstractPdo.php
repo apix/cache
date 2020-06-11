@@ -84,7 +84,14 @@ abstract class AbstractPdo extends AbstractCache
         if (!isset($this->sql_definitions[$index])) {
             return false;
         }
-        $this->adapter->exec($this->getSql($index, $this->options['db_table']));
+
+        try {
+            $this->adapter->exec($this->getSql($index, $this->options['db_table']));
+        } catch (\PDOException $ex) {
+            if (1061 !== $ex->errorInfo[1]) {
+                // if not "Index already exists"
+            }
+        }
 
         return $this->adapter->errorCode() == '00000';
     }
@@ -201,7 +208,12 @@ abstract class AbstractPdo extends AbstractCache
             return false !== $this->adapter->exec($this->getSql('flush_all'));
         }
 
-        return (boolean) $this->adapter->exec($this->getSql('flush'));
+        $value = array(
+            $this->options['prefix_key'].'%',
+            $this->options['prefix_tag'].'%'
+        );
+
+        return (boolean) $this->exec($this->getSql('flush'), $value)->rowCount();
     }
 
     /**
