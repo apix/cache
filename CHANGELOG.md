@@ -1,5 +1,8 @@
 # APIx Cache changelog
 
+#### Version 1.3.5 (11-Jun-2020)
+- Improved the `flush` method for the SQL backends (see #40 and PR #39 by @BlairCooper).
+
 #### Version 1.3.4 (30-Oct-2019)
 - Fixed Memcached unit tests for PHP 7.x (PR #39 by @BlairCooper).
 - Fixed `Memcached.php::setSerializer` for PHP 7.3 compatibility (PR #37 by @BlairCooper & PR #38 by @mgmbh).
