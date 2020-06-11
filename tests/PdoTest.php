@@ -13,6 +13,7 @@
 namespace Apix\Cache\tests;
 
 use Apix\Cache;
+use Apix\Cache\AbstractPdo;
 
 /**
  * @covers Apix\Cache\AbstractPdo
@@ -23,7 +24,9 @@ use Apix\Cache;
  */
 class PdoTest extends GenericTestCase
 {
-    protected $cache, $pdo;
+    /** @var AbstractPdo */
+    protected $cache;
+    protected $pdo;
 
     protected $options = array(
         'db_name'  => 'apix_tests',
@@ -133,6 +136,45 @@ class PdoTest extends GenericTestCase
     }
 
     /**
+     * With multiple caches in play, calling flush() should only remove the
+     * entries for the cache instance it is called on.
+     */
+    public function testFlushCacheOnly_secondCache()
+    {
+        $options = array(
+            'prefix_key'        => 'second-cache-key:', // prefix cache keys
+            'prefix_tag'        => 'second-cache-tag:', // prefix cache tags
+            'tag_enable'        => true               // wether to enable tagging
+        );
+
+        /** @var AbstractPdo */
+        $localCache = new $this->classname($this->pdo, $options);
+
+        $this->assertTrue(
+            $this->cache->save('data1_1', 'id1_1', array('tag1_1', 'tag1_2')) &&
+            $this->cache->save('data1_2', 'id1_2', array('tag1_2', 'tag1_3')) &&
+            $this->cache->save('data1_3', 'id1_3', array('tag1_3', 'tag1_4'))
+            );
+
+        $this->assertTrue(
+            $localCache->save('data2_1', 'id2_1', array('tag2_1', 'tag2_2')) &&
+            $localCache->save('data2_2', 'id2_2', array('tag2_2', 'tag2_3')) &&
+            $localCache->save('data2_3', 'id2_3', array('tag2_3', 'tag2_4'))
+            );
+
+        $result = $this->cache->flush();
+        $this->assertTrue($result);
+
+        $this->assertNull($this->cache->load('id1_3'));
+        $this->assertNull($this->cache->load('tag1_1', 'tag'));
+
+        $this->assertNotNull($localCache->load('id2_3'));
+        $this->assertNotNull($localCache->load('tag2_1', 'tag'));
+
+        unset($localCache);
+    }
+
+    /**
      *
      */
     public function testFlushAll()
@@ -145,8 +187,60 @@ class PdoTest extends GenericTestCase
 
         $this->assertTrue($this->cache->flush(true));
 
-        $this->assertNull($this->cache->load('id3'));
-        $this->assertNull($this->cache->load('tag1', 'tag'));
+        try {
+            /*
+             * Previously flush() would have dropped the cache table which
+             * would result in a PDOException being thrown if the table were
+             * subsequently be accessed.
+             */
+            $this->assertNull($this->cache->load('id3'));
+            $this->assertNull($this->cache->load('tag1', 'tag'));
+        }
+        catch (\PDOException $e) {
+            /* Because the cache table is no longer dropped we should never
+             * reach this point.
+             */
+            $this->fail('PDOException should not have been thrown');
+        }
+    }
+
+    /**
+     * With multiple caches in play, calling flush(true) should remove all of
+     * the entries from the database regardless of which cache instance they
+     * are associated with.
+     */
+    public function testFlushAll_secondCache()
+    {
+        $options = array(
+            'prefix_key'        => 'second-cache-key:', // prefix cache keys
+            'prefix_tag'        => 'second-cache-tag:', // prefix cache tags
+            'tag_enable'        => true               // wether to enable tagging
+        );
+
+        /** @var AbstractPdo */
+        $localCache = new $this->classname($this->pdo, $options);
+
+        $this->assertTrue(
+            $this->cache->save('data1_1', 'id1_1', array('tag1_1', 'tag1_2')) &&
+            $this->cache->save('data1_2', 'id1_2', array('tag1_2', 'tag1_3')) &&
+            $this->cache->save('data1_3', 'id1_3', array('tag1_3', 'tag1_4'))
+            );
+
+        $this->assertTrue(
+            $localCache->save('data2_1', 'id2_1', array('tag2_1', 'tag2_2')) &&
+            $localCache->save('data2_2', 'id2_2', array('tag2_2', 'tag2_3')) &&
+            $localCache->save('data2_3', 'id2_3', array('tag2_3', 'tag2_4'))
+            );
+
+        $this->assertTrue($this->cache->flush(true));
+
+        $this->assertNull($this->cache->load('id1_3'));
+        $this->assertNull($this->cache->load('tag1_1', 'tag'));
+
+        $this->assertNull($localCache->load('id2_3'));
+        $this->assertNull($localCache->load('tag2_1', 'tag'));
+
+        unset($localCache);
     }
 
     public function testShortTtlDoesExpunge()
