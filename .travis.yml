@@ -96,6 +96,9 @@ jobs:
       env: DB=memcached # memcached client is broken on PHP 5.4
     - php: 5.4
       dist: trusty
+      env: DB=memcached # memcached client is broken on PHP 5.4
+    - php: 5.4
+      dist: trusty
       env: DB=apc
     - php: 5.4
       dist: trusty
@@ -115,6 +118,9 @@ jobs:
 #    - php: 5.5
 #      dist: trusty
 #      env: DB=memcached # memcached client is broken on PHP 5.5
+    - php: 5.5
+      dist: trusty
+      env: DB=memcached # memcached client is broken on PHP 5.5
     - php: 5.5
       dist: trusty
       env: DB=memcached # memcached client is broken on PHP 5.5
