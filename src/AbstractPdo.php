@@ -101,21 +101,26 @@ abstract class AbstractPdo extends AbstractCache
      */
     public function loadKey($key)
     {
+        $result = null;
+
         $key = $this->mapKey($key);
         $sql = $this->getSql('loadKey');
         $values = array('key' => $key, 'now' => time());
 
         $cached = $this->exec($sql, $values)->fetch();
 
-        // if (isset($cached['expire'])) {
+        if (false !== $cached) {
             $this->ttls[$key] = $cached['expire'];
-        // }
 
-        if (null !== $cached['data'] && null !== $this->serializer) {
-            return $this->serializer->unserialize($cached['data']);
+            if (null !== $cached['data'] && null !== $this->serializer) {
+                $result = $this->serializer->unserialize($cached['data']);
+            }
+            else {
+                $result = $cached['data'];
+            }
         }
 
-        return false === $cached ? null : $cached['data'];
+        return $result;
     }
 
     /**
