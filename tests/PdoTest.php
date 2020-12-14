@@ -308,4 +308,36 @@ class PdoTest extends GenericTestCase
 
         $this->assertEquals('same_data', $this->cache->load('same_key'));
     }
+
+    /**
+     * @requires PHP 7.3
+     */
+    public function testCacheMiss_loadKey()
+    {
+        $cacheMissKey = 'CacheMissKey';
+
+        try {
+            $result = $this->cache->loadKey($cacheMissKey);
+
+            $this->assertNull($result);
+        } catch (\Exception $e) {
+            $this->fail('Exception should not have been thrown');
+        }
+    }
+
+    /**
+     * @requires PHP 7.3
+     */
+    public function testCacheMiss_loadTag()
+    {
+        $cacheMissTag = 'CacheMissTag';
+
+        try {
+            $result = $this->cache->loadTag($cacheMissTag);
+
+            $this->assertNull($result);
+        } catch (\Exception $e) {
+            $this->fail('Exception should not have been thrown');
+        }
+    }
 }
