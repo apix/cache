@@ -130,6 +130,14 @@ jobs:
       env: DB=mariadb
       addons:
         mariadb: 10.1
+    - php: 8.0
+      env: DB=mariadb
+      addons:
+        mariadb: 5.5
+    - php: 8.0
+      env: DB=mariadb
+      addons:
+        mariadb: 10.1
   allow_failures:
     - php: 5.3
     - php: 5.4
