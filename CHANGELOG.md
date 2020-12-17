@@ -1,5 +1,10 @@
 # APIx Cache changelog
 
+#### Version 1.3.6 (XX-Dec-2020)
+- On PHP >= 7.3, if the key passed to `loadKey()` isn't in the cache a
+notice is generated because value returned from `PDO::fetch()` is false
+but it is treated as an array (see #40 and PR #44 by @BlairCooper).
+
 #### Version 1.3.5 (11-Jun-2020)
 - Improved the `flush` method for the SQL backends (see #40 and PR #39 by @BlairCooper).
 
